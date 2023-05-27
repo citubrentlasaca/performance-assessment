@@ -2,6 +2,7 @@ import { Box, IconButton, Stack, TextField, FormControl, Select, MenuItem, Typog
 import React, { useState } from 'react';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import MultipleChoice from './MultipleChoice';
 
 function AssessmentQuestion() {
   const [type, setType] = useState('Multiple choice');
@@ -49,52 +50,7 @@ function AssessmentQuestion() {
               </Select>
             </FormControl>
           </Stack>
-            {type === 'Multiple choice' && (
-                <Stack direction="row" justifyContent="flex-start" alignItems="center" margin="10px 0 0 20px">
-                    <FormControl>
-                    <RadioGroup value={choice} onChange={handleChoiceChange}>
-                        <Stack direction="row" alignItems="center">
-                        <FormControlLabel value="option1" control={<Radio disabled/>} />
-                        <TextField variant="standard"
-                            sx={{
-                                width: "500px"
-                            }}
-                        />
-                        </Stack>
-                    </RadioGroup>
-                    <RadioGroup value={choice} onChange={handleChoiceChange}>
-                        <Stack direction="row" alignItems="center">
-                        <FormControlLabel value="option1" control={<Radio disabled/>} />
-                        <TextField variant="standard"
-                            sx={{
-                                width: "500px"
-                            }}
-                        />
-                        </Stack>
-                    </RadioGroup>
-                    <RadioGroup value={choice} onChange={handleChoiceChange}>
-                        <Stack direction="row" alignItems="center">
-                        <FormControlLabel value="option1" control={<Radio disabled/>} />
-                        <TextField variant="standard"
-                            sx={{
-                                width: "500px"
-                            }}
-                        />
-                        </Stack>
-                    </RadioGroup>
-                    <RadioGroup value={choice} onChange={handleChoiceChange}>
-                        <Stack direction="row" alignItems="center">
-                        <FormControlLabel value="option1" control={<Radio disabled/>} />
-                        <TextField variant="standard"
-                            sx={{
-                                width: "500px"
-                            }}
-                        />
-                        </Stack>
-                    </RadioGroup>
-                    </FormControl>
-                </Stack>
-            )}
+          {type === 'Multiple choice' && <MultipleChoice choice={choice} handleChoiceChange={handleChoiceChange} />}
           <hr
             style={{
               width: "100%",
