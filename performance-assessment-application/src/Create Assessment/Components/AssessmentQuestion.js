@@ -59,8 +59,6 @@ function AssessmentQuestion() {
       });
   };
 
-  console.log(choice)
-
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
       <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={2}>
