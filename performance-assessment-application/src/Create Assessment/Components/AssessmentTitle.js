@@ -34,21 +34,12 @@ function AssessmentTitle() {
           backgroundColor: "white",
           borderTop: "10px solid #27c6d9",
           borderRadius: "10px",
-          padding: "0 20px 0 20px",
+          padding: "0 20px",
         }}
         onClick={handleBoxClick}
       >
-        <TextField label="Assessment Title" variant="standard"
-          sx={{
-            width: "100%",
-            marginTop: "10px"
-          }}
-        />
-        <TextField label="Assessment Description" variant="standard"
-          sx={{
-            width: "100%",
-          }}
-        />
+        <TextField label="Assessment Title" variant="standard" fullWidth sx={{ marginTop: "10px" }} />
+        <TextField label="Assessment Description" variant="standard" fullWidth />
       </Box>
       {isBoxActive && (
         <Box
@@ -58,17 +49,12 @@ function AssessmentTitle() {
             backgroundColor: "white",
             borderRadius: "10px",
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
           }}
         >
           <IconButton>
-            <AddBoxOutlinedIcon
-              sx={{
-                color: "black"
-              }}
-            />
+            <AddBoxOutlinedIcon sx={{ color: "black" }} />
           </IconButton>
         </Box>
       )}
