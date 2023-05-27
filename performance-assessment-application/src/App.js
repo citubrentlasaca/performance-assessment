@@ -7,14 +7,14 @@ function App() {
   return (
     <div
       style={{
+        minHeight: "100vh", // Set the minimum height of the container to 100% of viewport height
         width: "100vw",
-        height: "100vh",
-        backgroundColor: "#d6f4f8"
+        backgroundColor: "#d6f4f8",
       }}
     >
-      <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
-        <AssessmentTitle/>
-        <AssessmentQuestion/>
+      <Stack direction="column" spacing={2}>
+        <AssessmentTitle />
+        <AssessmentQuestion />
       </Stack>
     </div>
   );
