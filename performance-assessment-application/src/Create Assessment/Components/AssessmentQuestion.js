@@ -1,20 +1,65 @@
-import { Box, IconButton, Stack, TextField, FormControl, Select, MenuItem, Typography, Switch, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { Box, IconButton, Stack, TextField, FormControl, Select, MenuItem, Typography, Switch } from '@mui/material';
 import React, { useState } from 'react';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import MultipleChoice from './MultipleChoice';
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
 function AssessmentQuestion() {
+  const [question, setQuestion] = useState('');
   const [type, setType] = useState('Multiple choice');
-  const [choice, setChoice] = useState('');
+  const [choice, setChoice] = useState(['', '', '', '']);
+  const [weight, setWeight] = useState(0);
+  const [isRequired, setIsRequired] = useState(false);
+
+  const handleQuestionChange = (event) => {
+    setQuestion(event.target.value);
+  }
 
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
 
-  const handleChoiceChange = (event) => {
-    setChoice(event.target.value);
+  const handleWeightChange = (event) => {
+    setWeight(event.target.value);
   };
+
+  const handleIsRequiredChange = (event) => {
+    setIsRequired(event.target.checked);
+  };
+
+  const addQuestion = () => {
+    const firebaseConfig = {
+        apiKey: "AIzaSyAOVXrrv4E8-iOL-VpvNknCAR9VpJarxzs",
+        authDomain: "performance-assessment-c9485.firebaseapp.com",
+        projectId: "performance-assessment-c9485",
+        storageBucket: "performance-assessment-c9485.appspot.com",
+        messagingSenderId: "304338500801",
+        appId: "1:304338500801:web:a42c3d48a3d68a850fe840",
+        measurementId: "G-TZ08H4CPFJ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const questionsCollectionRef = collection(db, 'question');
+
+    addDoc(questionsCollectionRef, {
+      question: question,
+      type: type,
+      choice: choice,
+      weight: weight,
+      isRequired: isRequired  
+    })
+      .then((docRef) => {
+        console.log('Document written with ID: ', docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  };
+
+  console.log(choice)
 
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -29,7 +74,7 @@ function AssessmentQuestion() {
           }}
         >
           <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
-            <TextField multiline label="Question" variant="filled"
+            <TextField multiline label="Question" variant="filled" value={question} onChange={handleQuestionChange}
               sx={{
                 width: "100%"
               }}
@@ -50,7 +95,7 @@ function AssessmentQuestion() {
               </Select>
             </FormControl>
           </Stack>
-          {type === 'Multiple choice' && <MultipleChoice choice={choice} handleChoiceChange={handleChoiceChange} />}
+          {type === 'Multiple choice' &&  <MultipleChoice choice={choice} setChoices={setChoice} />}
           <hr
             style={{
               width: "100%",
@@ -61,9 +106,9 @@ function AssessmentQuestion() {
           />
           <Stack direction="row" justifyContent="flex-start" alignItems="center">
             <Typography variant="body1" fontFamily="Montserrat Regular" marginRight="10px">
-              Weight choice (0-100%):
+              Weight value (0-100%):
             </Typography>
-            <TextField variant="outlined" size="small"
+            <TextField variant="outlined" size="small" onChange={handleWeightChange}
               sx={{
                 width: "150px"
               }}
@@ -79,7 +124,10 @@ function AssessmentQuestion() {
             <Typography variant="body1" fontFamily="Montserrat Regular">
               Required
             </Typography>
-            <Switch />
+            <Switch
+                checked={isRequired}
+                onChange={handleIsRequiredChange}
+            />
           </Stack>
         </Box>
       </Stack>
@@ -94,7 +142,7 @@ function AssessmentQuestion() {
           alignItems: "center"
         }}
       >
-        <IconButton>
+        <IconButton onClick={addQuestion}>
           <AddBoxOutlinedIcon />
         </IconButton>
       </Box>
