@@ -7,6 +7,7 @@ import MultipleChoice from './MultipleChoice';
 function AssessmentQuestion() {
   const [type, setType] = useState('Multiple choice');
   const [choice, setChoice] = useState('');
+  const [isActive, setIsActive] = useState(false);
 
   const handleTypeChange = (event) => {
     setType(event.target.value);
@@ -14,6 +15,10 @@ function AssessmentQuestion() {
 
   const handleChoiceChange = (event) => {
     setChoice(event.target.value);
+  };
+
+  const toggleActiveState = () => {
+    setIsActive(!isActive);
   };
 
   return (
@@ -25,10 +30,11 @@ function AssessmentQuestion() {
             height: "auto",
             backgroundColor: "white",
             borderRadius: "10px",
-            padding: "20px"
+            padding: "20px",
           }}
+          onClick={toggleActiveState}
         >
-          <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
+                    <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
             <TextField multiline label="Question" variant="filled"
               sx={{
                 width: "100%"
@@ -83,21 +89,23 @@ function AssessmentQuestion() {
           </Stack>
         </Box>
       </Stack>
-      <Box
-        sx={{
-          width: "50px",
-          height: "50px",
-          backgroundColor: "white",
-          borderRadius: "10px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        <IconButton>
-          <AddBoxOutlinedIcon />
-        </IconButton>
-      </Box>
+      {isActive && ( // Only show the Add Icon Button when active
+        <Box
+          sx={{
+            width: "50px",
+            height: "50px",
+            backgroundColor: "white",
+            borderRadius: "10px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <IconButton>
+            <AddBoxOutlinedIcon />
+          </IconButton>
+        </Box>
+      )}
     </Stack>
   );
 }
