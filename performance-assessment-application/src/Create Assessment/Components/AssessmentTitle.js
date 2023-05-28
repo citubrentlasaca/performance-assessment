@@ -1,7 +1,14 @@
 import React from 'react';
 import { Box, Stack, TextField } from '@mui/material';
 
-function AssessmentTitle() {
+function AssessmentTitle({ title, description, setTitle, setDescription}) {
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  }
+  
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+  }
 
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} marginTop="10px">
@@ -15,8 +22,8 @@ function AssessmentTitle() {
           padding: "0 20px",
         }}
       >
-        <TextField label="Assessment Title" variant="standard" fullWidth sx={{ marginTop: "10px" }} />
-        <TextField label="Assessment Description" variant="standard" fullWidth />
+        <TextField label="Assessment Title" value={title} onChange={handleTitleChange} variant="standard" fullWidth sx={{ marginTop: "10px" }} />
+        <TextField label="Assessment Description" value={description} onChange={handleDescriptionChange} variant="standard" fullWidth />
       </Box>
     </Stack>
   );

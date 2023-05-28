@@ -18,8 +18,11 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import Paragraph from './Paragraph';
 import ShortAnswer from './ShortAnswer';
+import AssessmentTitle from './AssessmentTitle';
 
 function AssessmentQuestion() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [question, setQuestion] = useState('');
   const [type, setType] = useState('Multiple choice');
   const [choice, setChoice] = useState(['', '', '', '']);
@@ -27,7 +30,7 @@ function AssessmentQuestion() {
   const [isRequired, setIsRequired] = useState(false);
   const [checkboxes, setCheckboxes] = useState([{ label: '', checked: false }]);
   const [paragraphAnswer, setParagraphAnswer] = useState('');
-  const [shortAnswer, setShortAnswer] = useState('');
+  const [shortAnswerInput, setShortAnswerInput] = useState('');
 
   const handleQuestionChange = (event) => {
     setQuestion(event.target.value);
@@ -54,10 +57,10 @@ function AssessmentQuestion() {
   };
 
   const handleShortAnswerChange = (event) => {
-    setShortAnswer(event.target.value);
+    setShortAnswerInput(event.target.value);
   };
 
-  const addQuestion = () => {
+  const addAssessment = () => {
     const firebaseConfig = {
         apiKey: "AIzaSyAOVXrrv4E8-iOL-VpvNknCAR9VpJarxzs",
         authDomain: "performance-assessment-c9485.firebaseapp.com",
@@ -70,28 +73,47 @@ function AssessmentQuestion() {
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const questionsCollectionRef = collection(db, 'question');
+    const assessmentCollectionRef = collection(db, 'assessment');
 
-    addDoc(questionsCollectionRef, {
-      question: question,
-      type: type,
-      choice: choice,
-      weight: weight,
-      isRequired: isRequired,
-      paragraphAnswer: paragraphAnswer,
-      shortAnswer: shortAnswer
-    })
-      .then((docRef) => {
-        console.log('Document written with ID: ', docRef.id);
+    if(type == "Multiple choice"){
+      addDoc(assessmentCollectionRef, {
+        assessmentTitle: title,
+        assessmentDescription: description,
+        question: question,
+        type: type,
+        choice: choice,
+        weight: weight,
+        isRequired: isRequired
       })
-      .catch((error) => {
-        console.error('Error adding document: ', error);
-      });
+        .then((docRef) => {
+          console.log('Document written with ID: ', docRef.id);
+        })
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+        });
+    }
+    else if(type == "Short answer"){
+      addDoc(assessmentCollectionRef, {
+        assessmentTitle: title,
+        assessmentDescription: description,
+        question: question,
+        type: type,
+        weight: weight,
+        isRequired: isRequired
+      })
+        .then((docRef) => {
+          console.log('Document written with ID: ', docRef.id);
+        })
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+        });
+    }
   };
 
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
       <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={2}>
+        <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
         <Box
           sx={{
             width: '750px',
@@ -136,13 +158,7 @@ function AssessmentQuestion() {
               label="Enter your long answer"
             />
           )}
-          {type === 'Short answer' && (
-            <ShortAnswer
-              value={shortAnswer}
-              onChange={handleShortAnswerChange}
-              label="Enter your short answer"
-            />
-          )}
+          {type === 'Short answer' && ( <ShortAnswer label="Short answer"/> )}
           <hr
             style={{
               width: '100%',
@@ -189,7 +205,7 @@ function AssessmentQuestion() {
           alignItems: 'center'
         }}
       >
-        <IconButton onClick={addQuestion}>
+        <IconButton onClick={addAssessment}>
           <AddBoxOutlinedIcon />
         </IconButton>
       </Box>

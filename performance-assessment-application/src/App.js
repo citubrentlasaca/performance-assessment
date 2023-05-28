@@ -13,7 +13,6 @@ function App() {
       }}
     >
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
-        <AssessmentTitle />
         <AssessmentQuestion/>
       </Stack>
     </div>
