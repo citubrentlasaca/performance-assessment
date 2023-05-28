@@ -26,7 +26,7 @@ function AssessmentQuestion() {
   const [question, setQuestion] = useState('');
   const [type, setType] = useState('Multiple choice');
   const [choice, setChoice] = useState([]);
-  const [checkboxChoice, setCheckboxChoices] = useState([]);
+  const [checkboxChoices, setCheckboxChoices] = useState([]);
   const [weight, setWeight] = useState(0);
   const [isRequired, setIsRequired] = useState(false);
   const [checkboxes, setCheckboxes] = useState([{ label: '', checked: false }]);
@@ -49,8 +49,8 @@ function AssessmentQuestion() {
     setIsRequired(event.target.checked);
   };
 
-  const handleCheckboxesChange = (newCheckboxes) => {
-    setCheckboxes(newCheckboxes);
+  const handleCheckboxChoicesChange = (newChoices) => {
+    setCheckboxChoices(newChoices);
   };
 
   const handleParagraphAnswerChange = (event) => {
@@ -109,7 +109,26 @@ function AssessmentQuestion() {
           console.error('Error adding document: ', error);
         });
     }
+    else if(type == "Checkboxes"){
+      addDoc(assessmentCollectionRef, {
+        assessmentTitle: title,
+        assessmentDescription: description,
+        question: question,
+        type: type,
+        checkboxChoices: checkboxChoices,
+        weight: weight,
+        isRequired: isRequired
+      })
+        .then((docRef) => {
+          console.log('Document written with ID: ', docRef.id);
+        })
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+        });
+    }
   };
+
+  console.log(checkboxChoices)
 
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -150,7 +169,7 @@ function AssessmentQuestion() {
           </Stack>
           {type === 'Multiple choice' && <MultipleChoice choice={choice} setChoices={setChoice} />}
           {type === 'Checkboxes' && (
-            <Checkboxes checkboxChoices={checkboxChoice} setCheckboxChoices={setCheckboxChoices} />
+            <Checkboxes checkboxChoices={checkboxChoices} setCheckboxChoices={setCheckboxChoices} />
           )}
           {type === 'Paragraph' && (
             <Paragraph

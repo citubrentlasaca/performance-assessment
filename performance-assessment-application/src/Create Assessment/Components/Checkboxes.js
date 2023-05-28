@@ -1,21 +1,16 @@
 import React from 'react';
-import { Stack, Checkbox, TextField, Button } from '@mui/material';
+import { Stack, Checkbox, TextField, Button, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 function Checkboxes({ checkboxChoices, setCheckboxChoices }) {
-  const handleCheckboxChange = (index) => (event) => {
+  const handleCheckboxChoicesChange = (index) => (event) => {
     const newChoices = [...checkboxChoices];
-    newChoices[index].label = event.target.value;
-    setCheckboxChoices(newChoices);
+    newChoices[index] = { label: event.target.value }; // Update the label only
+    setCheckboxChoices(newChoices); // Exclude choices with empty labels
   };
-
-  const handleCheckboxCheckedChange = (index) => (event) => {
-    const newChoices = [...checkboxChoices];
-    newChoices[index].checked = event.target.checked;
-    setCheckboxChoices(newChoices);
-  };
-
+  
   const handleAddCheckbox = () => {
-    const newChoices = [...checkboxChoices, { label: '', checked: false }];
+    const newChoices = [...checkboxChoices, { label: '' }];
     setCheckboxChoices(newChoices);
   };
 
@@ -25,22 +20,21 @@ function Checkboxes({ checkboxChoices, setCheckboxChoices }) {
         <Stack direction="row" alignItems="center" key={index}>
           <Checkbox
             checked={checkboxChoice.checked}
-            onChange={handleCheckboxCheckedChange(index)}
             disabled
             sx={{ marginTop: '10px' }}
           />
           <TextField
             variant="standard"
             value={checkboxChoice.label}
-            onChange={handleCheckboxChange(index)}
+            onChange={handleCheckboxChoicesChange(index)}
             sx={{ marginTop: '10px' }}
           />
         </Stack>
       ))}
       <Stack direction="row" justifyContent="left">
-        <Button variant="outlined" size="small" onClick={handleAddCheckbox} sx={{ marginLeft: '10px', marginTop: '10px' }}>
-            Add Option
-        </Button>
+        <IconButton onClick={handleAddCheckbox}>
+          <AddIcon/>
+        </IconButton>
       </Stack>
     </Stack>
   );
