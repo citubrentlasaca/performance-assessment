@@ -25,7 +25,8 @@ function AssessmentQuestion() {
   const [description, setDescription] = useState('');
   const [question, setQuestion] = useState('');
   const [type, setType] = useState('Multiple choice');
-  const [choice, setChoice] = useState(['', '', '', '']);
+  const [choice, setChoice] = useState([]);
+  const [checkboxChoice, setCheckboxChoices] = useState([]);
   const [weight, setWeight] = useState(0);
   const [isRequired, setIsRequired] = useState(false);
   const [checkboxes, setCheckboxes] = useState([{ label: '', checked: false }]);
@@ -92,7 +93,7 @@ function AssessmentQuestion() {
           console.error('Error adding document: ', error);
         });
     }
-    else if(type == "Short answer"){
+    else if(type == "Short answer" || type == "Paragraph"){
       addDoc(assessmentCollectionRef, {
         assessmentTitle: title,
         assessmentDescription: description,
@@ -149,7 +150,7 @@ function AssessmentQuestion() {
           </Stack>
           {type === 'Multiple choice' && <MultipleChoice choice={choice} setChoices={setChoice} />}
           {type === 'Checkboxes' && (
-            <Checkboxes choices={checkboxes} setChoices={handleCheckboxesChange} />
+            <Checkboxes checkboxChoices={checkboxChoice} setCheckboxChoices={setCheckboxChoices} />
           )}
           {type === 'Paragraph' && (
             <Paragraph

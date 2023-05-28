@@ -1,20 +1,18 @@
 import React from 'react';
 import { Stack, TextField } from '@mui/material';
 
-function Paragraph({ label, value, onChange }) {
-  const handleTextChange = (event) => {
-    onChange(event.target.value);
-  };
+function Paragraph() {
 
   return (
     <Stack direction="column" spacing={2}>
       <TextField
         variant="standard"
-        label={label}
-        value={value}
-        onChange={handleTextChange}
+        label= "Paragraph"
         disabled
-        sx={{ marginTop: '10px' }}
+        sx={{ 
+          marginTop: '10px',
+          width: "565px"
+        }}
       />
     </Stack>
   );

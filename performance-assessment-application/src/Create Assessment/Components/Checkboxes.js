@@ -1,37 +1,37 @@
 import React from 'react';
 import { Stack, Checkbox, TextField, Button } from '@mui/material';
 
-function Checkboxes({ choices, setChoices }) {
+function Checkboxes({ checkboxChoices, setCheckboxChoices }) {
   const handleCheckboxChange = (index) => (event) => {
-    const newChoices = [...choices];
+    const newChoices = [...checkboxChoices];
     newChoices[index].label = event.target.value;
-    setChoices(newChoices);
+    setCheckboxChoices(newChoices);
   };
 
   const handleCheckboxCheckedChange = (index) => (event) => {
-    const newChoices = [...choices];
+    const newChoices = [...checkboxChoices];
     newChoices[index].checked = event.target.checked;
-    setChoices(newChoices);
+    setCheckboxChoices(newChoices);
   };
 
   const handleAddCheckbox = () => {
-    const newChoices = [...choices, { label: '', checked: false }];
-    setChoices(newChoices);
+    const newChoices = [...checkboxChoices, { label: '', checked: false }];
+    setCheckboxChoices(newChoices);
   };
 
   return (
     <Stack direction="column" spacing={1}>
-      {choices.map((choice, index) => (
+      {checkboxChoices.map((checkboxChoice, index) => (
         <Stack direction="row" alignItems="center" key={index}>
           <Checkbox
-            checked={choice.checked}
+            checked={checkboxChoice.checked}
             onChange={handleCheckboxCheckedChange(index)}
             disabled
             sx={{ marginTop: '10px' }}
           />
           <TextField
             variant="standard"
-            value={choice.label}
+            value={checkboxChoice.label}
             onChange={handleCheckboxChange(index)}
             sx={{ marginTop: '10px' }}
           />
