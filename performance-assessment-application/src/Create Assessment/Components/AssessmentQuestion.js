@@ -129,89 +129,90 @@ function AssessmentQuestion() {
   };
 
   return (
-    <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-      <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={2}>
-        <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
-        <Box
-          sx={{
-            width: '750px',
-            height: 'auto',
-            backgroundColor: 'white',
-            borderRadius: '10px',
-            padding: '20px'
-          }}
-        >
-          <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
-            <TextField
-              multiline
-              label="Question"
-              variant="filled"
-              value={question}
-              onChange={handleQuestionChange}
-              sx={{
-                width: '100%'
-              }}
-            />
-            <FormControl
-              sx={{
-                width: '220px'
-              }}
-            >
-              <Select value={type} onChange={handleTypeChange}>
-                <MenuItem value={'Short answer'}>Short answer</MenuItem>
-                <MenuItem value={'Paragraph'}>Paragraph</MenuItem>
-                <MenuItem value={'Multiple choice'}>Multiple choice</MenuItem>
-                <MenuItem value={'Checkboxes'}>Checkboxes</MenuItem>
-              </Select>
-            </FormControl>
-          </Stack>
-          {type === 'Multiple choice' && <MultipleChoice choices={choices} setChoices={setChoices} />}
-          {type === 'Checkboxes' && (
-            <Checkboxes checkboxChoices={checkboxChoices} setCheckboxChoices={setCheckboxChoices} />
-          )}
-          {type === 'Paragraph' && (
-            <Paragraph
-              value={paragraphAnswer}
-              onChange={handleParagraphAnswerChange}
-              label="Enter your long answer"
-            />
-          )}
-          {type === 'Short answer' && ( <ShortAnswer label="Short answer"/> )}
-          <hr
-            style={{
-              width: '100%',
-              height: '1px',
-              backgroundColor: 'black',
-              margin: '20px 0 20px 0'
+    <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
+      <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
+      <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+        <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={2}>
+          <Box
+            sx={{
+              width: '750px',
+              height: 'auto',
+              backgroundColor: 'white',
+              borderRadius: '10px',
+              padding: '20px'
             }}
-          />
-          <Stack direction="row" justifyContent="flex-start" alignItems="center">
-            <Typography variant="body1" fontFamily="Montserrat Regular" marginRight="10px">
-              Weight value (0-100%):
-            </Typography>
-            <TextField
-              variant="outlined"
-              size="small"
-              onChange={handleWeightChange}
-              sx={{
-                width: '150px'
+          >
+            <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
+              <TextField
+                multiline
+                label="Question"
+                variant="filled"
+                value={question}
+                onChange={handleQuestionChange}
+                sx={{
+                  width: '100%'
+                }}
+              />
+              <FormControl
+                sx={{
+                  width: '220px'
+                }}
+              >
+                <Select value={type} onChange={handleTypeChange}>
+                  <MenuItem value={'Short answer'}>Short answer</MenuItem>
+                  <MenuItem value={'Paragraph'}>Paragraph</MenuItem>
+                  <MenuItem value={'Multiple choice'}>Multiple choice</MenuItem>
+                  <MenuItem value={'Checkboxes'}>Checkboxes</MenuItem>
+                </Select>
+              </FormControl>
+            </Stack>
+            {type === 'Multiple choice' && <MultipleChoice choices={choices} setChoices={setChoices} />}
+            {type === 'Checkboxes' && (
+              <Checkboxes checkboxChoices={checkboxChoices} setCheckboxChoices={setCheckboxChoices} />
+            )}
+            {type === 'Paragraph' && (
+              <Paragraph
+                value={paragraphAnswer}
+                onChange={handleParagraphAnswerChange}
+                label="Enter your long answer"
+              />
+            )}
+            {type === 'Short answer' && ( <ShortAnswer label="Short answer"/> )}
+            <hr
+              style={{
+                width: '100%',
+                height: '1px',
+                backgroundColor: 'black',
+                margin: '20px 0 20px 0'
               }}
             />
-            <IconButton
-              sx={{
-                marginLeft: '200px',
-                marginRight: '20px'
-              }}
-            >
-              <DeleteOutlineOutlinedIcon />
-            </IconButton>
-            <Typography variant="body1" fontFamily="Montserrat Regular">
-              Required
-            </Typography>
-            <Switch checked={isRequired} onChange={handleIsRequiredChange} />
-          </Stack>
-        </Box>
-      </Stack>
+            <Stack direction="row" justifyContent="flex-start" alignItems="center">
+              <Typography variant="body1" fontFamily="Montserrat Regular" marginRight="10px">
+                Weight value (0-100%):
+              </Typography>
+              <TextField
+                variant="outlined"
+                size="small"
+                onChange={handleWeightChange}
+                sx={{
+                  width: '150px'
+                }}
+              />
+              <IconButton
+                sx={{
+                  marginLeft: '200px',
+                  marginRight: '20px'
+                }}
+              >
+                <DeleteOutlineOutlinedIcon />
+              </IconButton>
+              <Typography variant="body1" fontFamily="Montserrat Regular">
+                Required
+              </Typography>
+              <Switch checked={isRequired} onChange={handleIsRequiredChange} />
+            </Stack>
+          </Box>
+        </Stack>
       <Box
         sx={{
           width: '50px',
@@ -227,6 +228,7 @@ function AssessmentQuestion() {
           <AddBoxOutlinedIcon />
         </IconButton>
       </Box>
+    </Stack>
     </Stack>
   );
 }
