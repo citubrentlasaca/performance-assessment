@@ -25,7 +25,7 @@ function AssessmentQuestion() {
   const [description, setDescription] = useState('');
   const [question, setQuestion] = useState('');
   const [type, setType] = useState('Multiple choice');
-  const [choice, setChoice] = useState([]);
+  const [choices, setChoices] = useState([]);
   const [checkboxChoices, setCheckboxChoices] = useState([]);
   const [weight, setWeight] = useState(0);
   const [isRequired, setIsRequired] = useState(false);
@@ -82,7 +82,7 @@ function AssessmentQuestion() {
         assessmentDescription: description,
         question: question,
         type: type,
-        choice: choice,
+        choice: choices,
         weight: weight,
         isRequired: isRequired
       })
@@ -128,8 +128,6 @@ function AssessmentQuestion() {
     }
   };
 
-  console.log(checkboxChoices)
-
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
       <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={2}>
@@ -167,7 +165,7 @@ function AssessmentQuestion() {
               </Select>
             </FormControl>
           </Stack>
-          {type === 'Multiple choice' && <MultipleChoice choice={choice} setChoices={setChoice} />}
+          {type === 'Multiple choice' && <MultipleChoice choices={choices} setChoices={setChoices} />}
           {type === 'Checkboxes' && (
             <Checkboxes checkboxChoices={checkboxChoices} setCheckboxChoices={setCheckboxChoices} />
           )}
