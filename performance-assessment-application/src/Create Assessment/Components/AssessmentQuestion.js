@@ -8,7 +8,8 @@ import {
   Select,
   MenuItem,
   Typography,
-  Switch
+  Switch,
+  Button
 } from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
@@ -21,6 +22,7 @@ import AssessmentTitle from './AssessmentTitle';
 import EditIcon from '@mui/icons-material/Edit';
 import { app } from '../../firebase';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import NewQuestion from './NewQuestion';
 
 function AssessmentQuestion() {
   const [title, setTitle] = useState('');
@@ -35,6 +37,11 @@ function AssessmentQuestion() {
   const [shortAnswerInput, setShortAnswerInput] = useState('');
   const [temporaryQuestion, setTemporaryQuestion] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
+  const [componentCount, setComponentCount] = useState(1);
+
+  const handleAddComponent = () => {
+    setComponentCount(componentCount + 1);
+  };
 
   const handleQuestionChange = (event) => {
     setQuestion(event.target.value);
@@ -211,114 +218,23 @@ function AssessmentQuestion() {
   return (
     <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
       <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
-      <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-        <Stack direction="column" justifyContent="center" alignItems="flex-start" spacing={2}>
-          <Box
-            sx={{
-              width: '750px',
-              height: 'auto',
-              backgroundColor: 'white',
-              borderRadius: '10px',
-              padding: '20px',
-              opacity: isDisabled ? 0.75 : 1, // Apply opacity based on the disabled state
-              pointerEvents: isDisabled ? 'none' : 'auto', // Disable pointer events based on the disabled state
-            }}
-          >
-            <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
-              <TextField
-                multiline
-                label="Question"
-                variant="filled"
-                value={question}
-                onChange={handleQuestionChange}
-                sx={{
-                  width: '100%'
-                }}
-              />
-              <FormControl
-                sx={{
-                  width: '220px'
-                }}
-              >
-                <Select value={type} onChange={handleTypeChange}>
-                  <MenuItem value={'Short answer'}>Short answer</MenuItem>
-                  <MenuItem value={'Paragraph'}>Paragraph</MenuItem>
-                  <MenuItem value={'Multiple choice'}>Multiple choice</MenuItem>
-                  <MenuItem value={'Checkboxes'}>Checkboxes</MenuItem>
-                </Select>
-              </FormControl>
-            </Stack>
-            {type === 'Multiple choice' && <MultipleChoice choices={choices} setChoices={setChoices} />}
-            {type === 'Checkboxes' && (
-              <Checkboxes checkboxChoices={checkboxChoices} setCheckboxChoices={setCheckboxChoices} />
-            )}
-            {type === 'Paragraph' && (
-              <Paragraph
-                value={paragraphAnswer}
-                onChange={handleParagraphAnswerChange}
-                label="Enter your long answer"
-              />
-            )}
-            {type === 'Short answer' && ( <ShortAnswer label="Short answer"/> )}
-            <hr
-              style={{
-                width: '100%',
-                height: '1px',
-                backgroundColor: 'black',
-                margin: '20px 0 20px 0'
-              }}
-            />
-            <Stack direction="row" justifyContent="flex-start" alignItems="center">
-              <Typography variant="body1" fontFamily="Montserrat Regular" marginRight="10px">
-                Weight value (0-100%):
-              </Typography>
-              <TextField
-                variant="outlined"
-                size="small"
-                onChange={handleWeightChange}
-                sx={{
-                  width: '150px'
-                }}
-              />
-              <IconButton onClick={deleteDocument}
-                sx={{
-                  marginLeft: '200px',
-                  marginRight: '20px'
-                }}
-              >
-                <DeleteOutlineOutlinedIcon />
-              </IconButton>
-              <Typography variant="body1" fontFamily="Montserrat Regular">
-                Required
-              </Typography>
-              <Switch checked={isRequired} onChange={handleIsRequiredChange} />
-            </Stack>
-          </Box>
-        </Stack>
-      <Box
+      {Array.from({ length: componentCount }).map((_, index) => (
+        <NewQuestion key={index} index={index} title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
+      ))}
+      <Button variant="contained" onClick={handleAddComponent}
         sx={{
-          width: '50px',
-          height: 'auto',
-          backgroundColor: 'white',
-          borderRadius: '10px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
+          backgroundColor: "white",
+          color: "black",
+          fontFamily: "Montserrat Regular",
+          "&:hover": {
+            backgroundColor: "white",
+            color: "black",
+            fontFamily: "Montserrat Regular",
+          },
         }}
       >
-        <Stack direction="column" justifyContent="center" alignItems="center">
-          <IconButton onClick={addAssessment}>
-            <AddBoxOutlinedIcon />
-          </IconButton>
-          <IconButton onClick={handleUnlockClick}>
-            <LockOpenIcon/>
-          </IconButton>
-          <IconButton onClick={updateAssessment}>
-            <EditIcon />
-          </IconButton>
-        </Stack>
-      </Box>
-    </Stack>
+        Add new question
+      </Button>
     </Stack>
   );
 }
