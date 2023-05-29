@@ -1,12 +1,13 @@
 import React from 'react';
-import { Stack, TextField, Button, IconButton, Radio, RadioGroup, FormControlLabel } from '@mui/material';
+
+import { Stack, TextField, IconButton, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 function MultipleChoice({ choices, setChoices }) {
   const handleChoiceChange = (index) => (event) => {
     const newChoices = [...choices];
-    newChoices[index] = { label: event.target.value }; // Update the label only
-    setChoices(newChoices); // Exclude choices with empty labels
+    newChoices[index] = { label: event.target.value };
+    setChoices(newChoices);
   };
   
   const handleAddRadio = () => {

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
 import {
   Box,
   IconButton,
@@ -10,19 +11,20 @@ import {
   Typography,
   Switch
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import MultipleChoice from './MultipleChoice';
-import Checkboxes from './Checkboxes';
+
 import { getFirestore, collection, setDoc, getDoc, doc, updateDoc, deleteDoc, deleteField } from 'firebase/firestore';
+import { app } from '../../firebase';
+
 import Paragraph from './Paragraph';
 import ShortAnswer from './ShortAnswer';
-import AssessmentTitle from './AssessmentTitle';
-import EditIcon from '@mui/icons-material/Edit';
-import { app } from '../../firebase';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
+import Checkboxes from './Checkboxes';
+import MultipleChoice from './MultipleChoice';
 
-function NewQuestion({ index, title, description, setTitle, setDescription, handleDeleteComponent }) {
+function NewQuestion({ index, title, description, handleDeleteComponent }) {
     const [question, setQuestion] = useState('');
     const [type, setType] = useState('Multiple choice');
     const [choices, setChoices] = useState([]);
@@ -30,7 +32,6 @@ function NewQuestion({ index, title, description, setTitle, setDescription, hand
     const [weight, setWeight] = useState(0);
     const [isRequired, setIsRequired] = useState(false);
     const [paragraphAnswer, setParagraphAnswer] = useState('');
-    const [shortAnswerInput, setShortAnswerInput] = useState('');
     const [temporaryQuestion, setTemporaryQuestion] = useState('');
     const [isDisabled, setIsDisabled] = useState(false);
   
@@ -50,16 +51,8 @@ function NewQuestion({ index, title, description, setTitle, setDescription, hand
       setIsRequired(event.target.checked);
     };
   
-    const handleCheckboxChoicesChange = (newChoices) => {
-      setCheckboxChoices(newChoices);
-    };
-  
     const handleParagraphAnswerChange = (event) => {
       setParagraphAnswer(event.target.value);
-    };
-  
-    const handleShortAnswerChange = (event) => {
-      setShortAnswerInput(event.target.value);
     };
   
     const handleAddClick = () => {
@@ -136,6 +129,7 @@ function NewQuestion({ index, title, description, setTitle, setDescription, hand
     
       if (type === "Multiple choice") {
         updatedFields = {
+          assessmentDescription: description,
           question: question,
           type: type,
           choice: choices,
@@ -144,6 +138,7 @@ function NewQuestion({ index, title, description, setTitle, setDescription, hand
         };
       } else if (type === "Short answer" || type === "Paragraph") {
         updatedFields = {
+          assessmentDescription: description,
           question: question,
           type: type,
           weight: weight,
@@ -151,6 +146,7 @@ function NewQuestion({ index, title, description, setTitle, setDescription, hand
         };
       } else if (type === "Checkboxes") {
         updatedFields = {
+          assessmentDescription: description,
           question: question,
           type: type,
           checkboxChoices: checkboxChoices,
@@ -161,21 +157,17 @@ function NewQuestion({ index, title, description, setTitle, setDescription, hand
     
       const documentRef = doc(assessmentCollectionRef, documentId);
     
-      // Get the existing document data
       getDoc(documentRef)
         .then((docSnap) => {
           if (docSnap.exists()) {
-            // Extract the existing field values from the document
             const existingData = docSnap.data();
     
-            // Remove existing fields from the updatedFields object
             for (const field in existingData) {
               if (!(field in updatedFields)) {
                 updatedFields[field] = deleteField();
               }
             }
     
-            // Update the document with the updated fields
             updateDoc(documentRef, updatedFields)
               .then(() => {
                 setIsDisabled(true);
@@ -219,8 +211,8 @@ function NewQuestion({ index, title, description, setTitle, setDescription, hand
               backgroundColor: 'white',
               borderRadius: '10px',
               padding: '20px',
-              opacity: isDisabled ? 0.75 : 1, // Apply opacity based on the disabled state
-              pointerEvents: isDisabled ? 'none' : 'auto', // Disable pointer events based on the disabled state
+              opacity: isDisabled ? 0.75 : 1,
+              pointerEvents: isDisabled ? 'none' : 'auto',
             }}
           >
             <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2}>

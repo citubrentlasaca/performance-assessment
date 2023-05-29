@@ -1,12 +1,13 @@
 import React from 'react';
-import { Stack, Checkbox, TextField, Button, IconButton } from '@mui/material';
+
+import { Stack, Checkbox, TextField, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 function Checkboxes({ checkboxChoices, setCheckboxChoices }) {
   const handleCheckboxChoicesChange = (index) => (event) => {
     const newChoices = [...checkboxChoices];
-    newChoices[index] = { label: event.target.value }; // Update the label only
-    setCheckboxChoices(newChoices); // Exclude choices with empty labels
+    newChoices[index] = { label: event.target.value }; 
+    setCheckboxChoices(newChoices);
   };
   
   const handleAddCheckbox = () => {
