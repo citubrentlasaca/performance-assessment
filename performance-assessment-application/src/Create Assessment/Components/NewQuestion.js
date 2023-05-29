@@ -24,7 +24,7 @@ import ShortAnswer from './ShortAnswer';
 import Checkboxes from './Checkboxes';
 import MultipleChoice from './MultipleChoice';
 
-function NewQuestion({ index, title, description, handleDeleteComponent }) {
+function NewQuestion({ index, title, description, handleDeleteComponent, handleAddComponent }) {
     const [question, setQuestion] = useState('');
     const [type, setType] = useState('Multiple choice');
     const [choices, setChoices] = useState([]);
@@ -58,6 +58,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent }) {
     const handleAddClick = () => {
       setIsDisabled(true);
       setTemporaryQuestion(question);
+      handleAddComponent();
     };
   
     const handleUnlockClick = () => {
@@ -188,18 +189,24 @@ function NewQuestion({ index, title, description, handleDeleteComponent }) {
   
     const deleteDocument = () => {
       const db = getFirestore(app);
+      
+      if (!question) {
+        handleDeleteComponent(index);
+        return;
+      }
+
       const assessmentCollectionRef = collection(db, title);
       const documentRef = doc(assessmentCollectionRef, question);
-  
+    
       deleteDoc(documentRef)
         .then(() => {
-            handleDeleteComponent(index);
+          handleDeleteComponent(index);
           console.log('Document successfully deleted!');
         })
         .catch((error) => {
           console.error('Error deleting document:', error);
         });
-    };
+    };    
 
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -213,6 +220,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent }) {
               padding: '20px',
               opacity: isDisabled ? 0.75 : 1,
               pointerEvents: isDisabled ? 'none' : 'auto',
+              marginLeft: "65px"
             }}
           >
             <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
