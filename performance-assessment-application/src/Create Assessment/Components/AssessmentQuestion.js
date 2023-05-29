@@ -14,13 +14,13 @@ import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import MultipleChoice from './MultipleChoice';
 import Checkboxes from './Checkboxes';
-import { getFirestore, collection, setDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { getFirestore, collection, setDoc, getDoc, doc, updateDoc, deleteDoc, deleteField } from 'firebase/firestore';
 import Paragraph from './Paragraph';
 import ShortAnswer from './ShortAnswer';
 import AssessmentTitle from './AssessmentTitle';
 import EditIcon from '@mui/icons-material/Edit';
 import { app } from '../../firebase';
-import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 function AssessmentQuestion() {
   const [title, setTitle] = useState('');
@@ -34,8 +34,7 @@ function AssessmentQuestion() {
   const [paragraphAnswer, setParagraphAnswer] = useState('');
   const [shortAnswerInput, setShortAnswerInput] = useState('');
   const [temporaryQuestion, setTemporaryQuestion] = useState('');
-  const [editIconEnabled, setEditIconEnabled] = useState(true);
-  const [questionMarkIconEnabled, setQuestionMarkIconEnabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleQuestionChange = (event) => {
     setQuestion(event.target.value);
@@ -65,15 +64,14 @@ function AssessmentQuestion() {
     setShortAnswerInput(event.target.value);
   };
 
-  const handleQuestionClick = () => {
-    setEditIconEnabled(false);
-    setQuestionMarkIconEnabled(true);
+  const handleAddClick = () => {
+    setIsDisabled(true);
     setTemporaryQuestion(question);
   };
 
-  const handleEditClick = () => {
-    setQuestionMarkIconEnabled(false);
-    setEditIconEnabled(true);
+  const handleUnlockClick = () => {
+    setIsDisabled(false);
+    setTemporaryQuestion(question);
   };
 
   const addAssessment = () => {
@@ -90,6 +88,7 @@ function AssessmentQuestion() {
         isRequired: isRequired
       })
         .then(() => {
+          handleAddClick();
           console.log('Document written with ID: ', question);
         })
         .catch((error) => {
@@ -130,7 +129,6 @@ function AssessmentQuestion() {
   };
 
   const updateAssessment = () => {
-    handleEditClick();
     const db = getFirestore(app);
     const assessmentCollectionRef = collection(db, title);
     const documentId = temporaryQuestion;
@@ -160,17 +158,41 @@ function AssessmentQuestion() {
         isRequired: isRequired
       };
     }
-
+  
     const documentRef = doc(assessmentCollectionRef, documentId);
   
-    updateDoc(documentRef, updatedFields)
-      .then(() => {
-        console.log('Document successfully updated!');
+    // Get the existing document data
+    getDoc(documentRef)
+      .then((docSnap) => {
+        if (docSnap.exists()) {
+          // Extract the existing field values from the document
+          const existingData = docSnap.data();
+  
+          // Remove existing fields from the updatedFields object
+          for (const field in existingData) {
+            if (!(field in updatedFields)) {
+              updatedFields[field] = deleteField();
+            }
+          }
+  
+          // Update the document with the updated fields
+          updateDoc(documentRef, updatedFields)
+            .then(() => {
+              setIsDisabled(true);
+              console.log('Document successfully updated!');
+            })
+            .catch((error) => {
+              console.error('Error updating document:', error);
+            });
+        } else {
+          console.error('Document does not exist.');
+        }
       })
       .catch((error) => {
-        console.error('Error updating document:', error);
+        console.error('Error getting document:', error);
       });
   };
+    
 
   const deleteDocument = () => {
     const db = getFirestore(app);
@@ -197,7 +219,9 @@ function AssessmentQuestion() {
               height: 'auto',
               backgroundColor: 'white',
               borderRadius: '10px',
-              padding: '20px'
+              padding: '20px',
+              opacity: isDisabled ? 0.75 : 1, // Apply opacity based on the disabled state
+              pointerEvents: isDisabled ? 'none' : 'auto', // Disable pointer events based on the disabled state
             }}
           >
             <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
@@ -286,10 +310,10 @@ function AssessmentQuestion() {
           <IconButton onClick={addAssessment}>
             <AddBoxOutlinedIcon />
           </IconButton>
-          <IconButton disabled={!editIconEnabled} onClick={handleQuestionClick}>
-            <QuestionMarkIcon/>
+          <IconButton onClick={handleUnlockClick}>
+            <LockOpenIcon/>
           </IconButton>
-          <IconButton disabled={!questionMarkIconEnabled} onClick={updateAssessment}>
+          <IconButton onClick={updateAssessment}>
             <EditIcon />
           </IconButton>
         </Stack>
