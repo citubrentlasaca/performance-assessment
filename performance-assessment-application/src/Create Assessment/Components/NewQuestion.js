@@ -22,7 +22,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { app } from '../../firebase';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 
-function NewQuestion({ index, title, description, setTitle, setDescription }) {
+function NewQuestion({ index, title, description, setTitle, setDescription, handleDeleteComponent }) {
     const [question, setQuestion] = useState('');
     const [type, setType] = useState('Multiple choice');
     const [choices, setChoices] = useState([]);
@@ -201,6 +201,7 @@ function NewQuestion({ index, title, description, setTitle, setDescription }) {
   
       deleteDoc(documentRef)
         .then(() => {
+            handleDeleteComponent(index);
           console.log('Document successfully deleted!');
         })
         .catch((error) => {

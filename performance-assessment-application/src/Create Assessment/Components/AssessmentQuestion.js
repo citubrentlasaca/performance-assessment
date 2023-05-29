@@ -38,9 +38,17 @@ function AssessmentQuestion() {
   const [temporaryQuestion, setTemporaryQuestion] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
   const [componentCount, setComponentCount] = useState(1);
+  const [components, setComponents] = useState([{ index: 0 }]);
 
   const handleAddComponent = () => {
+    const newIndex = componentCount;
     setComponentCount(componentCount + 1);
+    setComponents([...components, { index: newIndex }]);
+  };
+
+  const handleDeleteComponent = (indexToDelete) => {
+    const updatedComponents = components.filter((component) => component.index !== indexToDelete);
+    setComponents(updatedComponents);
   };
 
   const handleQuestionChange = (event) => {
@@ -218,8 +226,8 @@ function AssessmentQuestion() {
   return (
     <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
       <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
-      {Array.from({ length: componentCount }).map((_, index) => (
-        <NewQuestion key={index} index={index} title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
+      {components.map((component) => (
+        <NewQuestion key={component.index} index={component.index} handleDeleteComponent={handleDeleteComponent} title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
       ))}
       <Button variant="contained" onClick={handleAddComponent}
         sx={{
