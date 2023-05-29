@@ -33,7 +33,7 @@ function MultipleChoice({ choices, setChoices }) {
             variant="standard"
             value={choice.label}
             onChange={handleChoiceChange(index)}
-            sx={{ marginTop: '10px', width: "505px" }}
+            sx={{ marginTop: '10px', width: "440px" }}
           />
         </Stack>
       ))}
