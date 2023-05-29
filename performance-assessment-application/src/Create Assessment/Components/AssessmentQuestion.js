@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   IconButton,
@@ -14,11 +14,13 @@ import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import MultipleChoice from './MultipleChoice';
 import Checkboxes from './Checkboxes';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, setDoc, doc, updateDoc } from 'firebase/firestore';
 import Paragraph from './Paragraph';
 import ShortAnswer from './ShortAnswer';
 import AssessmentTitle from './AssessmentTitle';
+import EditIcon from '@mui/icons-material/Edit';
+import { app } from '../../firebase';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 function AssessmentQuestion() {
   const [title, setTitle] = useState('');
@@ -29,9 +31,11 @@ function AssessmentQuestion() {
   const [checkboxChoices, setCheckboxChoices] = useState([]);
   const [weight, setWeight] = useState(0);
   const [isRequired, setIsRequired] = useState(false);
-  const [checkboxes, setCheckboxes] = useState([{ label: '', checked: false }]);
   const [paragraphAnswer, setParagraphAnswer] = useState('');
   const [shortAnswerInput, setShortAnswerInput] = useState('');
+  const [temporaryQuestion, setTemporaryQuestion] = useState('');
+  const [editIconEnabled, setEditIconEnabled] = useState(true);
+  const [questionMarkIconEnabled, setQuestionMarkIconEnabled] = useState(false);
 
   const handleQuestionChange = (event) => {
     setQuestion(event.target.value);
@@ -61,24 +65,23 @@ function AssessmentQuestion() {
     setShortAnswerInput(event.target.value);
   };
 
-  const addAssessment = () => {
-    const firebaseConfig = {
-        apiKey: "AIzaSyAOVXrrv4E8-iOL-VpvNknCAR9VpJarxzs",
-        authDomain: "performance-assessment-c9485.firebaseapp.com",
-        projectId: "performance-assessment-c9485",
-        storageBucket: "performance-assessment-c9485.appspot.com",
-        messagingSenderId: "304338500801",
-        appId: "1:304338500801:web:a42c3d48a3d68a850fe840",
-        measurementId: "G-TZ08H4CPFJ"
-    };
+  const handleQuestionClick = () => {
+    setEditIconEnabled(false);
+    setQuestionMarkIconEnabled(true);
+    setTemporaryQuestion(question);
+  };
 
-    const app = initializeApp(firebaseConfig);
+  const handleEditClick = () => {
+    setQuestionMarkIconEnabled(false);
+    setEditIconEnabled(true);
+  };
+
+  const addAssessment = () => {
     const db = getFirestore(app);
-    const assessmentCollectionRef = collection(db, 'assessment');
+    const assessmentCollectionRef = collection(db, title);
 
     if(type == "Multiple choice"){
-      addDoc(assessmentCollectionRef, {
-        assessmentTitle: title,
+      setDoc(doc(assessmentCollectionRef, question), {
         assessmentDescription: description,
         question: question,
         type: type,
@@ -86,32 +89,30 @@ function AssessmentQuestion() {
         weight: weight,
         isRequired: isRequired
       })
-        .then((docRef) => {
-          console.log('Document written with ID: ', docRef.id);
+        .then(() => {
+          console.log('Document written with ID: ', question);
         })
         .catch((error) => {
           console.error('Error adding document: ', error);
         });
     }
     else if(type == "Short answer" || type == "Paragraph"){
-      addDoc(assessmentCollectionRef, {
-        assessmentTitle: title,
+      setDoc(doc(assessmentCollectionRef, question), {
         assessmentDescription: description,
         question: question,
         type: type,
         weight: weight,
         isRequired: isRequired
       })
-        .then((docRef) => {
-          console.log('Document written with ID: ', docRef.id);
+        .then(() => {
+          console.log('Document written with ID: ', question);
         })
         .catch((error) => {
           console.error('Error adding document: ', error);
         });
     }
     else if(type == "Checkboxes"){
-      addDoc(assessmentCollectionRef, {
-        assessmentTitle: title,
+      setDoc(doc(assessmentCollectionRef, question), {
         assessmentDescription: description,
         question: question,
         type: type,
@@ -119,13 +120,56 @@ function AssessmentQuestion() {
         weight: weight,
         isRequired: isRequired
       })
-        .then((docRef) => {
-          console.log('Document written with ID: ', docRef.id);
+        .then(() => {
+          console.log('Document written with ID: ', question);
         })
         .catch((error) => {
           console.error('Error adding document: ', error);
         });
     }
+  };
+
+  const updateAssessment = () => {
+    handleEditClick();
+    const db = getFirestore(app);
+    const assessmentCollectionRef = collection(db, title);
+    const documentId = temporaryQuestion;
+    let updatedFields = {};
+  
+    if (type === "Multiple choice") {
+      updatedFields = {
+        question: question,
+        type: type,
+        choice: choices,
+        weight: weight,
+        isRequired: isRequired
+      };
+    } else if (type === "Short answer" || type === "Paragraph") {
+      updatedFields = {
+        question: question,
+        type: type,
+        weight: weight,
+        isRequired: isRequired
+      };
+    } else if (type === "Checkboxes") {
+      updatedFields = {
+        question: question,
+        type: type,
+        checkboxChoices: checkboxChoices,
+        weight: weight,
+        isRequired: isRequired
+      };
+    }
+
+    const documentRef = doc(assessmentCollectionRef, documentId);
+  
+    updateDoc(documentRef, updatedFields)
+      .then(() => {
+        console.log('Document successfully updated!');
+      })
+      .catch((error) => {
+        console.error('Error updating document:', error);
+      });
   };
 
   return (
@@ -216,7 +260,7 @@ function AssessmentQuestion() {
       <Box
         sx={{
           width: '50px',
-          height: '50px',
+          height: 'auto',
           backgroundColor: 'white',
           borderRadius: '10px',
           display: 'flex',
@@ -224,9 +268,17 @@ function AssessmentQuestion() {
           alignItems: 'center'
         }}
       >
-        <IconButton onClick={addAssessment}>
-          <AddBoxOutlinedIcon />
-        </IconButton>
+        <Stack direction="column" justifyContent="center" alignItems="center">
+          <IconButton onClick={addAssessment}>
+            <AddBoxOutlinedIcon />
+          </IconButton>
+          <IconButton disabled={!editIconEnabled} onClick={handleQuestionClick}>
+            <QuestionMarkIcon/>
+          </IconButton>
+          <IconButton disabled={!questionMarkIconEnabled} onClick={updateAssessment}>
+            <EditIcon />
+          </IconButton>
+        </Stack>
       </Box>
     </Stack>
     </Stack>
