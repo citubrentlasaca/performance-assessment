@@ -236,10 +236,14 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
               />
               <FormControl
                 sx={{
-                  width: '220px'
+                  width: '230px'
                 }}
               >
-                <Select value={type} onChange={handleTypeChange}>
+                <Select value={type} onChange={handleTypeChange}
+                  sx={{
+                    fontFamily: "Montserrat Regular"
+                  }}
+                >
                   <MenuItem value={'Short answer'}>Short answer</MenuItem>
                   <MenuItem value={'Paragraph'}>Paragraph</MenuItem>
                   <MenuItem value={'Multiple choice'}>Multiple choice</MenuItem>

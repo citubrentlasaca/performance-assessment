@@ -28,7 +28,7 @@ function Checkboxes({ checkboxChoices, setCheckboxChoices }) {
             variant="standard"
             value={checkboxChoice.label}
             onChange={handleCheckboxChoicesChange(index)}
-            sx={{ marginTop: '10px', width: "525px" }}
+            sx={{ marginTop: '10px', width: "520px" }}
           />
         </Stack>
       ))}
