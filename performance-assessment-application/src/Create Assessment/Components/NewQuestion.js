@@ -15,8 +15,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 
 import { getFirestore, collection, setDoc, getDoc, doc, updateDoc, deleteDoc, deleteField } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../../firebase';
 
 import Paragraph from './Paragraph';
@@ -34,7 +36,26 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     const [paragraphAnswer, setParagraphAnswer] = useState('');
     const [temporaryQuestion, setTemporaryQuestion] = useState('');
     const [isDisabled, setIsDisabled] = useState(false);
+    const [uploadedImageData, setUploadedImageData] = useState({}); 
+
+    const handleImageUpload = (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
   
+      reader.onloadend = () => {
+        const imageData = reader.result;
+  
+        setUploadedImageData((prevData) => ({
+          ...prevData,
+          [index]: imageData,
+        }));
+      };
+  
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    };
+    
     const handleQuestionChange = (event) => {
       setQuestion(event.target.value);
     };
@@ -69,16 +90,65 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     const addAssessment = () => {
       const db = getFirestore(app);
       const assessmentCollectionRef = collection(db, title);
-  
-      if(type == "Multiple choice"){
-        setDoc(doc(assessmentCollectionRef, question), {
+    
+      const uploadImage = async () => {
+        const response = await fetch(uploadedImageData[index]);
+        const blob = await response.blob();
+    
+        const storage = getStorage(app);
+        const storageRef = ref(storage, `images/${question}-${Date.now()}`);
+    
+        const snapshot = await uploadBytes(storageRef, blob);
+    
+        const downloadURL = await getDownloadURL(storageRef);
+    
+        let assessmentData = {
           assessmentDescription: description,
           question: question,
           type: type,
-          choice: choices,
           weight: weight,
           isRequired: isRequired
-        })
+        };
+    
+        if (downloadURL) {
+          assessmentData.imageUrl = downloadURL;
+        }
+    
+        if (type === "Multiple choice") {
+          assessmentData.choice = choices;
+        } else if (type === "Checkboxes") {
+          assessmentData.checkboxChoices = checkboxChoices;
+        }
+    
+        setDoc(doc(assessmentCollectionRef, question), assessmentData)
+          .then(() => {
+            handleAddClick();
+            console.log('Document written with ID: ', question);
+          })
+          .catch((error) => {
+            console.error('Error adding document: ', error);
+          });
+      };
+    
+      if (uploadedImageData[index]) {
+        uploadImage();
+      } else {
+
+        let assessmentData = {
+          assessmentDescription: description,
+          question: question,
+          type: type,
+          weight: weight,
+          isRequired: isRequired
+        };
+    
+        if (type === "Multiple choice") {
+          assessmentData.choice = choices;
+        } else if (type === "Checkboxes") {
+          assessmentData.checkboxChoices = checkboxChoices;
+        }
+    
+        setDoc(doc(assessmentCollectionRef, question), assessmentData)
           .then(() => {
             handleAddClick();
             console.log('Document written with ID: ', question);
@@ -87,40 +157,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
             console.error('Error adding document: ', error);
           });
       }
-      else if(type == "Short answer" || type == "Paragraph"){
-        setDoc(doc(assessmentCollectionRef, question), {
-          assessmentDescription: description,
-          question: question,
-          type: type,
-          weight: weight,
-          isRequired: isRequired
-        })
-          .then(() => {
-            handleAddClick();
-            console.log('Document written with ID: ', question);
-          })
-          .catch((error) => {
-            console.error('Error adding document: ', error);
-          });
-      }
-      else if(type == "Checkboxes"){
-        setDoc(doc(assessmentCollectionRef, question), {
-          assessmentDescription: description,
-          question: question,
-          type: type,
-          checkboxChoices: checkboxChoices,
-          weight: weight,
-          isRequired: isRequired
-        })
-          .then(() => {
-            handleAddClick();
-            console.log('Document written with ID: ', question);
-          })
-          .catch((error) => {
-            console.error('Error adding document: ', error);
-          });
-      }
-    };
+    };    
   
     const updateAssessment = () => {
       const db = getFirestore(app);
@@ -128,63 +165,90 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
       const documentId = temporaryQuestion;
       let updatedFields = {};
     
-      if (type === "Multiple choice") {
-        updatedFields = {
-          assessmentDescription: description,
-          question: question,
-          type: type,
-          choice: choices,
-          weight: weight,
-          isRequired: isRequired
-        };
-      } else if (type === "Short answer" || type === "Paragraph") {
-        updatedFields = {
-          assessmentDescription: description,
-          question: question,
-          type: type,
-          weight: weight,
-          isRequired: isRequired
-        };
-      } else if (type === "Checkboxes") {
-        updatedFields = {
-          assessmentDescription: description,
-          question: question,
-          type: type,
-          checkboxChoices: checkboxChoices,
-          weight: weight,
-          isRequired: isRequired
-        };
-      }
+      const uploadImage = async () => {
+        const response = await fetch(uploadedImageData);
+        const blob = await response.blob();
     
-      const documentRef = doc(assessmentCollectionRef, documentId);
+        const storage = getStorage(app);
+        const storageRef = ref(storage, `images/${question}-${Date.now()}`);
     
-      getDoc(documentRef)
-        .then((docSnap) => {
-          if (docSnap.exists()) {
-            const existingData = docSnap.data();
+        const snapshot = await uploadBytes(storageRef, blob);
     
-            for (const field in existingData) {
-              if (!(field in updatedFields)) {
-                updatedFields[field] = deleteField();
+        const downloadURL = await getDownloadURL(storageRef);
+    
+        updatedFields.imageUrl = downloadURL;
+    
+        updateDocument();
+      };
+    
+      const updateDocument = () => {
+        const documentRef = doc(assessmentCollectionRef, documentId);
+    
+        getDoc(documentRef)
+          .then((docSnap) => {
+            if (docSnap.exists()) {
+              const existingData = docSnap.data();
+    
+              if (type === "Multiple choice") {
+                updatedFields = {
+                  ...updatedFields,
+                  assessmentDescription: description,
+                  question: question,
+                  type: type,
+                  choice: choices,
+                  weight: weight,
+                  isRequired: isRequired
+                };
+              } else if (type === "Short answer" || type === "Paragraph") {
+                updatedFields = {
+                  ...updatedFields,
+                  assessmentDescription: description,
+                  question: question,
+                  type: type,
+                  weight: weight,
+                  isRequired: isRequired
+                };
+              } else if (type === "Checkboxes") {
+                updatedFields = {
+                  ...updatedFields,
+                  assessmentDescription: description,
+                  question: question,
+                  type: type,
+                  checkboxChoices: checkboxChoices,
+                  weight: weight,
+                  isRequired: isRequired
+                };
               }
-            }
     
-            updateDoc(documentRef, updatedFields)
-              .then(() => {
-                setIsDisabled(true);
-                console.log('Document successfully updated!');
-              })
-              .catch((error) => {
-                console.error('Error updating document:', error);
-              });
-          } else {
-            console.error('Document does not exist.');
-          }
-        })
-        .catch((error) => {
-          console.error('Error getting document:', error);
-        });
-    };
+              for (const field in existingData) {
+                if (!(field in updatedFields)) {
+                  updatedFields[field] = deleteField();
+                }
+              }
+    
+              updateDoc(documentRef, updatedFields)
+                .then(() => {
+                  setIsDisabled(true);
+                  console.log('Document successfully updated!');
+                })
+                .catch((error) => {
+                  console.error('Error updating document:', error);
+                });
+            } else {
+              console.error('Document does not exist.');
+            }
+          })
+          .catch((error) => {
+            console.error('Error getting document:', error);
+          });
+      };
+    
+      if (uploadedImageData) {
+        uploadImage();
+      } else {
+        updateDocument();
+      }
+    };    
       
   
     const deleteDocument = () => {
@@ -234,9 +298,27 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
                   width: '100%'
                 }}
               />
+              <input type="file" onChange={handleImageUpload} accept="image/*" style={{ display: 'none' }} id={`upload-input-${index}`} />
+              <label htmlFor={`upload-input-${index}`}>
+                <IconButton component="span">
+                  <Box
+                    sx={{
+                      width: "50px",
+                      height: "50px",
+                      backgroundColor: "white",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "10px"
+                    }}
+                  >
+                    <ImageOutlinedIcon />
+                  </Box>
+                </IconButton>
+              </label>
               <FormControl
                 sx={{
-                  width: '230px'
+                  width: '270px'
                 }}
               >
                 <Select value={type} onChange={handleTypeChange}
@@ -250,6 +332,25 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
                   <MenuItem value={'Checkboxes'}>Checkboxes</MenuItem>
                 </Select>
               </FormControl>
+            </Stack>
+            <Stack justifyContent="center" alignItems="center">
+              {uploadedImageData[index] && (
+                <Box
+                  sx={{
+                    width: "500px",
+                    height: "500px",
+                    backgroundColor: "white",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: "10px",
+                    backgroundImage: `url(${uploadedImageData[index]})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    marginTop: "10px"
+                  }}
+                />
+              )}
             </Stack>
             {type === 'Multiple choice' && <MultipleChoice choices={choices} setChoices={setChoices} />}
             {type === 'Checkboxes' && (

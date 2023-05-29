@@ -29,10 +29,17 @@ function AssessmentQuestion() {
     <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
       <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
       {components.map((component) => (
-        <NewQuestion key={component.index} index={component.index} handleDeleteComponent={handleDeleteComponent} handleAddComponent={handleAddComponent} title={title} description={description}/>
+        <NewQuestion 
+        key={component.index} 
+        index={component.index} 
+        handleDeleteComponent={handleDeleteComponent} 
+        handleAddComponent={handleAddComponent} 
+        title={title} 
+        description={description}
+        />
       ))}
       {hasNoQuestions && (
-        <IconButton variant="contained" onClick={handleAddComponent}>
+        <IconButton onClick={handleAddComponent}>
           <Box
             sx={{
               width: "50px",
