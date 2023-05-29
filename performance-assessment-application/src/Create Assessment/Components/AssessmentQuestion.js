@@ -14,7 +14,7 @@ import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import MultipleChoice from './MultipleChoice';
 import Checkboxes from './Checkboxes';
-import { getFirestore, collection, setDoc, doc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, setDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import Paragraph from './Paragraph';
 import ShortAnswer from './ShortAnswer';
 import AssessmentTitle from './AssessmentTitle';
@@ -172,6 +172,20 @@ function AssessmentQuestion() {
       });
   };
 
+  const deleteDocument = () => {
+    const db = getFirestore(app);
+    const assessmentCollectionRef = collection(db, title);
+    const documentRef = doc(assessmentCollectionRef, question);
+
+    deleteDoc(documentRef)
+      .then(() => {
+        console.log('Document successfully deleted!');
+      })
+      .catch((error) => {
+        console.error('Error deleting document:', error);
+      });
+  };
+
   return (
     <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
       <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
@@ -242,7 +256,7 @@ function AssessmentQuestion() {
                   width: '150px'
                 }}
               />
-              <IconButton
+              <IconButton onClick={deleteDocument}
                 sx={{
                   marginLeft: '200px',
                   marginRight: '20px'
