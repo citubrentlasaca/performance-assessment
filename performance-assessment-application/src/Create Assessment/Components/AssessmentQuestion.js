@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 
-import { Stack, IconButton, Box } from '@mui/material';
+import { Stack, IconButton, Box, Button } from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 
 import AssessmentTitle from './AssessmentTitle';
 import NewQuestion from './NewQuestion';
+import AssessmentDialog from './AssessmentDialog';
+
+import { getFirestore, collection, getDocs, deleteDoc } from 'firebase/firestore';
+import { app } from '../../firebase';
 
 function AssessmentQuestion() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [componentCount, setComponentCount] = useState(1);
   const [components, setComponents] = useState([{ index: 0 }]);
+  const [open, setOpen] = useState(false);
+  const [dialogText, setDialogText] = useState('');
 
   const handleAddComponent = () => {
     const newIndex = componentCount;
@@ -24,6 +30,34 @@ function AssessmentQuestion() {
   };
 
   const hasNoQuestions = components.length === 0;
+
+  const handlePublishOpen = () => {
+    setOpen(true);
+    setDialogText("ASSESSMENT PUBLISHED")
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDiscardOpen = async () => {
+    setOpen(true);
+    setDialogText("ASSESSMENT DISCARDED");
+  
+    try {
+      const db = getFirestore(app);
+      const assessmentCollectionRef = collection(db, title);
+      const snapshot = await getDocs(assessmentCollectionRef);
+  
+      snapshot.forEach((doc) => {
+        deleteDoc(doc.ref);
+      });
+  
+      console.log('Collection deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting collection:', error);
+    }
+  };
 
   return (
     <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
@@ -55,6 +89,37 @@ function AssessmentQuestion() {
           </Box>
         </IconButton>
       )}
+      <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+            <Button variant="contained" onClick={handlePublishOpen}
+              sx={{
+                backgroundColor: "white",
+                color: "black",
+                fontFamily: "Montserrat Regular",
+                '&:hover': {
+                  backgroundColor: 'green',
+                  color: 'white',
+                  fontFamily: "Montserrat Regular",
+                },
+              }}
+            >
+              Publish Assessment
+            </Button>
+            <Button variant="contained" onClick={handleDiscardOpen}
+              sx={{
+                backgroundColor: "white",
+                color: "black",
+                fontFamily: "Montserrat Regular",
+                '&:hover': {
+                  backgroundColor: 'red',
+                  color: 'white',
+                  fontFamily: "Montserrat Regular",
+                },
+              }}
+            >
+              Discard Assessment
+            </Button>
+            <AssessmentDialog open={open} handleClose={handleClose} dialogText={dialogText}/>
+      </Stack>
     </Stack>
   );
 }
