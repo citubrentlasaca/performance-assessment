@@ -10,6 +10,8 @@ import AssessmentDialog from './AssessmentDialog';
 import { getFirestore, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import { app } from '../../firebase';
 
+import axios from 'axios';
+
 function AssessmentQuestion() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -26,6 +28,7 @@ function AssessmentQuestion() {
     } else {
       setComponents([...components, { index: newIndex }]);
     }
+    handlePostAssessment();
   };  
 
   const handleDeleteComponent = (indexToDelete) => {
@@ -62,6 +65,20 @@ function AssessmentQuestion() {
       console.error('Error deleting collection:', error);
     }
   };
+
+  const handlePostAssessment = async () => {
+    try {
+      const assessmentData = {
+        title: title,
+        description: description,
+      };
+      const response = await axios.post('https://localhost:7236/api/assessments', assessmentData);
+      console.log('Assessment published successfully!', response.data);
+    } catch (error) {
+      console.error('Error publishing assessment:', error);
+    }
+  };
+  
 
   return (
     <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
