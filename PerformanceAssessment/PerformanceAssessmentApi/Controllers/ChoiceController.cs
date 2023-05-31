@@ -28,7 +28,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     POST /api/choices
         ///     {
-        ///         "choiceValue": "Work, Performance, Ratings, Evaluation",
+        ///         "choiceValue": "Evaluation",
         ///         "itemId": 1
         ///     }
         ///
@@ -135,7 +135,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     PUT /api/choices
         ///     {
-        ///         "choiceValue": "Skills, Abilities, Review Period, Analytics"
+        ///         "choiceValue": "Analytics"
         ///     }
         ///
         /// </remarks>
