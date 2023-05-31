@@ -7,9 +7,6 @@ import AssessmentTitle from './AssessmentTitle';
 import NewQuestion from './NewQuestion';
 import AssessmentDialog from './AssessmentDialog';
 
-import { getFirestore, collection, getDocs, deleteDoc } from 'firebase/firestore';
-import { app } from '../../firebase';
-
 import axios from 'axios';
 
 function AssessmentQuestion() {

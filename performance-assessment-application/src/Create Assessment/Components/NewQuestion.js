@@ -17,10 +17,6 @@ import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 
-import { getFirestore, collection, setDoc, getDoc, doc, updateDoc, deleteDoc, deleteField } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { app } from '../../firebase';
-
 import Paragraph from './Paragraph';
 import ShortAnswer from './ShortAnswer';
 import Checkboxes from './Checkboxes';
@@ -185,7 +181,6 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
             const choicesResponse = await axios.get("https://localhost:7236/api/choices");
             const tempChoices = choicesResponse.data.filter(choice => choice.itemId === itemId);
     
-            // Update existing choices
             if (type === "Multiple choice") {
               for (let i = 0; i < tempChoices.length; i++) {
                 const tempChoice = tempChoices[i];
@@ -200,7 +195,6 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
               }
             }
     
-            // Add new choices
             if (type === "Multiple choice" && choices.length > tempChoices.length) {
               for (let i = tempChoices.length; i < choices.length; i++) {
                 const choice = choices[i];
