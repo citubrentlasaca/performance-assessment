@@ -28,7 +28,6 @@ function AssessmentQuestion() {
     } else {
       setComponents([...components, { index: newIndex }]);
     }
-    handlePostAssessment();
   };  
 
   const handleDeleteComponent = (indexToDelete) => {
@@ -94,7 +93,7 @@ function AssessmentQuestion() {
         />
       ))}
       {hasNoQuestions && (
-        <IconButton onClick={handleAddComponent}>
+        <IconButton onClick={() => {handleAddComponent(); handlePostAssessment(); }}>
           <Box
             sx={{
               width: "50px",

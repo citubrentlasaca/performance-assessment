@@ -26,6 +26,8 @@ import ShortAnswer from './ShortAnswer';
 import Checkboxes from './Checkboxes';
 import MultipleChoice from './MultipleChoice';
 
+import axios from 'axios';
+
 function NewQuestion({ index, title, description, handleDeleteComponent, handleAddComponent }) {
     const [question, setQuestion] = useState('');
     const [type, setType] = useState('Multiple choice');
@@ -87,78 +89,71 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
       setTemporaryQuestion(question);
     };
   
-    const addAssessment = () => {
-      const db = getFirestore(app);
-      const assessmentCollectionRef = collection(db, title);
-    
-      const uploadImage = async () => {
-        const response = await fetch(uploadedImageData[index]);
-        const blob = await response.blob();
-    
-        const storage = getStorage(app);
-        const storageRef = ref(storage, `images/${question}-${Date.now()}`);
-    
-        const snapshot = await uploadBytes(storageRef, blob);
-    
-        const downloadURL = await getDownloadURL(storageRef);
-    
-        let assessmentData = {
-          assessmentDescription: description,
+    const postItem = async () => {
+      try {
+        const assessmentData = {
           question: question,
-          type: type,
+          questionType: type,
           weight: weight,
-          isRequired: isRequired
+          required: isRequired
         };
     
-        if (downloadURL) {
-          assessmentData.imageUrl = downloadURL;
+        const assessmentsResponse = await axios.get('https://localhost:7236/api/assessments');
+        const assessments = assessmentsResponse.data;
+        const matchingAssessment = assessments.find((assessment) => assessment.title === title);
+        const assessmentId = matchingAssessment.id;
+        assessmentData.assessmentId = assessmentId;
+    
+        const postResponse = await axios.post('https://localhost:7236/api/items', assessmentData);
+        const itemId = postResponse.data.id;
+        console.log(itemId);
+        handleAddClick();
+        console.log('Item added successfully!');
+    
+        if (type === 'Multiple choice') {
+          for (const choice of choices) {
+            await postMultipleChoiceChoices(choice, itemId);
+          }
+        } else if (type === 'Checkboxes') {
+          for (const checkboxChoice of checkboxChoices) {
+            await postCheckboxChoices(checkboxChoice, itemId);
+          }
         }
+      } catch (error) {
+        console.error('Error adding item:', error);
+      }
+    };
     
-        if (type === "Multiple choice") {
-          assessmentData.choice = choices;
-        } else if (type === "Checkboxes") {
-          assessmentData.checkboxChoices = checkboxChoices;
-        }
-    
-        setDoc(doc(assessmentCollectionRef, question), assessmentData)
-          .then(() => {
-            handleAddClick();
-            console.log('Document written with ID: ', question);
-          })
-          .catch((error) => {
-            console.error('Error adding document: ', error);
-          });
-      };
-    
-      if (uploadedImageData[index]) {
-        uploadImage();
-      } else {
-
-        let assessmentData = {
-          assessmentDescription: description,
-          question: question,
-          type: type,
-          weight: weight,
-          isRequired: isRequired
+    const postMultipleChoiceChoices = async (choice, itemId) => {
+      try {
+        const choiceData = {
+          choiceValue: String(choice.label),
+          itemId: itemId
         };
     
-        if (type === "Multiple choice") {
-          assessmentData.choice = choices;
-        } else if (type === "Checkboxes") {
-          assessmentData.checkboxChoices = checkboxChoices;
-        }
+        await axios.post('https://localhost:7236/api/choices', choiceData);
     
-        setDoc(doc(assessmentCollectionRef, question), assessmentData)
-          .then(() => {
-            handleAddClick();
-            console.log('Document written with ID: ', question);
-          })
-          .catch((error) => {
-            console.error('Error adding document: ', error);
-          });
+        console.log('Multiple choice choice posted successfully!');
+      } catch (error) {
+        console.error('Error posting multiple choice choice:', error);
+      }
+    };
+    
+    const postCheckboxChoices = async (checkboxChoice, itemId) => {
+      try {
+        const checkboxChoiceData = {
+          choiceValue: String(checkboxChoice.label),
+          itemId: itemId
+        };
+    
+        await axios.post('https://localhost:7236/api/choices', checkboxChoiceData);
+    
+        console.log('Checkbox choice posted successfully!');
+      } catch (error) {
+        console.error('Error posting checkbox choice:', error);
       }
     };    
-  
+                       
     const updateAssessment = () => {
       const db = getFirestore(app);
       const assessmentCollectionRef = collection(db, title);
@@ -270,7 +265,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
         .catch((error) => {
           console.error('Error deleting document:', error);
         });
-    };    
+    };
 
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -411,7 +406,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
         }}
       >
         <Stack direction="column" justifyContent="center" alignItems="center">
-          <IconButton onClick={addAssessment}>
+          <IconButton onClick={postItem}>
             <AddBoxOutlinedIcon />
           </IconButton>
           <IconButton onClick={handleUnlockClick}>
