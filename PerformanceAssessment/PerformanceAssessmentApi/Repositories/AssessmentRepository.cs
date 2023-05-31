@@ -93,7 +93,7 @@ namespace PerformanceAssessmentApi.Repositories
                         i.AssessmentId,
                         c.Id AS Id, 
                         c.ChoiceValue,
-                        c.ItemId
+                        c.ItemId AS ItemId
                     FROM 
                         [dbo].[Assessment] AS a 
                         LEFT JOIN [dbo].[Item] AS i ON a.Id = i.AssessmentId 
@@ -103,32 +103,36 @@ namespace PerformanceAssessmentApi.Repositories
 
             using (var connection = _context.CreateConnection())
             {
-                var assessments = await connection.QueryAsync<AssessmentItemDto, ItemDto, ChoiceDto, AssessmentItemDto>(
+                var assessmentDictionary = new Dictionary<int, AssessmentItemDto>();
+
+                await connection.QueryAsync<AssessmentItemDto, ItemDto, ChoiceDto, AssessmentItemDto>(
                     sql,
                     (assessment, item, choice) =>
                     {
-                        assessment.Items.Add(item);
-                        item.Choices = choice;
+                        if (!assessmentDictionary.TryGetValue(assessment.Id, out var currentAssessment))
+                        {
+                            currentAssessment = assessment;
+                            currentAssessment.Items = new List<ItemDto>();
+                            assessmentDictionary.Add(currentAssessment.Id, currentAssessment);
+                        }
+
+                        if (currentAssessment.Items.Any(existingItem => existingItem.Id == item.Id))
+                        {
+                            currentAssessment.Items.Single(existingItem => existingItem.Id == item.Id).Choices.Add(choice);
+                        }
+                        else
+                        {
+                            item.Choices = new List<ChoiceDto> { choice };
+                            currentAssessment.Items.Add(item);
+                        }
+
                         return assessment;
                     },
                     new { Id = id },
-                    splitOn: "Id, Id"
+                    splitOn: "Id, Id, Id"
                 );
 
-                var result = assessments
-                    .GroupBy(assessment => assessment.Id)
-                    .Select(assessmentGroup =>
-                    {
-                        var groupedAssessment = assessmentGroup.First();
-                        groupedAssessment.Items = assessmentGroup
-                            .Select(item => item.Items.FirstOrDefault())
-                            .Where(item => item != null)
-                            .GroupBy(item => item.Id)
-                            .Select(itemGroup => itemGroup.First())
-                            .ToList();
-                        return groupedAssessment;
-                    })
-                    .SingleOrDefault();
+                var result = assessmentDictionary.Values.SingleOrDefault();
 
                 return result;
             }

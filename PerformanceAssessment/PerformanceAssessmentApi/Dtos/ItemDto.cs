@@ -7,7 +7,7 @@
         public string? QuestionType { get; set; }
         public float Weight { get; set; }
         public bool Required { get; set; }
-        public ChoiceDto? Choices { get; set; }
+        public List<ChoiceDto> Choices { get; set; } = new List<ChoiceDto>();
         public int AssessmentId { get; set; }
     }
 }
