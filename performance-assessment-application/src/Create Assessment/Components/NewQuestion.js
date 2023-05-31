@@ -251,25 +251,26 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
       }
     };        
 
-    const deleteDocument = () => {
-      const db = getFirestore(app);
-      
+    const deleteItem = async () => {
       if (!question) {
         handleDeleteComponent(index);
         return;
       }
-
-      const assessmentCollectionRef = collection(db, title);
-      const documentRef = doc(assessmentCollectionRef, question);
-    
-      deleteDoc(documentRef)
-        .then(() => {
+      try {
+        const response = await axios.get("https://localhost:7236/api/items");
+        const items = response.data;
+        const item = items.find((item) => item.question === temporaryQuestion);
+        if (item) {
+          const itemId = item.id;
+          await axios.delete(`https://localhost:7236/api/items/${itemId}`);
           handleDeleteComponent(index);
-          console.log('Document successfully deleted!');
-        })
-        .catch((error) => {
-          console.error('Error deleting document:', error);
-        });
+          console.log("Item deleted successfully!");
+        } else {
+          console.log("Item not found.");
+        }
+      } catch (error) {
+        console.error("Error deleting item:", error);
+      }
     };
 
   return (
@@ -384,7 +385,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
                   width: '150px'
                 }}
               />
-              <IconButton onClick={deleteDocument}
+              <IconButton onClick={deleteItem}
                 sx={{
                   marginLeft: '200px',
                   marginRight: '20px'
