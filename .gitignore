@@ -583,3 +583,4 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+PerformanceAssessment/PerformanceAssessmentApi/appsettings.json

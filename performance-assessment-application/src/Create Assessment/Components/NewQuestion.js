@@ -17,14 +17,12 @@ import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 
-import { getFirestore, collection, setDoc, getDoc, doc, updateDoc, deleteDoc, deleteField } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { app } from '../../firebase';
-
 import Paragraph from './Paragraph';
 import ShortAnswer from './ShortAnswer';
 import Checkboxes from './Checkboxes';
 import MultipleChoice from './MultipleChoice';
+
+import axios from 'axios';
 
 function NewQuestion({ index, title, description, handleDeleteComponent, handleAddComponent }) {
     const [question, setQuestion] = useState('');
@@ -37,6 +35,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     const [temporaryQuestion, setTemporaryQuestion] = useState('');
     const [isDisabled, setIsDisabled] = useState(false);
     const [uploadedImageData, setUploadedImageData] = useState({}); 
+    const [tempChoices, setTempChoices] = useState([]);
 
     const handleImageUpload = (event) => {
       const file = event.target.files[0];
@@ -85,192 +84,188 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     const handleUnlockClick = () => {
       setIsDisabled(false);
       setTemporaryQuestion(question);
+    
+      if (type === 'Multiple choice') {
+        setTempChoices([...choices]);
+      } else if (type === 'Checkboxes') {
+        setTempChoices([...checkboxChoices]);
+      }
     };
+    
   
-    const addAssessment = () => {
-      const db = getFirestore(app);
-      const assessmentCollectionRef = collection(db, title);
-    
-      const uploadImage = async () => {
-        const response = await fetch(uploadedImageData[index]);
-        const blob = await response.blob();
-    
-        const storage = getStorage(app);
-        const storageRef = ref(storage, `images/${question}-${Date.now()}`);
-    
-        const snapshot = await uploadBytes(storageRef, blob);
-    
-        const downloadURL = await getDownloadURL(storageRef);
-    
-        let assessmentData = {
-          assessmentDescription: description,
+    const postItem = async () => {
+      try {
+        const assessmentData = {
           question: question,
-          type: type,
+          questionType: type,
           weight: weight,
-          isRequired: isRequired
+          required: isRequired
         };
     
-        if (downloadURL) {
-          assessmentData.imageUrl = downloadURL;
+        const assessmentsResponse = await axios.get('https://localhost:7236/api/assessments');
+        const assessments = assessmentsResponse.data;
+        const matchingAssessment = assessments.find((assessment) => assessment.title === title);
+        const assessmentId = matchingAssessment.id;
+        assessmentData.assessmentId = assessmentId;
+    
+        const postResponse = await axios.post('https://localhost:7236/api/items', assessmentData);
+        const itemId = postResponse.data.id;
+        handleAddClick();
+        console.log('Item added successfully!');
+    
+        if (type === 'Multiple choice') {
+          for (const choice of choices) {
+            await postMultipleChoiceChoices(choice, itemId);
+          }
+        } else if (type === 'Checkboxes') {
+          for (const checkboxChoice of checkboxChoices) {
+            await postCheckboxChoices(checkboxChoice, itemId);
+          }
         }
+      } catch (error) {
+        console.error('Error adding item:', error);
+      }
+    };
     
-        if (type === "Multiple choice") {
-          assessmentData.choice = choices;
-        } else if (type === "Checkboxes") {
-          assessmentData.checkboxChoices = checkboxChoices;
-        }
-    
-        setDoc(doc(assessmentCollectionRef, question), assessmentData)
-          .then(() => {
-            handleAddClick();
-            console.log('Document written with ID: ', question);
-          })
-          .catch((error) => {
-            console.error('Error adding document: ', error);
-          });
-      };
-    
-      if (uploadedImageData[index]) {
-        uploadImage();
-      } else {
-
-        let assessmentData = {
-          assessmentDescription: description,
-          question: question,
-          type: type,
-          weight: weight,
-          isRequired: isRequired
+    const postMultipleChoiceChoices = async (choice, itemId) => {
+      try {
+        const choiceData = {
+          choiceValue: String(choice.label),
+          itemId: itemId
         };
     
-        if (type === "Multiple choice") {
-          assessmentData.choice = choices;
-        } else if (type === "Checkboxes") {
-          assessmentData.checkboxChoices = checkboxChoices;
-        }
+        await axios.post('https://localhost:7236/api/choices', choiceData);
     
-        setDoc(doc(assessmentCollectionRef, question), assessmentData)
-          .then(() => {
-            handleAddClick();
-            console.log('Document written with ID: ', question);
-          })
-          .catch((error) => {
-            console.error('Error adding document: ', error);
-          });
+        console.log('Multiple choice added successfully!');
+      } catch (error) {
+        console.error('Error adding multiple choice:', error);
+      }
+    };
+    
+    const postCheckboxChoices = async (checkboxChoice, itemId) => {
+      try {
+        const checkboxChoiceData = {
+          choiceValue: String(checkboxChoice.label),
+          itemId: itemId
+        };
+    
+        await axios.post('https://localhost:7236/api/choices', checkboxChoiceData);
+    
+        console.log('Checkbox choice added successfully!');
+      } catch (error) {
+        console.error('Error adding checkbox choice:', error);
       }
     };    
-  
-    const updateAssessment = () => {
-      const db = getFirestore(app);
-      const assessmentCollectionRef = collection(db, title);
-      const documentId = temporaryQuestion;
-      let updatedFields = {};
+      
+    const putItem = async () => {
+      try {
+        const response = await axios.get("https://localhost:7236/api/items");
+        const items = response.data;
+        const item = items.find((item) => item.question === temporaryQuestion);
     
-      const uploadImage = async () => {
-        const response = await fetch(uploadedImageData);
-        const blob = await response.blob();
+        if (item) {
+          const itemId = item.id;
     
-        const storage = getStorage(app);
-        const storageRef = ref(storage, `images/${question}-${Date.now()}`);
+          const assessmentData = {
+            question: question,
+            questionType: type,
+            weight: weight,
+            required: isRequired,
+          };
     
-        const snapshot = await uploadBytes(storageRef, blob);
+          await axios.put(`https://localhost:7236/api/items/${itemId}`, assessmentData);
+          setIsDisabled(true);
+          console.log("Item updated successfully!");
     
-        const downloadURL = await getDownloadURL(storageRef);
+          if (type === "Multiple choice" || type === "Checkboxes") {
+            const choicesResponse = await axios.get("https://localhost:7236/api/choices");
+            const tempChoices = choicesResponse.data.filter(choice => choice.itemId === itemId);
     
-        updatedFields.imageUrl = downloadURL;
-    
-        updateDocument();
-      };
-    
-      const updateDocument = () => {
-        const documentRef = doc(assessmentCollectionRef, documentId);
-    
-        getDoc(documentRef)
-          .then((docSnap) => {
-            if (docSnap.exists()) {
-              const existingData = docSnap.data();
-    
-              if (type === "Multiple choice") {
-                updatedFields = {
-                  ...updatedFields,
-                  assessmentDescription: description,
-                  question: question,
-                  type: type,
-                  choice: choices,
-                  weight: weight,
-                  isRequired: isRequired
-                };
-              } else if (type === "Short answer" || type === "Paragraph") {
-                updatedFields = {
-                  ...updatedFields,
-                  assessmentDescription: description,
-                  question: question,
-                  type: type,
-                  weight: weight,
-                  isRequired: isRequired
-                };
-              } else if (type === "Checkboxes") {
-                updatedFields = {
-                  ...updatedFields,
-                  assessmentDescription: description,
-                  question: question,
-                  type: type,
-                  checkboxChoices: checkboxChoices,
-                  weight: weight,
-                  isRequired: isRequired
-                };
+            if (type === "Multiple choice") {
+              for (let i = 0; i < tempChoices.length; i++) {
+                const tempChoice = tempChoices[i];
+                const choice = choices[i];
+                await putMultipleChoiceChoice(itemId, tempChoice.id, choice.label);
               }
-    
-              for (const field in existingData) {
-                if (!(field in updatedFields)) {
-                  updatedFields[field] = deleteField();
-                }
+            } else if (type === "Checkboxes") {
+              for (let i = 0; i < tempChoices.length; i++) {
+                const tempCheckboxChoice = tempChoices[i];
+                const checkboxChoice = checkboxChoices[i];
+                await putCheckboxChoice(itemId, tempCheckboxChoice.id, checkboxChoice.label);
               }
-    
-              updateDoc(documentRef, updatedFields)
-                .then(() => {
-                  setIsDisabled(true);
-                  console.log('Document successfully updated!');
-                })
-                .catch((error) => {
-                  console.error('Error updating document:', error);
-                });
-            } else {
-              console.error('Document does not exist.');
             }
-          })
-          .catch((error) => {
-            console.error('Error getting document:', error);
-          });
-      };
     
-      if (uploadedImageData) {
-        uploadImage();
-      } else {
-        updateDocument();
+            if (type === "Multiple choice" && choices.length > tempChoices.length) {
+              for (let i = tempChoices.length; i < choices.length; i++) {
+                const choice = choices[i];
+                await postMultipleChoiceChoices(choice, itemId);
+              }
+            } else if (type === "Checkboxes" && checkboxChoices.length > tempChoices.length) {
+              for (let i = tempChoices.length; i < checkboxChoices.length; i++) {
+                const checkboxChoice = checkboxChoices[i];
+                await postCheckboxChoices(checkboxChoice, itemId);
+              }
+            }
+          }
+        } else {
+          console.log("Item not found.");
+        }
+      } catch (error) {
+        console.error("Error updating item:", error);
       }
-    };    
-      
-  
-    const deleteDocument = () => {
-      const db = getFirestore(app);
-      
+    };
+    
+    const putMultipleChoiceChoice = async (itemId, choiceId, label) => {
+      try {
+        const choiceData = {
+          choiceValue: String(label),
+          itemId: itemId
+        };
+    
+        await axios.put(`https://localhost:7236/api/choices/${choiceId}`, choiceData);
+    
+        console.log('Multiple choice choice updated successfully!');
+      } catch (error) {
+        console.error('Error updating multiple choice choice:', error);
+      }
+    };
+    
+    const putCheckboxChoice = async (itemId, choiceId, label) => {
+      try {
+        const checkboxChoiceData = {
+          choiceValue: String(label),
+          itemId: itemId
+        };
+    
+        await axios.put(`https://localhost:7236/api/choices/${choiceId}`, checkboxChoiceData);
+    
+        console.log('Checkbox choice updated successfully!');
+      } catch (error) {
+        console.error('Error updating checkbox choice:', error);
+      }
+    };        
+
+    const deleteItem = async () => {
       if (!question) {
         handleDeleteComponent(index);
         return;
       }
-
-      const assessmentCollectionRef = collection(db, title);
-      const documentRef = doc(assessmentCollectionRef, question);
-    
-      deleteDoc(documentRef)
-        .then(() => {
+      try {
+        const response = await axios.get("https://localhost:7236/api/items");
+        const items = response.data;
+        const item = items.find((item) => item.question === temporaryQuestion);
+        if (item) {
+          const itemId = item.id;
+          await axios.delete(`https://localhost:7236/api/items/${itemId}`);
           handleDeleteComponent(index);
-          console.log('Document successfully deleted!');
-        })
-        .catch((error) => {
-          console.error('Error deleting document:', error);
-        });
-    };    
+          console.log("Item deleted successfully!");
+        } else {
+          console.log("Item not found.");
+        }
+      } catch (error) {
+        console.error("Error deleting item:", error);
+      }
+    };
 
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -384,7 +379,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
                   width: '150px'
                 }}
               />
-              <IconButton onClick={deleteDocument}
+              <IconButton onClick={deleteItem}
                 sx={{
                   marginLeft: '200px',
                   marginRight: '20px'
@@ -411,13 +406,13 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
         }}
       >
         <Stack direction="column" justifyContent="center" alignItems="center">
-          <IconButton onClick={addAssessment}>
+          <IconButton onClick={postItem}>
             <AddBoxOutlinedIcon />
           </IconButton>
           <IconButton onClick={handleUnlockClick}>
             <LockOpenIcon/>
           </IconButton>
-          <IconButton onClick={updateAssessment}>
+          <IconButton onClick={putItem}>
             <EditIcon />
           </IconButton>
         </Stack>

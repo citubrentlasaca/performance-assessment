@@ -7,22 +7,26 @@ import AssessmentTitle from './AssessmentTitle';
 import NewQuestion from './NewQuestion';
 import AssessmentDialog from './AssessmentDialog';
 
-import { getFirestore, collection, getDocs, deleteDoc } from 'firebase/firestore';
-import { app } from '../../firebase';
+import axios from 'axios';
 
 function AssessmentQuestion() {
   const [title, setTitle] = useState('');
+  const [tempTitle, setTempTitle] = useState('');
   const [description, setDescription] = useState('');
   const [componentCount, setComponentCount] = useState(1);
-  const [components, setComponents] = useState([{ index: 0 }]);
+  const [components, setComponents] = useState([]);
   const [open, setOpen] = useState(false);
   const [dialogText, setDialogText] = useState('');
 
   const handleAddComponent = () => {
     const newIndex = componentCount;
     setComponentCount(componentCount + 1);
-    setComponents([...components, { index: newIndex }]);
-  };
+    if (components.length === 0) {
+      setComponents([{ index: newIndex }]);
+    } else {
+      setComponents([...components, { index: newIndex }]);
+    }
+  };  
 
   const handleDeleteComponent = (indexToDelete) => {
     const updatedComponents = components.filter((component) => component.index !== indexToDelete);
@@ -31,8 +35,42 @@ function AssessmentQuestion() {
 
   const hasNoQuestions = components.length === 0;
 
+  const updateAssessment = () => {
+    axios
+      .get("https://localhost:7236/api/assessments")
+      .then((response) => {
+        const assessments = response.data;
+        const assessment = assessments.find((item) => item.title === tempTitle);
+  
+        if (assessment) {
+          const assessmentId = assessment.id;
+  
+          const updatedAssessment = {
+            title: title,
+            description: description,
+          };
+  
+          axios
+            .put(`https://localhost:7236/api/assessments/${assessmentId}`, updatedAssessment)
+            .then(() => {
+              console.log("Assessment updated successfully!");
+            })
+            .catch((error) => {
+              console.error("Error updating assessment:", error);
+            });
+        } else {
+          console.log("Assessment not found.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error retrieving assessments:", error);
+      });
+  };  
+
   const handlePublishOpen = () => {
     setOpen(true);
+    setTempTitle(title);
+    updateAssessment();
     setDialogText("ASSESSMENT PUBLISHED")
   };
 
@@ -40,25 +78,54 @@ function AssessmentQuestion() {
     setOpen(false);
   };
 
-  const handleDiscardOpen = async () => {
-    setOpen(true);
-    setDialogText("ASSESSMENT DISCARDED");
+  const deleteAssessment = () => {
+    axios
+      .get("https://localhost:7236/api/assessments")
+      .then((response) => {
+        const assessments = response.data;
+        const assessment = assessments.find((item) => item.title === tempTitle);
   
-    try {
-      const db = getFirestore(app);
-      const assessmentCollectionRef = collection(db, title);
-      const snapshot = await getDocs(assessmentCollectionRef);
+        if (assessment) {
+          const assessmentId = assessment.id;
   
-      snapshot.forEach((doc) => {
-        deleteDoc(doc.ref);
+          axios
+            .delete(`https://localhost:7236/api/assessments/${assessmentId}`)
+            .then(() => {
+              console.log("Assessment deleted successfully!");
+            })
+            .catch((error) => {
+              console.error("Error deleting assessment:", error);
+            });
+        } else {
+          console.log("Assessment not found.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error retrieving assessments:", error);
       });
+  };
   
-      console.log('Collection deleted successfully!');
-    } catch (error) {
-      console.error('Error deleting collection:', error);
-    }
+  const handleDiscardOpen = () => {
+    setOpen(true);
+    setTempTitle(title);
+    deleteAssessment();
+    setDialogText("ASSESSMENT DISCARDED"); 
   };
 
+  const handlePostAssessment = async () => {
+    try {
+      const assessmentData = {
+        title: title,
+        description: description,
+      };
+      const response = await axios.post('https://localhost:7236/api/assessments', assessmentData);
+      setTempTitle(title);
+      console.log('Assessment published successfully!', response.data);
+    } catch (error) {
+      console.error('Error publishing assessment:', error);
+    }
+  };
+  
   return (
     <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
       <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
@@ -73,7 +140,7 @@ function AssessmentQuestion() {
         />
       ))}
       {hasNoQuestions && (
-        <IconButton onClick={handleAddComponent}>
+        <IconButton onClick={() => {handleAddComponent(); handlePostAssessment(); }}>
           <Box
             sx={{
               width: "50px",
