@@ -39,6 +39,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     const [temporaryQuestion, setTemporaryQuestion] = useState('');
     const [isDisabled, setIsDisabled] = useState(false);
     const [uploadedImageData, setUploadedImageData] = useState({}); 
+    const [tempChoices, setTempChoices] = useState([]);
 
     const handleImageUpload = (event) => {
       const file = event.target.files[0];
@@ -87,7 +88,14 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     const handleUnlockClick = () => {
       setIsDisabled(false);
       setTemporaryQuestion(question);
+    
+      if (type === 'Multiple choice') {
+        setTempChoices([...choices]);
+      } else if (type === 'Checkboxes') {
+        setTempChoices([...checkboxChoices]);
+      }
     };
+    
   
     const postItem = async () => {
       try {
@@ -106,7 +114,6 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     
         const postResponse = await axios.post('https://localhost:7236/api/items', assessmentData);
         const itemId = postResponse.data.id;
-        console.log(itemId);
         handleAddClick();
         console.log('Item added successfully!');
     
@@ -133,9 +140,9 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     
         await axios.post('https://localhost:7236/api/choices', choiceData);
     
-        console.log('Multiple choice choice posted successfully!');
+        console.log('Multiple choice added successfully!');
       } catch (error) {
-        console.error('Error posting multiple choice choice:', error);
+        console.error('Error adding multiple choice:', error);
       }
     };
     
@@ -148,104 +155,102 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     
         await axios.post('https://localhost:7236/api/choices', checkboxChoiceData);
     
-        console.log('Checkbox choice posted successfully!');
+        console.log('Checkbox choice added successfully!');
       } catch (error) {
-        console.error('Error posting checkbox choice:', error);
-      }
-    };    
-                       
-    const updateAssessment = () => {
-      const db = getFirestore(app);
-      const assessmentCollectionRef = collection(db, title);
-      const documentId = temporaryQuestion;
-      let updatedFields = {};
-    
-      const uploadImage = async () => {
-        const response = await fetch(uploadedImageData);
-        const blob = await response.blob();
-    
-        const storage = getStorage(app);
-        const storageRef = ref(storage, `images/${question}-${Date.now()}`);
-    
-        const snapshot = await uploadBytes(storageRef, blob);
-    
-        const downloadURL = await getDownloadURL(storageRef);
-    
-        updatedFields.imageUrl = downloadURL;
-    
-        updateDocument();
-      };
-    
-      const updateDocument = () => {
-        const documentRef = doc(assessmentCollectionRef, documentId);
-    
-        getDoc(documentRef)
-          .then((docSnap) => {
-            if (docSnap.exists()) {
-              const existingData = docSnap.data();
-    
-              if (type === "Multiple choice") {
-                updatedFields = {
-                  ...updatedFields,
-                  assessmentDescription: description,
-                  question: question,
-                  type: type,
-                  choice: choices,
-                  weight: weight,
-                  isRequired: isRequired
-                };
-              } else if (type === "Short answer" || type === "Paragraph") {
-                updatedFields = {
-                  ...updatedFields,
-                  assessmentDescription: description,
-                  question: question,
-                  type: type,
-                  weight: weight,
-                  isRequired: isRequired
-                };
-              } else if (type === "Checkboxes") {
-                updatedFields = {
-                  ...updatedFields,
-                  assessmentDescription: description,
-                  question: question,
-                  type: type,
-                  checkboxChoices: checkboxChoices,
-                  weight: weight,
-                  isRequired: isRequired
-                };
-              }
-    
-              for (const field in existingData) {
-                if (!(field in updatedFields)) {
-                  updatedFields[field] = deleteField();
-                }
-              }
-    
-              updateDoc(documentRef, updatedFields)
-                .then(() => {
-                  setIsDisabled(true);
-                  console.log('Document successfully updated!');
-                })
-                .catch((error) => {
-                  console.error('Error updating document:', error);
-                });
-            } else {
-              console.error('Document does not exist.');
-            }
-          })
-          .catch((error) => {
-            console.error('Error getting document:', error);
-          });
-      };
-    
-      if (uploadedImageData) {
-        uploadImage();
-      } else {
-        updateDocument();
+        console.error('Error adding checkbox choice:', error);
       }
     };    
       
-  
+    const putItem = async () => {
+      try {
+        const response = await axios.get("https://localhost:7236/api/items");
+        const items = response.data;
+        const item = items.find((item) => item.question === temporaryQuestion);
+    
+        if (item) {
+          const itemId = item.id;
+    
+          const assessmentData = {
+            question: question,
+            questionType: type,
+            weight: weight,
+            required: isRequired,
+          };
+    
+          await axios.put(`https://localhost:7236/api/items/${itemId}`, assessmentData);
+          setIsDisabled(true);
+          console.log("Item updated successfully!");
+    
+          if (type === "Multiple choice" || type === "Checkboxes") {
+            const choicesResponse = await axios.get("https://localhost:7236/api/choices");
+            const tempChoices = choicesResponse.data.filter(choice => choice.itemId === itemId);
+    
+            // Update existing choices
+            if (type === "Multiple choice") {
+              for (let i = 0; i < tempChoices.length; i++) {
+                const tempChoice = tempChoices[i];
+                const choice = choices[i];
+                await putMultipleChoiceChoice(itemId, tempChoice.id, choice.label);
+              }
+            } else if (type === "Checkboxes") {
+              for (let i = 0; i < tempChoices.length; i++) {
+                const tempCheckboxChoice = tempChoices[i];
+                const checkboxChoice = checkboxChoices[i];
+                await putCheckboxChoice(itemId, tempCheckboxChoice.id, checkboxChoice.label);
+              }
+            }
+    
+            // Add new choices
+            if (type === "Multiple choice" && choices.length > tempChoices.length) {
+              for (let i = tempChoices.length; i < choices.length; i++) {
+                const choice = choices[i];
+                await postMultipleChoiceChoices(choice, itemId);
+              }
+            } else if (type === "Checkboxes" && checkboxChoices.length > tempChoices.length) {
+              for (let i = tempChoices.length; i < checkboxChoices.length; i++) {
+                const checkboxChoice = checkboxChoices[i];
+                await postCheckboxChoices(checkboxChoice, itemId);
+              }
+            }
+          }
+        } else {
+          console.log("Item not found.");
+        }
+      } catch (error) {
+        console.error("Error updating item:", error);
+      }
+    };
+    
+    const putMultipleChoiceChoice = async (itemId, choiceId, label) => {
+      try {
+        const choiceData = {
+          choiceValue: String(label),
+          itemId: itemId
+        };
+    
+        await axios.put(`https://localhost:7236/api/choices/${choiceId}`, choiceData);
+    
+        console.log('Multiple choice choice updated successfully!');
+      } catch (error) {
+        console.error('Error updating multiple choice choice:', error);
+      }
+    };
+    
+    const putCheckboxChoice = async (itemId, choiceId, label) => {
+      try {
+        const checkboxChoiceData = {
+          choiceValue: String(label),
+          itemId: itemId
+        };
+    
+        await axios.put(`https://localhost:7236/api/choices/${choiceId}`, checkboxChoiceData);
+    
+        console.log('Checkbox choice updated successfully!');
+      } catch (error) {
+        console.error('Error updating checkbox choice:', error);
+      }
+    };        
+
     const deleteDocument = () => {
       const db = getFirestore(app);
       
@@ -412,7 +417,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
           <IconButton onClick={handleUnlockClick}>
             <LockOpenIcon/>
           </IconButton>
-          <IconButton onClick={updateAssessment}>
+          <IconButton onClick={putItem}>
             <EditIcon />
           </IconButton>
         </Stack>
