@@ -14,15 +14,19 @@ function AssessmentQuestion() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [componentCount, setComponentCount] = useState(1);
-  const [components, setComponents] = useState([{ index: 0 }]);
+  const [components, setComponents] = useState([]);
   const [open, setOpen] = useState(false);
   const [dialogText, setDialogText] = useState('');
 
   const handleAddComponent = () => {
     const newIndex = componentCount;
     setComponentCount(componentCount + 1);
-    setComponents([...components, { index: newIndex }]);
-  };
+    if (components.length === 0) {
+      setComponents([{ index: newIndex }]);
+    } else {
+      setComponents([...components, { index: newIndex }]);
+    }
+  };  
 
   const handleDeleteComponent = (indexToDelete) => {
     const updatedComponents = components.filter((component) => component.index !== indexToDelete);
