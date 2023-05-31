@@ -10,11 +10,13 @@ namespace PerformanceAssessmentApi.Controllers
     public class AssessmentController : ControllerBase
     {
         private readonly IAssessmentService _assessmentService;
+        private readonly IItemService _itemService;
         private readonly ILogger<AssessmentController> _logger;
 
-        public AssessmentController(IAssessmentService assessmentService, ILogger<AssessmentController> logger)
+        public AssessmentController(IAssessmentService assessmentService, IItemService itemService, ILogger<AssessmentController> logger)
         {
             _assessmentService = assessmentService;
+            _itemService = itemService;
             _logger = logger;
         }
 
@@ -223,6 +225,14 @@ namespace PerformanceAssessmentApi.Controllers
         {
             try
             {
+                // Check if an assessment has an item or not
+                var foundItems = await _itemService.GetItemById(id);
+
+                if (foundItems == null)
+                {
+                    return StatusCode(404, "Item/s not found");
+                }
+
                 // Check if assessment exists
                 var foundAssessmentItems = await _assessmentService.GetAssessmentItemsById(id);
 
