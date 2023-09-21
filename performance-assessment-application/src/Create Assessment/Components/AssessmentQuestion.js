@@ -26,7 +26,7 @@ function AssessmentQuestion() {
     } else {
       setComponents([...components, { index: newIndex }]);
     }
-  };  
+  };
 
   const handleDeleteComponent = (indexToDelete) => {
     const updatedComponents = components.filter((component) => component.index !== indexToDelete);
@@ -41,15 +41,15 @@ function AssessmentQuestion() {
       .then((response) => {
         const assessments = response.data;
         const assessment = assessments.find((item) => item.title === tempTitle);
-  
+
         if (assessment) {
           const assessmentId = assessment.id;
-  
+
           const updatedAssessment = {
             title: title,
             description: description,
           };
-  
+
           axios
             .put(`https://localhost:7236/api/assessments/${assessmentId}`, updatedAssessment)
             .then(() => {
@@ -65,7 +65,7 @@ function AssessmentQuestion() {
       .catch((error) => {
         console.error("Error retrieving assessments:", error);
       });
-  };  
+  };
 
   const handlePublishOpen = () => {
     setOpen(true);
@@ -84,10 +84,10 @@ function AssessmentQuestion() {
       .then((response) => {
         const assessments = response.data;
         const assessment = assessments.find((item) => item.title === tempTitle);
-  
+
         if (assessment) {
           const assessmentId = assessment.id;
-  
+
           axios
             .delete(`https://localhost:7236/api/assessments/${assessmentId}`)
             .then(() => {
@@ -104,12 +104,12 @@ function AssessmentQuestion() {
         console.error("Error retrieving assessments:", error);
       });
   };
-  
+
   const handleDiscardOpen = () => {
     setOpen(true);
     setTempTitle(title);
     deleteAssessment();
-    setDialogText("ASSESSMENT DISCARDED"); 
+    setDialogText("ASSESSMENT DISCARDED");
   };
 
   const handlePostAssessment = async () => {
@@ -125,69 +125,81 @@ function AssessmentQuestion() {
       console.error('Error publishing assessment:', error);
     }
   };
-  
+
   return (
-    <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
-      <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription}/>
-      {components.map((component) => (
-        <NewQuestion 
-        key={component.index} 
-        index={component.index} 
-        handleDeleteComponent={handleDeleteComponent} 
-        handleAddComponent={handleAddComponent} 
-        title={title} 
-        description={description}
-        />
-      ))}
-      {hasNoQuestions && (
-        <IconButton onClick={() => {handleAddComponent(); handlePostAssessment(); }}>
-          <Box
+    <div
+      style={{
+        height: 'calc(100% - 100px)',
+        width: '100%',
+        overflowY: 'auto', // Add this CSS property to enable vertical scrolling
+      }}
+    >
+      <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
+        <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription} />
+        {components.map((component) => (
+          <NewQuestion
+            key={component.index}
+            index={component.index}
+            handleDeleteComponent={handleDeleteComponent}
+            handleAddComponent={handleAddComponent}
+            title={title}
+            description={description}
+          />
+        ))}
+        {hasNoQuestions && (
+          <IconButton onClick={() => { handleAddComponent(); handlePostAssessment(); }}>
+            <Box
+              sx={{
+                width: "50px",
+                height: "50px",
+                backgroundColor: "white",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: "10px"
+              }}
+            >
+              <AddBoxOutlinedIcon />
+            </Box>
+          </IconButton>
+        )}
+        <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}
+          style={{
+            marginBottom: "16px"
+          }}
+        >
+          <Button variant="contained" onClick={handlePublishOpen}
             sx={{
-              width: "50px",
-              height: "50px",
               backgroundColor: "white",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: "10px"
+              color: "black",
+              fontFamily: "Montserrat Regular",
+              '&:hover': {
+                backgroundColor: 'green',
+                color: 'white',
+                fontFamily: "Montserrat Regular",
+              },
             }}
           >
-              <AddBoxOutlinedIcon/>
-          </Box>
-        </IconButton>
-      )}
-      <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-            <Button variant="contained" onClick={handlePublishOpen}
-              sx={{
-                backgroundColor: "white",
-                color: "black",
+            Publish Assessment
+          </Button>
+          <Button variant="contained" onClick={handleDiscardOpen}
+            sx={{
+              backgroundColor: "white",
+              color: "black",
+              fontFamily: "Montserrat Regular",
+              '&:hover': {
+                backgroundColor: 'red',
+                color: 'white',
                 fontFamily: "Montserrat Regular",
-                '&:hover': {
-                  backgroundColor: 'green',
-                  color: 'white',
-                  fontFamily: "Montserrat Regular",
-                },
-              }}
-            >
-              Publish Assessment
-            </Button>
-            <Button variant="contained" onClick={handleDiscardOpen}
-              sx={{
-                backgroundColor: "white",
-                color: "black",
-                fontFamily: "Montserrat Regular",
-                '&:hover': {
-                  backgroundColor: 'red',
-                  color: 'white',
-                  fontFamily: "Montserrat Regular",
-                },
-              }}
-            >
-              Discard Assessment
-            </Button>
-            <AssessmentDialog open={open} handleClose={handleClose} dialogText={dialogText}/>
+              },
+            }}
+          >
+            Discard Assessment
+          </Button>
+          <AssessmentDialog open={open} handleClose={handleClose} dialogText={dialogText} />
+        </Stack>
       </Stack>
-    </Stack>
+    </div>
   );
 }
 

@@ -584,3 +584,4 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 PerformanceAssessment/PerformanceAssessmentApi/appsettings.json
+/PerformanceAssessment/PerformanceAssessmentDatabase/PerformanceAssessmentDatabase.sqlproj
