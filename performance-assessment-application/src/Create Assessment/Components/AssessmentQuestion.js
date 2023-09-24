@@ -8,6 +8,7 @@ import NewQuestion from './NewQuestion';
 import AssessmentDialog from './AssessmentDialog';
 
 import axios from 'axios';
+import NavBar from '../../Shared/NavBar';
 
 function AssessmentQuestion() {
   const [title, setTitle] = useState('');
@@ -127,13 +128,7 @@ function AssessmentQuestion() {
   };
 
   return (
-    <div
-      style={{
-        height: 'calc(100% - 100px)',
-        width: '100%',
-        overflowY: 'auto', // Add this CSS property to enable vertical scrolling
-      }}
-    >
+    <NavBar>
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
         <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription} />
         {components.map((component) => (
@@ -199,7 +194,7 @@ function AssessmentQuestion() {
           <AssessmentDialog open={open} handleClose={handleClose} dialogText={dialogText} />
         </Stack>
       </Stack>
-    </div>
+    </NavBar>
   );
 }
 

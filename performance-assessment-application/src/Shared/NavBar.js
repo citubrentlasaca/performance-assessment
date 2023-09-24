@@ -3,9 +3,8 @@ import { Stack } from '@mui/material'
 import TopBar from './TopBar'
 import SideBar from './SideBar'
 import TopBarTwo from './TopBarTwo'
-import AssessmentQuestion from '../Create Assessment/Components/AssessmentQuestion'
 
-function NavBar() {
+function NavBar({ children }) {
   return (
     <Stack
       direction="column"
@@ -40,7 +39,18 @@ function NavBar() {
           }}
         >
           <TopBarTwo />
-          <AssessmentQuestion />
+          <div
+            style={{
+              height: 'calc(100% - 100px)',
+              width: '100%',
+              overflowY: 'auto',
+              padding: '40px'
+            }}
+          >
+            <main>
+              {children}
+            </main>
+          </div>
         </Stack>
       </Stack>
     </Stack>

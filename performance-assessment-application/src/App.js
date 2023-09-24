@@ -1,5 +1,7 @@
 import './App.css';
-import NavBar from './Shared/NavBar';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AssessmentQuestion from './Create Assessment/Components/AssessmentQuestion';
+import Templates from './Create Assessment/Components/Templates';
 
 function App() {
   return (
@@ -11,7 +13,12 @@ function App() {
         backgroundColor: "#d6f4f8",
       }}
     >
-      <NavBar />
+      <Router>
+        <Routes>
+          <Route path="/assessments" element={<AssessmentQuestion />} />
+          <Route path="/templates" element={<Templates />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
