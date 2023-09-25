@@ -93,6 +93,7 @@ namespace PerformanceAssessmentApi.Repositories
                         i.AssessmentId,
                         c.Id AS Id, 
                         c.ChoiceValue,
+                        c.Weight,
                         c.ItemId AS ItemId
                     FROM 
                         [dbo].[Assessment] AS a 
