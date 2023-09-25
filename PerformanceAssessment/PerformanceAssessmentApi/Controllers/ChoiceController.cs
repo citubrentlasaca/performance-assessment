@@ -29,7 +29,6 @@ namespace PerformanceAssessmentApi.Controllers
         ///     POST /api/choices
         ///     {
         ///         "choiceValue": "Evaluation",
-        ///         "weight": 50,
         ///         "itemId": 1
         ///     }
         ///
@@ -136,8 +135,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     PUT /api/choices
         ///     {
-        ///         "choiceValue": "Analytics",
-        ///         "weight": 30
+        ///         "choiceValue": "Analytics"
         ///     }
         ///
         /// </remarks>
