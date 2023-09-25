@@ -88,12 +88,12 @@ namespace PerformanceAssessmentApi.Repositories
                         i.Id AS Id, 
                         i.Question, 
                         i.QuestionType, 
-                        i.Weight, 
+                        i.Weight,
+                        i.Target,
                         i.Required,
                         i.AssessmentId,
                         c.Id AS Id, 
                         c.ChoiceValue,
-                        c.Weight,
                         c.ItemId AS ItemId
                     FROM 
                         [dbo].[Assessment] AS a 
