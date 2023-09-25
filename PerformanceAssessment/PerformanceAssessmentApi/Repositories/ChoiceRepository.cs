@@ -16,8 +16,8 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<int> CreateChoice(Choice choice)
         {
-            var sql = "INSERT INTO [dbo].[Choice] ([ChoiceValue], [Weight], [ItemId]) " +
-                      "VALUES (@ChoiceValue, @Weight, @ItemId); " +
+            var sql = "INSERT INTO [dbo].[Choice] ([ChoiceValue], [ItemId]) " +
+                      "VALUES (@ChoiceValue, @ItemId); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
@@ -49,8 +49,7 @@ namespace PerformanceAssessmentApi.Repositories
         public async Task<int> UpdateChoice(Choice choice)
         {
             var sql = "UPDATE [dbo].[Choice] SET " +
-                      "[ChoiceValue] = @ChoiceValue, " +
-                      "[Weight] = @Weight " +
+                      "[ChoiceValue] = @ChoiceValue " +
                       "WHERE Id = @Id;";
 
             using (var con = _context.CreateConnection())
@@ -60,8 +59,7 @@ namespace PerformanceAssessmentApi.Repositories
                     new
                     {
                         Id = choice.Id,
-                        ChoiceValue = choice.ChoiceValue,
-                        Weight = choice.Weight
+                        ChoiceValue = choice.ChoiceValue
                     }
                 );
             }
