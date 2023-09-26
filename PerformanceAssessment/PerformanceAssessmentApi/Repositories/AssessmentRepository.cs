@@ -78,64 +78,30 @@ namespace PerformanceAssessmentApi.Repositories
             }
         }
 
-        public async Task<AssessmentItemDto> GetAssessmentItemsById(int id)
+        public async Task<AssessmentItemDto?> GetAssessmentItemsById(int id)
         {
-            var sql = @"
-                    SELECT 
-                        a.Id AS Id, 
-                        a.Title AS Title, 
-                        a.Description AS Description, 
-                        i.Id AS Id, 
-                        i.Question, 
-                        i.QuestionType, 
-                        i.Weight,
-                        i.Target,
-                        i.Required,
-                        i.AssessmentId,
-                        c.Id AS Id, 
-                        c.ChoiceValue,
-                        c.ItemId AS ItemId
-                    FROM 
-                        [dbo].[Assessment] AS a 
-                        LEFT JOIN [dbo].[Item] AS i ON a.Id = i.AssessmentId 
-                        LEFT JOIN [dbo].[Choice] AS c ON i.Id = c.ItemId 
-                    WHERE 
-                        a.Id = @Id";
+            var assessmentSql = "SELECT * FROM [dbo].[Assessment] WHERE [Id] = @Id;";
+            var itemsSql = "SELECT * FROM [dbo].[Item] WHERE [AssessmentId] = @Id;";
+            var choicesSql = "SELECT * FROM [dbo].[Choice] WHERE [ItemId] IN (SELECT [Id] FROM [dbo].[Item] WHERE [AssessmentId] = @Id);";
 
-            using (var connection = _context.CreateConnection())
+            using (var con = _context.CreateConnection())
             {
-                var assessmentDictionary = new Dictionary<int, AssessmentItemDto>();
+                using (var multi = await con.QueryMultipleAsync($"{assessmentSql}{itemsSql}{choicesSql}", new { Id = id }))
+                {
+                    var assessment = await multi.ReadSingleOrDefaultAsync<AssessmentItemDto>();
 
-                await connection.QueryAsync<AssessmentItemDto, ItemDto, ChoiceDto, AssessmentItemDto>(
-                    sql,
-                    (assessment, item, choice) =>
+                    if (assessment != null)
                     {
-                        if (!assessmentDictionary.TryGetValue(assessment.Id, out var currentAssessment))
+                        assessment.Items = (await multi.ReadAsync<ItemDto>()).ToList();
+                        var choices = (await multi.ReadAsync<ChoiceDto>()).ToList();
+
+                        foreach (var item in assessment.Items)
                         {
-                            currentAssessment = assessment;
-                            currentAssessment.Items = new List<ItemDto>();
-                            assessmentDictionary.Add(currentAssessment.Id, currentAssessment);
+                            item.Choices = choices.Where(choice => choice.ItemId == item.Id).ToList();
                         }
-
-                        if (currentAssessment.Items.Any(existingItem => existingItem.Id == item.Id))
-                        {
-                            currentAssessment.Items.Single(existingItem => existingItem.Id == item.Id).Choices.Add(choice);
-                        }
-                        else
-                        {
-                            item.Choices = new List<ChoiceDto> { choice };
-                            currentAssessment.Items.Add(item);
-                        }
-
-                        return assessment;
-                    },
-                    new { Id = id },
-                    splitOn: "Id, Id, Id"
-                );
-
-                var result = assessmentDictionary.Values.SingleOrDefault();
-
-                return result;
+                    }
+                    return assessment;
+                }
             }
         }
     }
