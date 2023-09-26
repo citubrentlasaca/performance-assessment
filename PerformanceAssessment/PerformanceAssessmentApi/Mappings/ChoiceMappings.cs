@@ -10,12 +10,10 @@ namespace PerformanceAssessmentApi.Mappings
         {
             CreateMap<ChoiceCreationDto, Choice>(MemberList.None)
                 .ForMember(dto => dto.ChoiceValue, opt => opt.MapFrom(st => (st.ChoiceValue!)))
-                .ForMember(dto => dto.Weight, opt => opt.MapFrom(st => (st.Weight!)))
                 .ForMember(dto => dto.ItemId, opt => opt.MapFrom(st => (st.ItemId!)));
 
             CreateMap<ChoiceUpdationDto, Choice>(MemberList.None)
-                .ForMember(dto => dto.ChoiceValue, opt => opt.MapFrom(st => (st.ChoiceValue!)))
-                .ForMember(dto => dto.Weight, opt => opt.MapFrom(st => (st.Weight!)));
+                .ForMember(dto => dto.ChoiceValue, opt => opt.MapFrom(st => (st.ChoiceValue!)));
         }
     }
 }

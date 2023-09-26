@@ -16,8 +16,8 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<int> CreateItem(Item item)
         {
-            var sql = "INSERT INTO [dbo].[Item] ([Question], [QuestionType], [Weight], [Required], [AssessmentId]) " +
-                      "VALUES (@Question, @QuestionType, @Weight, @Required, @AssessmentId); " +
+            var sql = "INSERT INTO [dbo].[Item] ([Question], [QuestionType], [Weight], [Target], [Required], [AssessmentId]) " +
+                      "VALUES (@Question, @QuestionType, @Weight, @Target, @Required, @AssessmentId); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
@@ -34,11 +34,11 @@ namespace PerformanceAssessmentApi.Repositories
                         i.Question, 
                         i.QuestionType, 
                         i.Weight, 
+                        i.Target,
                         i.Required,
                         i.AssessmentId,
                         c.Id AS Id, 
                         c.ChoiceValue,
-                        c.Weight,
                         c.ItemId AS ItemId
                     FROM 
                         [dbo].[Item] AS i
@@ -86,11 +86,11 @@ namespace PerformanceAssessmentApi.Repositories
                         i.Question, 
                         i.QuestionType, 
                         i.Weight, 
+                        i.Target,
                         i.Required,
                         i.AssessmentId,
                         c.Id AS Id, 
                         c.ChoiceValue,
-                        c.Weight,
                         c.ItemId AS ItemId
                     FROM 
                         [dbo].[Item] AS i
@@ -136,6 +136,7 @@ namespace PerformanceAssessmentApi.Repositories
                       "[Question] = @Question, " +
                       "[QuestionType] = @QuestionType, " +
                       "[Weight] = @Weight, " +
+                      "[Target] = @Target, " +
                       "[Required] = @Required " +
                       "WHERE Id = @Id;";
 
@@ -149,6 +150,7 @@ namespace PerformanceAssessmentApi.Repositories
                         Question = item.Question,
                         QuestionType = item.QuestionType,
                         Weight = item.Weight,
+                        Target = item.Target,
                         Required = item.Required
                     }
                 );

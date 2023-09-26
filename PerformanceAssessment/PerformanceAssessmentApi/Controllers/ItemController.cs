@@ -31,6 +31,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///         "question": "What can you say about the overall performance of your work?",
         ///         "questionType": "Short Answer",
         ///         "weight": 100,
+        ///         "target": 100,
         ///         "required": "true",
         ///         "assessmentId": 1
         ///     }
@@ -141,6 +142,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///         "question": "What steps are you planning on taking to further improve your job performance before your next review?",
         ///         "questionType": "Paragraph",
         ///         "weight": 90,
+        ///         "target": 50,
         ///         "required": "false"
         ///     }
         ///
