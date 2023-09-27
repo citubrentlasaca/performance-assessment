@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Stack, IconButton, Box, Button } from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
@@ -18,14 +18,37 @@ function AssessmentQuestion() {
   const [components, setComponents] = useState([]);
   const [open, setOpen] = useState(false);
   const [dialogText, setDialogText] = useState('');
+  const [totalWeight, setTotalWeight] = useState(0);
+
+  const calculateTotalWeight = () => {
+    return components.reduce((sum, component) => sum + parseFloat(component.weight), 0);
+  };
+
+  useEffect(() => {
+    const newTotalWeight = calculateTotalWeight();
+    setTotalWeight(newTotalWeight);
+    console.log("Total weight:", newTotalWeight);
+  }, [components]);
+
+  const handleWeightChange = (index, newWeight) => {
+    const updatedComponents = components.map((component) => {
+      if (component.index === index) {
+        return { ...component, weight: newWeight };
+      }
+      return component;
+    });
+    setComponents(updatedComponents);
+  };
+
+
 
   const handleAddComponent = () => {
     const newIndex = componentCount;
     setComponentCount(componentCount + 1);
     if (components.length === 0) {
-      setComponents([{ index: newIndex }]);
+      setComponents([{ index: newIndex, weight: 0 }]);
     } else {
-      setComponents([...components, { index: newIndex }]);
+      setComponents([...components, { index: newIndex, weight: 0 }]);
     }
   };
 
@@ -71,8 +94,13 @@ function AssessmentQuestion() {
   const handlePublishOpen = () => {
     setOpen(true);
     setTempTitle(title);
-    updateAssessment();
-    setDialogText("ASSESSMENT PUBLISHED")
+    if (totalWeight !== 100) {
+      setDialogText("TOTAL WEIGHT MUST BE EQUAL TO 100");
+    }
+    else {
+      updateAssessment();
+      setDialogText("ASSESSMENT PUBLISHED");
+    }
   };
 
   const handleClose = () => {
@@ -139,6 +167,7 @@ function AssessmentQuestion() {
             handleAddComponent={handleAddComponent}
             title={title}
             description={description}
+            updateWeight={(newWeight) => handleWeightChange(component.index, newWeight)}
           />
         ))}
         {hasNoQuestions && (
