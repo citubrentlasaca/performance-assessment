@@ -58,6 +58,7 @@
     <Folder Include="Properties" />
     <Folder Include="Tables" />
     <Folder Include="SelfAssessmentTable" />
+    <Folder Include="PeerAssessmentTable" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Assessment.sql" />
@@ -66,5 +67,8 @@
     <Build Include="SelfAssessmentTable\SelfAssessment.sql" />
     <Build Include="SelfAssessmentTable\SelfAssessmentItem.sql" />
     <Build Include="SelfAssessmentTable\SelfAssessmentChoice.sql" />
+    <Build Include="PeerAssessmentTable\PeerAssessment.sql" />
+    <Build Include="PeerAssessmentTable\PeerAssessmentItem.sql" />
+    <Build Include="PeerAssessmentTable\PeerAssessmentChoice.sql" />
   </ItemGroup>
 </Project>

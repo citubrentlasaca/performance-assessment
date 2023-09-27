@@ -145,7 +145,7 @@ namespace PerformanceAssessmentApi.Controllers
         [HttpPut("{id}", Name = "UpdateSelfAssessmentChoice")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(ChoiceUpdationDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SelfAssessmentChoiceUpdationDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateSelfAssessmentChoice(int id, [FromBody] SelfAssessmentChoiceUpdationDto choice)
