@@ -57,10 +57,14 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="SelfAssessmentTable" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Assessment.sql" />
     <Build Include="Tables\Item.sql" />
     <Build Include="Tables\Choice.sql" />
+    <Build Include="SelfAssessmentTable\SelfAssessment.sql" />
+    <Build Include="SelfAssessmentTable\SelfAssessmentItem.sql" />
+    <Build Include="SelfAssessmentTable\SelfAssessmentChoice.sql" />
   </ItemGroup>
 </Project>

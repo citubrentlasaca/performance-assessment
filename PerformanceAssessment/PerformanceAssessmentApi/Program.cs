@@ -74,4 +74,11 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IItemService, ItemService>();
     services.AddScoped<IChoiceRepository, ChoiceRepository>();
     services.AddScoped<IChoiceService, ChoiceService>();
+
+    services.AddScoped<ISelfAssessmentRepository, SelfAssessmentRepository>();
+    services.AddScoped<ISelfAssessmentService, SelfAssessmentService>();
+    services.AddScoped<ISelfAssessmentItemRepository, SelfAssessmentItemRepository>();
+    services.AddScoped<ISelfAssessmentItemService, SelfAssessmentItemService>();
+    services.AddScoped<ISelfAssessmentChoiceRepository, SelfAssessmentChoiceRepository>();
+    services.AddScoped<ISelfAssessmentChoiceService, SelfAssessmentChoiceService>();
 }
