@@ -88,4 +88,11 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IPeerAssessmentItemService, PeerAssessmentItemService>();
     services.AddScoped<IPeerAssessmentChoiceRepository, PeerAssessmentChoiceRepository>();
     services.AddScoped<IPeerAssessmentChoiceService, PeerAssessmentChoiceService>();
+
+    services.AddScoped<IEmployerAssessmentRepository, EmployerAssessmentRepository>();
+    services.AddScoped<IEmployerAssessmentService, EmployerAssessmentService>();
+    services.AddScoped<IEmployerAssessmentItemRepository, EmployerAssessmentItemRepository>();
+    services.AddScoped<IEmployerAssessmentItemService, EmployerAssessmentItemService>();
+    services.AddScoped<IEmployerAssessmentChoiceRepository, EmployerAssessmentChoiceRepository>();
+    services.AddScoped<IEmployerAssessmentChoiceService, EmployerAssessmentChoiceService>();
 }
