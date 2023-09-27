@@ -81,4 +81,11 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<ISelfAssessmentItemService, SelfAssessmentItemService>();
     services.AddScoped<ISelfAssessmentChoiceRepository, SelfAssessmentChoiceRepository>();
     services.AddScoped<ISelfAssessmentChoiceService, SelfAssessmentChoiceService>();
+
+    services.AddScoped<IPeerAssessmentRepository, PeerAssessmentRepository>();
+    services.AddScoped<IPeerAssessmentService, PeerAssessmentService>();
+    services.AddScoped<IPeerAssessmentItemRepository, PeerAssessmentItemRepository>();
+    services.AddScoped<IPeerAssessmentItemService, PeerAssessmentItemService>();
+    services.AddScoped<IPeerAssessmentChoiceRepository, PeerAssessmentChoiceRepository>();
+    services.AddScoped<IPeerAssessmentChoiceService, PeerAssessmentChoiceService>();
 }
