@@ -60,6 +60,7 @@
     <Folder Include="SelfAssessmentTable" />
     <Folder Include="PeerAssessmentTable" />
     <Folder Include="EmployerAssessmentTable" />
+    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Assessment.sql" />
@@ -74,5 +75,16 @@
     <Build Include="EmployerAssessmentTable\EmployerAssessment.sql" />
     <Build Include="EmployerAssessmentTable\EmployerAssessmentItem.sql" />
     <Build Include="EmployerAssessmentTable\EmployerAssessmentChoice.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\PopulateSelfAssesmentData.sql" />
+    <None Include="Scripts\PopulateSelfAssessmentItemData.sql" />
+    <None Include="Scripts\PopulateSelfAssessmentChoiceData.sql" />
+    <None Include="Scripts\PopulatePeerAssessmentData.sql" />
+    <None Include="Scripts\PopulatePeerAssessmentItemData.sql" />
+    <None Include="Scripts\PopulatePeerAssessmentChoiceData.sql" />
+    <None Include="Scripts\PopulateEmployerAssessmentData.sql" />
+    <None Include="Scripts\PopulateEmployerAssessmentItemData.sql" />
+    <None Include="Scripts\PopulateEmployerAssessmentChoiceData.sql" />
   </ItemGroup>
 </Project>
