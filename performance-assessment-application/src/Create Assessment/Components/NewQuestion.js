@@ -86,17 +86,6 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     handleAddComponent();
   };
 
-  const handleUnlockClick = () => {
-    setIsDisabled(false);
-    setTemporaryQuestion(question);
-
-    if (type === 'Multiple choice') {
-      setTempChoices([...choices]);
-    } else if (type === 'Checkboxes') {
-      setTempChoices([...checkboxChoices]);
-    }
-  };
-
 
   const postItem = async () => {
     try {
@@ -164,6 +153,10 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
   };
 
   const putItem = async () => {
+    if (isDisabled) {
+      setIsDisabled(!isDisabled);
+      return;
+    }
     try {
       const response = await axios.get("https://localhost:7236/api/items");
       const items = response.data;
@@ -181,7 +174,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
         };
 
         await axios.put(`https://localhost:7236/api/items/${itemId}`, assessmentData);
-        setIsDisabled(true);
+        setIsDisabled(!isDisabled);
         console.log("Item updated successfully!");
 
         if (type === "Multiple choice" || type === "Checkboxes") {
@@ -435,9 +428,6 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
         <Stack direction="column" justifyContent="center" alignItems="center">
           <IconButton onClick={postItem}>
             <AddBoxOutlinedIcon />
-          </IconButton>
-          <IconButton onClick={handleUnlockClick}>
-            <LockOpenIcon />
           </IconButton>
           <IconButton onClick={putItem}>
             <EditIcon />

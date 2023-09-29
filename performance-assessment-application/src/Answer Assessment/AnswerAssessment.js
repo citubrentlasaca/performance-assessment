@@ -13,40 +13,26 @@ function AnswerAssessment() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch assessment data
                 const assessmentResponse = await fetch(`https://localhost:7236/api/assessments/${id}`);
                 const assessmentData = await assessmentResponse.json();
                 setAssessmentData(assessmentData);
 
-                // Fetch item data
                 const itemResponse = await fetch(`https://localhost:7236/api/items`);
                 const itemData = await itemResponse.json();
-                // Assuming you want to filter for assessmentId = 3
                 const filteredItems = itemData.filter(item => item.assessmentId === Number(id));
-                // Now, 'filteredItems' contains only the items with assessmentId = 3
                 setItemData(filteredItems);
 
-
-                // Implement loop here to fetch choice data for each item in filteredItems
                 const choiceResponse = await fetch(`https://localhost:7236/api/choices`);
                 const choiceData = await choiceResponse.json();
-                // Create an object to store choice data by itemId
                 const choicesByItemId = {};
-
-                // Loop through filteredItems and filter choice data for each item
                 filteredItems.forEach(item => {
                     const itemId = item.id;
                     const choicesForItem = choiceData.filter(choice => choice.itemId === itemId);
                     choicesByItemId[itemId] = choicesForItem;
                 });
-
-                // Now, 'choicesByItemId' is an object that maps item IDs to their respective choices
                 setChoiceData(choicesByItemId);
 
-                // All requests completed, set loading to false
                 setLoading(false);
-                console.log(filteredItems)
-                console.log(choicesByItemId);
             } catch (error) {
                 console.error(`Error fetching data:`, error);
                 setLoading(false);
@@ -60,7 +46,19 @@ function AnswerAssessment() {
     return (
         <NavBar>
             {loading ? (
-                <p>Loading assessment data...</p>
+                <Stack
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={2}
+                    sx={{
+                        height: "100%",
+                        width: "100%"
+                    }}
+                >
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </Stack>
             ) : (
                 <Stack
                     direction="column"
