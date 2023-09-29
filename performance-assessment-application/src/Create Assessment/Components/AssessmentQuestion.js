@@ -27,7 +27,6 @@ function AssessmentQuestion() {
   useEffect(() => {
     const newTotalWeight = calculateTotalWeight();
     setTotalWeight(newTotalWeight);
-    console.log("Total weight:", newTotalWeight);
   }, [components]);
 
   const handleWeightChange = (index, newWeight) => {
