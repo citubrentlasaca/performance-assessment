@@ -13,8 +13,7 @@ namespace PerformanceAssessmentApi.Dtos
         [Required(ErrorMessage = "The weight is required.")]
         public float Weight { get; set; }
 
-        [Required(ErrorMessage = "The target is required.")]
-        public float Target { get; set; }
+        public float? Target { get; set; }
 
         [Required(ErrorMessage = "The required field is required.")]
         public bool Required { get; set; }
