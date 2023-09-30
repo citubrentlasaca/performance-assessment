@@ -75,6 +75,7 @@
     <Build Include="EmployerAssessmentTable\EmployerAssessment.sql" />
     <Build Include="EmployerAssessmentTable\EmployerAssessmentItem.sql" />
     <Build Include="EmployerAssessmentTable\EmployerAssessmentChoice.sql" />
+    <Build Include="Tables\Answer.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\PopulateSelfAssesmentData.sql" />
