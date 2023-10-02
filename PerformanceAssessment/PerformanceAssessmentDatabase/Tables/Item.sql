@@ -4,8 +4,8 @@
     [Question] NVARCHAR(MAX) NOT NULL, 
     [QuestionType] NVARCHAR(MAX) NOT NULL,
     [Weight] FLOAT NOT NULL,
-    [Target] FLOAT NOT NULL, 
+    [Target] FLOAT NULL, 
     [Required] BIT NOT NULL,
     [AssessmentId] INT NOT NULL,
-    CONSTRAINT [FK_ItemAssessment] FOREIGN KEY ([AssessmentId]) REFERENCES [Assessment]([Id]) ON DELETE CASCADE
+    CONSTRAINT [FK_ItemAssessment] FOREIGN KEY ([AssessmentId]) REFERENCES [Assessment]([Id]) ON DELETE NO ACTION
 )
