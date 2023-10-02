@@ -3,38 +3,57 @@ import React from 'react';
 import { Stack, Checkbox, TextField, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
-function Checkboxes({ checkboxChoices, setCheckboxChoices }) {
+function Checkboxes({ checkboxChoices, setCheckboxChoices, checkboxChoiceWeight, setCheckboxChoiceWeight }) {
   const handleCheckboxChoicesChange = (index) => (event) => {
     const newChoices = [...checkboxChoices];
-    newChoices[index] = { label: event.target.value }; 
+    newChoices[index] = { label: event.target.value };
     setCheckboxChoices(newChoices);
   };
-  
+
+  const handleChoiceWeightChange = (index) => (event) => {
+    const newChoiceWeight = [...checkboxChoiceWeight];
+    newChoiceWeight[index] = event.target.value;
+    setCheckboxChoiceWeight(newChoiceWeight);
+  };
+
   const handleAddCheckbox = () => {
     const newChoices = [...checkboxChoices, { label: '' }];
     setCheckboxChoices(newChoices);
   };
 
   return (
-    <Stack direction="column" spacing={1}>
+    <Stack direction="column" spacing={1}
+      sx={{
+        width: "100%",
+      }}
+    >
       {checkboxChoices.map((checkboxChoice, index) => (
-        <Stack direction="row" alignItems="center" key={index}>
+        <Stack direction="row" alignItems="center" justifyContent="center" key={index} spacing={2}
+          sx={{
+            width: "100%",
+          }}
+        >
           <Checkbox
             checked={checkboxChoice.checked}
             disabled
-            sx={{ marginTop: '10px' }}
           />
           <TextField
             variant="standard"
             value={checkboxChoice.label}
             onChange={handleCheckboxChoicesChange(index)}
-            sx={{ marginTop: '10px', width: "455px" }}
+            sx={{ width: "100%" }}
+          />
+          <input type='number' value={checkboxChoiceWeight[index]} onChange={handleChoiceWeightChange(index)}
+            style={{
+              width: '173.5px',
+              border: '1px solid #c4c4c4',
+            }}
           />
         </Stack>
       ))}
       <Stack direction="row" justifyContent="left">
         <IconButton onClick={handleAddCheckbox}>
-          <AddIcon/>
+          <AddIcon />
         </IconButton>
       </Stack>
     </Stack>
