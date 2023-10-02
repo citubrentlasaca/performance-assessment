@@ -27,7 +27,6 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     POST /api/answers
         ///     {
-        ///         "asssessmentId": 1,
         ///         "itemId": 1,
         ///         "answerText": "My performance was great.",
         ///         "selectedChoices": "Efficiency, Teamwork",
@@ -52,40 +51,6 @@ namespace PerformanceAssessmentApi.Controllers
                 var newAnswers = await _answerService.SaveAnswers(answers);
 
                 return CreatedAtRoute("GetAnswersById", new { id = newAnswers.Id }, newAnswers);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message);
-                return StatusCode(500, "Something went wrong");
-            }
-        }
-
-        /// <summary>
-        /// Gets the answers by assessment id
-        /// </summary>
-        /// <param name="assessmentId">Assessment id</param>
-        /// <returns>Returns the details of the answers with assessment id <paramref name="assessmentId"/></returns>
-        /// <response code="200">Answers found</response>
-        /// <response code="404">Answers not found</response>
-        /// <response code="500">Internal server error</response>
-        [HttpGet("assessments/{assessmentId}", Name = "GetAnswersByAssessmentId")]
-        [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAnswersByAssessmentId(int assessmentId)
-        {
-            try
-            {
-                // Check if the answers exist
-                var foundAnswers = await _answerService.GetAnswersByAssessmentId(assessmentId);
-
-                if (foundAnswers == null)
-                {
-                    return StatusCode(404, "Answers not found");
-                }
-
-                return Ok(foundAnswers);
             }
             catch (Exception e)
             {
@@ -173,7 +138,6 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     PUT /api/answers
         ///     {
-        ///         "assessmentId": 2,
         ///         "itemId": 2,
         ///         "answerText": "The team was good.",
         ///         "selectedChoices": "Punctuality, Evaluation",
@@ -214,10 +178,10 @@ namespace PerformanceAssessmentApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the existing answers
+        /// Soft deletes the existing answers
         /// </summary>
-        /// <param name="id">The id of the answer that will be deleted</param>
-        /// <response code="200">Successfully deleted the answers</response>
+        /// <param name="id">The id of the answer that will be soft deleted</param>
+        /// <response code="200">Successfully soft deleted the answers</response>
         /// <response code="404">Answers not found</response>
         /// <response code="500">Internal server error</response>
         [HttpDelete("{id}", Name = "DeleteAnswers")]
