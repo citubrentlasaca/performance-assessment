@@ -11,10 +11,8 @@ import {
   Switch
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 
 import Paragraph from './Paragraph';
 import ShortAnswer from './ShortAnswer';
@@ -27,33 +25,15 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
   const [question, setQuestion] = useState('');
   const [type, setType] = useState('Multiple choice');
   const [choices, setChoices] = useState([]);
+  const [choiceWeight, setChoiceWeight] = useState([]);
   const [checkboxChoices, setCheckboxChoices] = useState([]);
+  const [checkboxChoiceWeight, setCheckboxChoiceWeight] = useState([]);
   const [weight, setWeight] = useState(0);
   const [target, setTarget] = useState(0);
   const [isRequired, setIsRequired] = useState(false);
   const [paragraphAnswer, setParagraphAnswer] = useState('');
   const [temporaryQuestion, setTemporaryQuestion] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-  const [uploadedImageData, setUploadedImageData] = useState({});
-  const [tempChoices, setTempChoices] = useState([]);
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const imageData = reader.result;
-
-      setUploadedImageData((prevData) => ({
-        ...prevData,
-        [index]: imageData,
-      }));
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleQuestionChange = (event) => {
     setQuestion(event.target.value);
@@ -126,14 +106,15 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     try {
       const choiceData = {
         choiceValue: String(choice.label),
+        weight: choiceWeight[choices.indexOf(choice)],
         itemId: itemId
       };
 
       await axios.post('https://localhost:7236/api/choices', choiceData);
 
-      console.log('Multiple choice added successfully!');
+      console.log('Choices added successfully!');
     } catch (error) {
-      console.error('Error adding multiple choice:', error);
+      console.error('Error adding choices:', error);
     }
   };
 
@@ -141,14 +122,15 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     try {
       const checkboxChoiceData = {
         choiceValue: String(checkboxChoice.label),
+        weight: checkboxChoiceWeight[checkboxChoices.indexOf(checkboxChoice)],
         itemId: itemId
       };
 
       await axios.post('https://localhost:7236/api/choices', checkboxChoiceData);
 
-      console.log('Checkbox choice added successfully!');
+      console.log('Choices added successfully!');
     } catch (error) {
-      console.error('Error adding checkbox choice:', error);
+      console.error('Error adding choices:', error);
     }
   };
 
@@ -185,13 +167,13 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
             for (let i = 0; i < tempChoices.length; i++) {
               const tempChoice = tempChoices[i];
               const choice = choices[i];
-              await putMultipleChoiceChoice(itemId, tempChoice.id, choice.label);
+              await putMultipleChoiceChoice(itemId, tempChoice.id, choice.label, choiceWeight[i]);
             }
           } else if (type === "Checkboxes") {
             for (let i = 0; i < tempChoices.length; i++) {
               const tempCheckboxChoice = tempChoices[i];
               const checkboxChoice = checkboxChoices[i];
-              await putCheckboxChoice(itemId, tempCheckboxChoice.id, checkboxChoice.label);
+              await putCheckboxChoice(itemId, tempCheckboxChoice.id, checkboxChoice.label, checkboxChoiceWeight[i]);
             }
           }
 
@@ -215,25 +197,27 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
     }
   };
 
-  const putMultipleChoiceChoice = async (itemId, choiceId, label) => {
+  const putMultipleChoiceChoice = async (itemId, choiceId, label, weight) => {
     try {
       const choiceData = {
         choiceValue: String(label),
+        weight: weight,
         itemId: itemId
       };
 
       await axios.put(`https://localhost:7236/api/choices/${choiceId}`, choiceData);
 
-      console.log('Multiple choice choice updated successfully!');
+      console.log('Choices updated successfully!');
     } catch (error) {
-      console.error('Error updating multiple choice choice:', error);
+      console.error('Error updating choices', error);
     }
   };
 
-  const putCheckboxChoice = async (itemId, choiceId, label) => {
+  const putCheckboxChoice = async (itemId, choiceId, label, weight) => {
     try {
       const checkboxChoiceData = {
         choiceValue: String(label),
+        weight: weight,
         itemId: itemId
       };
 
@@ -241,7 +225,7 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
 
       console.log('Checkbox choice updated successfully!');
     } catch (error) {
-      console.error('Error updating checkbox choice:', error);
+      console.error('Error updating choices', error);
     }
   };
 
@@ -290,30 +274,12 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
               value={question}
               onChange={handleQuestionChange}
               sx={{
-                width: '100%'
+                width: '75%'
               }}
             />
-            <input type="file" onChange={handleImageUpload} accept="image/*" style={{ display: 'none' }} id={`upload-input-${index}`} />
-            <label htmlFor={`upload-input-${index}`}>
-              <IconButton component="span">
-                <Box
-                  sx={{
-                    width: "50px",
-                    height: "50px",
-                    backgroundColor: "white",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: "10px"
-                  }}
-                >
-                  <ImageOutlinedIcon />
-                </Box>
-              </IconButton>
-            </label>
             <FormControl
               sx={{
-                width: '270px'
+                width: '25%'
               }}
             >
               <Select value={type} onChange={handleTypeChange}
@@ -328,28 +294,9 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
               </Select>
             </FormControl>
           </Stack>
-          <Stack justifyContent="center" alignItems="center">
-            {uploadedImageData[index] && (
-              <Box
-                sx={{
-                  width: "500px",
-                  height: "500px",
-                  backgroundColor: "white",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: "10px",
-                  backgroundImage: `url(${uploadedImageData[index]})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  marginTop: "10px"
-                }}
-              />
-            )}
-          </Stack>
-          {type === 'Multiple choice' && <MultipleChoice choices={choices} setChoices={setChoices} />}
+          {type === 'Multiple choice' && <MultipleChoice choices={choices} setChoices={setChoices} choiceWeight={choiceWeight} setChoiceWeight={setChoiceWeight} />}
           {type === 'Checkboxes' && (
-            <Checkboxes checkboxChoices={checkboxChoices} setCheckboxChoices={setCheckboxChoices} />
+            <Checkboxes checkboxChoices={checkboxChoices} setCheckboxChoices={setCheckboxChoices} checkboxChoiceWeight={checkboxChoiceWeight} setCheckboxChoiceWeight={setCheckboxChoiceWeight} />
           )}
           {type === 'Paragraph' && (
             <Paragraph
