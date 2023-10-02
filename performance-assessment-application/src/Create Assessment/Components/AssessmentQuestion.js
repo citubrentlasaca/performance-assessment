@@ -148,9 +148,9 @@ function AssessmentQuestion() {
       };
       const response = await axios.post('https://localhost:7236/api/assessments', assessmentData);
       setTempTitle(title);
-      console.log('Assessment published successfully!', response.data);
+      console.log('Assessment added successfully!', response.data);
     } catch (error) {
-      console.error('Error publishing assessment:', error);
+      console.error('Error adding assessment:', error);
     }
   };
 
