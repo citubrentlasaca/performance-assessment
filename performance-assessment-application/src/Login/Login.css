@@ -1,3 +1,15 @@
 .login-container {
     display: flex;
   }
+
+.left-section {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+}
+
+.left-section img{
+  width: 626px;
+  height: 597px;
+  flex-shrink: 0;
+}
