@@ -5,14 +5,17 @@ import { Stack, TextField } from '@mui/material';
 function Paragraph() {
 
   return (
-    <Stack direction="column" spacing={2}>
+    <Stack direction="column" spacing={2}
+      sx={{
+        width: '100%',
+      }}
+    >
       <TextField
         variant="standard"
-        label= "Paragraph"
+        label="Paragraph"
         disabled
-        sx={{ 
-          marginTop: '10px',
-          width: "565px"
+        sx={{
+          width: "100%"
         }}
       />
     </Stack>

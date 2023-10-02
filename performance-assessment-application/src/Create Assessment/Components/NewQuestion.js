@@ -266,97 +266,134 @@ function NewQuestion({ index, title, description, handleDeleteComponent, handleA
             marginLeft: "65px"
           }}
         >
-          <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
-            <TextField
-              multiline
-              label="Question"
-              variant="filled"
-              value={question}
-              onChange={handleQuestionChange}
-              sx={{
-                width: '75%'
-              }}
-            />
-            <FormControl
-              sx={{
-                width: '25%'
-              }}
-            >
-              <Select value={type} onChange={handleTypeChange}
-                sx={{
-                  fontFamily: "Montserrat Regular"
-                }}
-              >
-                <MenuItem value={'Short answer'}>Short answer</MenuItem>
-                <MenuItem value={'Paragraph'}>Paragraph</MenuItem>
-                <MenuItem value={'Multiple choice'}>Multiple choice</MenuItem>
-                <MenuItem value={'Checkboxes'}>Checkboxes</MenuItem>
-              </Select>
-            </FormControl>
-          </Stack>
-          {type === 'Multiple choice' && <MultipleChoice choices={choices} setChoices={setChoices} choiceWeight={choiceWeight} setChoiceWeight={setChoiceWeight} />}
-          {type === 'Checkboxes' && (
-            <Checkboxes checkboxChoices={checkboxChoices} setCheckboxChoices={setCheckboxChoices} checkboxChoiceWeight={checkboxChoiceWeight} setCheckboxChoiceWeight={setCheckboxChoiceWeight} />
-          )}
-          {type === 'Paragraph' && (
-            <Paragraph
-              value={paragraphAnswer}
-              onChange={handleParagraphAnswerChange}
-              label="Enter your long answer"
-            />
-          )}
-          {type === 'Short answer' && (<ShortAnswer label="Short answer" />)}
-          <hr
-            style={{
-              width: '100%',
-              height: '1px',
-              backgroundColor: 'black',
-              margin: '20px 0 20px 0'
-            }}
-          />
 
           <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
+            direction="column"
+            justifyContent="center"
+            alignItems="flex-start"
+            spacing={2}
+            sx={{
+              width: '100%'
+            }}
           >
-            <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}
+            <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={2}
+              sx={{
+                width: '100%'
+              }}
             >
-              <p class="mb-0">Weight value (0-100%):</p>
-              <input type='number' value={weight} onChange={handleWeightChange}
-                style={{
-                  width: "60px"
+              <TextField
+                multiline
+                label="Question"
+                variant="filled"
+                value={question}
+                onChange={handleQuestionChange}
+                sx={{
+                  width: '75%'
                 }}
-              ></input>
-            </Stack>
-            <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}
-            >
-              <p class="mb-0">Target value:</p>
-              <input type='number' value={target} onChange={handleTargetChange}
-                style={{
-                  width: "60px"
+              />
+              <FormControl
+                sx={{
+                  width: '25%'
                 }}
-              ></input>
+              >
+                <Select value={type} onChange={handleTypeChange}
+                  sx={{
+                    fontFamily: "Montserrat Regular"
+                  }}
+                >
+                  <MenuItem value={'Short answer'}>Short answer</MenuItem>
+                  <MenuItem value={'Paragraph'}>Paragraph</MenuItem>
+                  <MenuItem value={'Multiple choice'}>Multiple choice</MenuItem>
+                  <MenuItem value={'Checkboxes'}>Checkboxes</MenuItem>
+                  <MenuItem value={'Counter'}>Counter</MenuItem>
+                </Select>
+              </FormControl>
             </Stack>
-            <IconButton onClick={deleteItem}>
-              <DeleteOutlineOutlinedIcon />
-            </IconButton>
+            {type === 'Multiple choice' && <MultipleChoice choices={choices} setChoices={setChoices} choiceWeight={choiceWeight} setChoiceWeight={setChoiceWeight} />}
+            {type === 'Checkboxes' && (
+              <Checkboxes checkboxChoices={checkboxChoices} setCheckboxChoices={setCheckboxChoices} checkboxChoiceWeight={checkboxChoiceWeight} setCheckboxChoiceWeight={setCheckboxChoiceWeight} />
+            )}
+            {type === 'Paragraph' && (
+              <Paragraph
+                value={paragraphAnswer}
+                onChange={handleParagraphAnswerChange}
+                label="Enter your long answer"
+              />
+            )}
+            {type === 'Short answer' && (<ShortAnswer label="Short answer" />)}
+            {type === 'Counter' && (
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+                sx={{
+                  width: '100%'
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#757575" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z" />
+                </svg>
+                <input type='number' disabled />
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#757575" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
+                </svg>
+              </Stack>
+            )}
+            <hr
+              style={{
+                width: '100%',
+                height: '1px',
+                backgroundColor: 'black',
+              }}
+            />
+
             <Stack
               direction="row"
-              justifyContent="center"
+              justifyContent="space-between"
               alignItems="center"
-              spacing={2}
+              sx={{
+                width: '100%'
+              }}
             >
-              <p class="mb-0">Required</p>
-              <Switch checked={isRequired} onChange={handleIsRequiredChange} />
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+              >
+                <p class="mb-0">Weight value (0-100%):</p>
+                <input type='number' value={weight} onChange={handleWeightChange}
+                  style={{
+                    width: "60px"
+                  }}
+                ></input>
+              </Stack>
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+              >
+                <p class="mb-0">Target value:</p>
+                <input type='number' value={target} onChange={handleTargetChange}
+                  style={{
+                    width: "60px"
+                  }}
+                ></input>
+              </Stack>
+              <IconButton onClick={deleteItem}>
+                <DeleteOutlineOutlinedIcon />
+              </IconButton>
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+              >
+                <p class="mb-0">Required</p>
+                <Switch checked={isRequired} onChange={handleIsRequiredChange} />
+              </Stack>
             </Stack>
           </Stack>
         </Box>
