@@ -74,28 +74,6 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IItemService, ItemService>();
     services.AddScoped<IChoiceRepository, ChoiceRepository>();
     services.AddScoped<IChoiceService, ChoiceService>();
-
     services.AddScoped<IAnswerRepository, AnswerRepository>();
     services.AddScoped<IAnswerService, AnswerService>();
-
-    services.AddScoped<ISelfAssessmentRepository, SelfAssessmentRepository>();
-    services.AddScoped<ISelfAssessmentService, SelfAssessmentService>();
-    services.AddScoped<ISelfAssessmentItemRepository, SelfAssessmentItemRepository>();
-    services.AddScoped<ISelfAssessmentItemService, SelfAssessmentItemService>();
-    services.AddScoped<ISelfAssessmentChoiceRepository, SelfAssessmentChoiceRepository>();
-    services.AddScoped<ISelfAssessmentChoiceService, SelfAssessmentChoiceService>();
-
-    services.AddScoped<IPeerAssessmentRepository, PeerAssessmentRepository>();
-    services.AddScoped<IPeerAssessmentService, PeerAssessmentService>();
-    services.AddScoped<IPeerAssessmentItemRepository, PeerAssessmentItemRepository>();
-    services.AddScoped<IPeerAssessmentItemService, PeerAssessmentItemService>();
-    services.AddScoped<IPeerAssessmentChoiceRepository, PeerAssessmentChoiceRepository>();
-    services.AddScoped<IPeerAssessmentChoiceService, PeerAssessmentChoiceService>();
-
-    services.AddScoped<IEmployerAssessmentRepository, EmployerAssessmentRepository>();
-    services.AddScoped<IEmployerAssessmentService, EmployerAssessmentService>();
-    services.AddScoped<IEmployerAssessmentItemRepository, EmployerAssessmentItemRepository>();
-    services.AddScoped<IEmployerAssessmentItemService, EmployerAssessmentItemService>();
-    services.AddScoped<IEmployerAssessmentChoiceRepository, EmployerAssessmentChoiceRepository>();
-    services.AddScoped<IEmployerAssessmentChoiceService, EmployerAssessmentChoiceService>();
 }
