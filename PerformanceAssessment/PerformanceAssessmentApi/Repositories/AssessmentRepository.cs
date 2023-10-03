@@ -17,8 +17,8 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<int> CreateAssessment(Assessment assessment)
         {
-            var sql = "INSERT INTO [dbo].[Assessment] ([Title], [Description]) " +
-                      "VALUES (@Title, @Description); " +
+            var sql = "INSERT INTO [dbo].[Assessment] ([Title], [Description], [DateTimeCreated], [DateTimeUpdated]) " +
+                      "VALUES (@Title, @Description, @DateTimeCreated, @DateTimeUpdated); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
@@ -51,7 +51,8 @@ namespace PerformanceAssessmentApi.Repositories
         {
             var sql = "UPDATE [dbo].[Assessment] SET " +
                       "[Title] = @Title, " +
-                      "[Description] = @Description " +
+                      "[Description] = @Description, " +
+                      "[DateTimeUpdated] = @DateTimeUpdated " +
                       "WHERE Id = @Id;";
 
             using (var con = _context.CreateConnection())
@@ -62,7 +63,8 @@ namespace PerformanceAssessmentApi.Repositories
                     {
                         Id = assessment.Id,
                         Title = assessment.Title,
-                        Description = assessment.Description
+                        Description = assessment.Description,
+                        DateTimeUpdated = assessment.DateTimeUpdated
                     }
                 );
             }
