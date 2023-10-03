@@ -7,5 +7,5 @@
     [Target] FLOAT NULL, 
     [Required] BIT NOT NULL,
     [AssessmentId] INT NOT NULL,
-    CONSTRAINT [FK_ItemAssessment] FOREIGN KEY ([AssessmentId]) REFERENCES [Assessment]([Id]) ON DELETE NO ACTION
+    CONSTRAINT [FK_ItemAssessment] FOREIGN KEY ([AssessmentId]) REFERENCES [Assessment]([Id]) ON DELETE CASCADE
 )
