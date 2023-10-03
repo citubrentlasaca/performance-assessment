@@ -16,7 +16,7 @@ function Login() {
         </div>
 
       <div className="right-section">
-        <img className="logo" src={logo}alt="Logo" />
+        <img className="logo" src={logo}alt="Logo" draggable="false" />
         <label>Email</label>
         <input type="email" id="email" />
         <label>Password</label>
