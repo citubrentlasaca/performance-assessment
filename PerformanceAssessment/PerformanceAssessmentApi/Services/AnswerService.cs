@@ -24,11 +24,6 @@ namespace PerformanceAssessmentApi.Services
             return model;
         }
 
-        public async Task<IEnumerable<AnswerDto>> GetAnswersByAssessmentId(int assessmentId)
-        {
-            return await _repository.GetAnswersByAssessmentId(assessmentId);
-        }
-
         public async Task<IEnumerable<AnswerDto>> GetAnswersByItemId(int itemId)
         {
             return await _repository.GetAnswersByItemId(itemId);
