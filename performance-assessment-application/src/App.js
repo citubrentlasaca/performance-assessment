@@ -4,6 +4,7 @@ import AssessmentQuestion from './Create Assessment/Components/AssessmentQuestio
 import Templates from './Create Assessment/Components/Templates';
 import UserAssessment from './Answer Assessment/UserAssessment';
 import AnswerAssessment from './Answer Assessment/AnswerAssessment';
+import UserRegistration from './User Registration/UserRegistration';
 import Login from './Login/Login.js';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/userassessments" element={<UserAssessment />} />
           <Route path="/answerassessment/:id" element={<AnswerAssessment />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<UserRegistration />} />
         </Routes>
       </Router>
     </div>
