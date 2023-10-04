@@ -6,8 +6,8 @@ function SuccessPage() {
     <div className="success-page">
       <div className="container">
         <div className="message">
-            <h1>Your team has been successfully created.</h1><br />
-            Thank you for choosing <span className="darkblue-text">WorkPA</span>
+            Your team has been successfully created.<br /><br /><br />
+            <h2>Thank you for choosing <span className="darkblue-text">WorkPA!</span></h2>
         </div>
       </div>
       <div className="copy-container">
