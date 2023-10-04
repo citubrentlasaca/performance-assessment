@@ -18,7 +18,7 @@ function SuccessPage() {
           defaultValue="https://workpa.com"
           readOnly
         />
-        <button class='successpage-button'>Copy</button>
+        <button class='successpage-button'>COPY</button>
       </div>
 
     </div>
