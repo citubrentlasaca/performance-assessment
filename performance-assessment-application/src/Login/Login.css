@@ -9,19 +9,18 @@
   background-color: #fff;
   padding: 20px;
   align-items: center;
+  flex-direction: column;
+  display: flex;
 }
 
 .left-section img{
+  margin-top: 10px;
   width: 500px;
   height: 450px;
   display: flex;
-  margin-left: 55px;
 }
 
 .description {
-  margin-top: 20px;
-  width: 622px;
-  height: 126px;
   color: rgba(39, 198, 217, 0.90);
   text-align: center;
   font-size: 30px;
@@ -44,7 +43,6 @@
 }
 
 .logo {
-  margin-left: 55px;
   margin-bottom: 20px;
 }
 
@@ -83,7 +81,7 @@ button {
   font-size: 20px;
   cursor: pointer;
   margin-top: 40px;
-  transition: background 0.3s; /* Adding transition for smooth hover effect */
+  transition: background 0.3s; 
 }
 
 button:hover {
