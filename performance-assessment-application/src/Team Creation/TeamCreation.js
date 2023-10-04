@@ -1,8 +1,9 @@
 import React from 'react';
+import './TeamCreation.css'; 
 
 function TeamCreation() {
   return (
-    <div className="teamcreation-container">
+    <div className="tc-container">
     
     </div>
   );
