@@ -5,4 +5,30 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.container {
+    width: 700px;
+    height: 500px;
+    border-radius: 50px;
+    background: rgba(39, 198, 217, 0.39);
+}
+
+.message {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.h1 {
+    color: #000;
+    font-family: Montserrat;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.darkblue-text {
+    color: #055C9D;
   }
