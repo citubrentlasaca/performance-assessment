@@ -1,0 +1,12 @@
+﻿CREATE TABLE [dbo].[Team]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Organization] NVARCHAR(MAX) NOT NULL, 
+    [FirstName] NVARCHAR(MAX) NOT NULL,
+    [LastName] NVARCHAR(MAX) NOT NULL,
+    [BusinessType] NVARCHAR(MAX) NOT NULL,
+    [BusinessAddress] NVARCHAR(MAX) NOT NULL,
+    [TeamCode] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [DateTimeCreated] DATETIME NOT NULL,
+    [DateTimeUpdated] DATETIME NOT NULL
+)

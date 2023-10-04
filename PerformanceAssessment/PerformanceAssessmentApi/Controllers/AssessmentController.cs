@@ -30,7 +30,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     POST /api/assessments
         ///     {
-        ///         "title": "Software Engineering 1"
+        ///         "title": "Software Engineering 1",
         ///         "description": "SPMP"
         ///     }
         ///
@@ -137,7 +137,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     PUT /api/assessments
         ///     {
-        ///         "title": "Programming Languages"
+        ///         "title": "Programming Languages",
         ///         "description": "History and Uses Of The Programming Languages"
         ///     }
         ///

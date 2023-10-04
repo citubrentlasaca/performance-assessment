@@ -76,4 +76,13 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IChoiceService, ChoiceService>();
     services.AddScoped<IAnswerRepository, AnswerRepository>();
     services.AddScoped<IAnswerService, AnswerService>();
+
+    services.AddScoped<IUserRepository, UserRepository>();
+    services.AddScoped<IUserService, UserService>();
+    services.AddScoped<ITeamRepository, TeamRepository>();
+    services.AddScoped<ITeamService, TeamService>();
+    services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+    services.AddScoped<IEmployeeService, EmployeeService>();
+    services.AddScoped<IAssignSchedulerRepository, AssignSchedulerRepository>();
+    services.AddScoped<IAssignSchedulerService, AssignSchedulerService>();
 }
