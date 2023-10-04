@@ -60,7 +60,8 @@
     background: #D9D9D9;
     border-color: transparent;
     margin: 0;
-    margin-left: 15px;
+    margin-left: 20px;
+    padding-left: 10px;
 }
 
 .successpage-button {
@@ -72,4 +73,14 @@
     margin-top: 0;
     margin-right: 0;
     margin-left: 20px;
+    border: 1px solid rgba(39, 198, 217, 0.90);
+    background: linear-gradient(254deg, #0273FF 40.22%, #00C0FE 76.98%, #00C0FE 88.25%);
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    transition: background 0.3s;
 }
+
+.successpage-button:hover {
+    background: linear-gradient(254deg, #00C0FE 40.22%, #0273FF 76.98%, #0273FF 88.25%);
+  }
