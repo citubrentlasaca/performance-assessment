@@ -52,7 +52,7 @@
     margin-top: 30px;
 }
 
-input {
+.successpage-input {
     width: 315px;
     height: 53px;
     flex-shrink: 0;
@@ -63,7 +63,7 @@ input {
     margin-left: 15px;
 }
 
-button {
+.successpage-button {
     width: 189px;
     height: 53px;
     flex-shrink: 0;
