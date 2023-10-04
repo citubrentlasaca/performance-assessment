@@ -10,6 +10,15 @@ function SuccessPage() {
             Thank you for choosing <span className="darkblue-text">WorkPA</span>
         </div>
       </div>
+      <div className="copy-container">
+        <input
+          id="textField"
+          type="text"
+          defaultValue="https://workpa.com"
+          readOnly
+        />
+        <button>Copy</button>
+      </div>      
       
     </div>
   );
