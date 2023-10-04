@@ -8,22 +8,22 @@
   flex: 1;
   background-color: #fff;
   padding: 20px;
+  align-items: center;
+  flex-direction: column;
+  display: flex;
 }
 
 .left-section img{
-  width: 600px;
-  height: 500px;
+  margin-top: 10px;
+  width: 500px;
+  height: 450px;
   display: flex;
-  margin-left: 55px;
 }
 
 .description {
-  margin-top: 20px;
-  width: 622px;
-  height: 126px;
   color: rgba(39, 198, 217, 0.90);
   text-align: center;
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 700;
 }
 
@@ -43,7 +43,6 @@
 }
 
 .logo {
-  margin-left: 55px;
   margin-bottom: 20px;
 }
 
@@ -82,4 +81,9 @@ button {
   font-size: 20px;
   cursor: pointer;
   margin-top: 40px;
+  transition: background 0.3s; 
+}
+
+button:hover {
+  background: linear-gradient(254deg, #00C0FE 40.22%, #0273FF 76.98%, #0273FF 88.25%);
 }
