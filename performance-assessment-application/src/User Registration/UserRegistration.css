@@ -98,3 +98,19 @@ body {
   font-size: 20px;
   cursor: pointer;
 }
+
+.register-password-input {
+  position: relative;
+}
+
+.register-password-input input {
+  padding-right: 30px; 
+}
+
+.register-toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 10px; 
+  transform: translateY(-50%);
+  cursor: pointer;
+}

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './UserRegistration.css';
 import image from './userRegistration.png';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function UserRegistration() {
   const [formData, setFormData] = useState({
@@ -77,7 +79,7 @@ function UserRegistration() {
             </div>
             <div className="registration-form-group">
               <label htmlFor="password">Password</label>
-              <div className="password-input">
+              <div className="register-password-input">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
@@ -86,21 +88,14 @@ function UserRegistration() {
                   onChange={handleChange}
                   required
                 />
-                <span
-                  className="toggle-password"
-                  onClick={togglePasswordVisibility}
-                >
-                  {showPassword ? (
-                    <i className="fas fa-eye-slash"></i>
-                  ) : (
-                    <i className="fas fa-eye"></i>
-                  )}
+                <span className="register-toggle-password" onClick={togglePasswordVisibility}>
+                  {showPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
                 </span>
               </div>
             </div>
             <div className="registration-form-group">
               <label htmlFor="confirmPassword">Confirm Password</label>
-              <div className="password-input">
+              <div className="register-password-input">
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   id="confirmPassword"
@@ -109,15 +104,8 @@ function UserRegistration() {
                   onChange={handleChange}
                   required
                 />
-                <span
-                  className="toggle-password"
-                  onClick={toggleConfirmPasswordVisibility}
-                >
-                  {showConfirmPassword ? (
-                    <i className="fas fa-eye-slash"></i>
-                  ) : (
-                    <i className="fas fa-eye"></i>
-                  )}
+                <span className="register-toggle-password" onClick={toggleConfirmPasswordVisibility}>
+                  {showConfirmPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
                 </span>
               </div>
             </div>
