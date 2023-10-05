@@ -19,10 +19,10 @@ namespace PerformanceAssessmentApi.Controllers
         }
 
         /// <summary>
-        /// Creates new schedulers for multiple employees.
+        /// Creates new schedulers for multiple employees
         /// </summary>
-        /// <param name="assignScheduler">Common scheduler details for all employees.</param>
-        /// <returns>Returns the IDs of the newly created scheduler records.</returns>
+        /// <param name="assignScheduler">Common scheduler details for all employees</param>
+        /// <returns>Returns the IDs of the newly created scheduler records</returns>
         /// <remarks>
         /// Sample request:
         ///
@@ -39,8 +39,8 @@ namespace PerformanceAssessmentApi.Controllers
         ///     }
         ///
         /// </remarks>
-        /// <response code="201">Successfully created new scheduler records.</response>
-        /// <response code="400">Scheduler details are invalid or employee IDs are empty.</response>
+        /// <response code="201">Successfully created new scheduler records</response>
+        /// <response code="400">Scheduler details are invalid or employee IDs are empty</response>
         /// <response code="500">Internal server error</response>
         [HttpPost(Name = "CreateAssignSchedulers")]
         [Consumes("application/json")]
