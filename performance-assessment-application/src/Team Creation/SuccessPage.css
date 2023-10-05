@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .container {
@@ -11,7 +12,6 @@
     height: 400px;
     border-radius: 50px;
     background: rgba(39, 198, 217, 0.39);
-    margin-top: 100px;
 }
 
 .message {
@@ -52,6 +52,8 @@ h2 {
 
 .copy-container {
     display: flex;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
     width: 565px;
     height: 73px;
@@ -70,27 +72,17 @@ h2 {
     background: #D9D9D9;
     border-color: transparent;
     margin: 0;
-    margin-left: 20px;
-    padding-left: 10px;
+    border: 1px solid black;
 }
 
 .successpage-button {
     width: 189px;
     height: 53px;
     flex-shrink: 0;
-    border-radius: 25px;
-    border: 1px solid rgba(39, 198, 217, 0.90);
+    border-radius: 10px;
+    border: none;
     margin-top: 0;
     margin-right: 0;
-    margin-left: 20px;
-    border: 1px solid rgba(39, 198, 217, 0.90);
-    background: linear-gradient(254deg, #0273FF 40.22%, #00C0FE 76.98%, #00C0FE 88.25%);
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-    transition: background 0.3s;
+    background-color: #4addfb;
 }
 
-.successpage-button:hover {
-    background: linear-gradient(254deg, #00C0FE 40.22%, #0273FF 76.98%, #0273FF 88.25%);
-  }
