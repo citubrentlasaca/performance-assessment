@@ -11,7 +11,6 @@ namespace PerformanceAssessmentApi.Mappings
         {
             CreateMap<AssignSchedulerCreationDto, AssignScheduler>(MemberList.None)
                 .ForMember(dto => dto.AssessmentId, opt => opt.MapFrom(st => (st.AssessmentId!)))
-                .ForMember(dto => dto.EmployeeId, opt => opt.MapFrom(st => (st.EmployeeId!)))
                 .ForMember(dto => dto.Reminder, opt => opt.MapFrom(st => (st.Reminder!)))
                 .ForMember(dto => dto.Occurrence, opt => opt.MapFrom(st => (st.Occurrence!)))
                 .ForMember(dto => dto.DueDate, opt => opt.MapFrom(st => st.DueDate))
