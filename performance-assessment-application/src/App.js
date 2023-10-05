@@ -7,6 +7,9 @@ import AnswerAssessment from './Answer Assessment/AnswerAssessment';
 import Login from './Login/Login.js';
 import LandingPage from './Landing Page/LandingPage';
 
+import SuccessPage from './Team Creation/SuccessPage.js';
+import TeamCreation from './Team Creation/TeamCreation';
+
 function App() {
   return (
     <div
@@ -25,6 +28,8 @@ function App() {
           <Route path="/userassessments" element={<UserAssessment />} />
           <Route path="/answerassessment/:id" element={<AnswerAssessment />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/success" element={<SuccessPage />} />
+          <Route path="/teamcreation" element={<TeamCreation />} />
         </Routes>
       </Router>
     </div>
