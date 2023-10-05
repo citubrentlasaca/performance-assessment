@@ -21,8 +21,7 @@ namespace PerformanceAssessmentApi.Controllers
         /// <summary>
         /// Creates new schedulers for multiple employees.
         /// </summary>
-        /// <param name="employeeIds">A list of employee IDs for whom the scheduler records will be created.</param>
-        /// <param name="scheduler">Common scheduler details for all employees.</param>
+        /// <param name="assignScheduler">Common scheduler details for all employees.</param>
         /// <returns>Returns the IDs of the newly created scheduler records.</returns>
         /// <remarks>
         /// Sample request:
