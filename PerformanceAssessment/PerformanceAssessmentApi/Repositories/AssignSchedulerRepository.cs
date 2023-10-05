@@ -14,7 +14,7 @@ namespace PerformanceAssessmentApi.Repositories
             _context = context;
         }
 
-        public async Task<int> CreateAssignScheduler(AssignScheduler assignScheduler)
+        public async Task<IEnumerable<int>> CreateAssignSchedulers(IEnumerable<int> employeeIds, AssignScheduler assignScheduler)
         {
             var sql = "INSERT INTO [dbo].[AssignScheduler] ([AssessmentId], [EmployeeId], [Reminder], [Occurrence], [DueDate], [Time], [DateTimeCreated], [DateTimeUpdated]) " +
                       "VALUES (@AssessmentId, @EmployeeId, @Reminder, @Occurrence, @DueDate, @Time, @DateTimeCreated, @DateTimeUpdated); " +
@@ -22,7 +22,17 @@ namespace PerformanceAssessmentApi.Repositories
 
             using (var con = _context.CreateConnection())
             {
-                return await con.ExecuteScalarAsync<int>(sql, assignScheduler);
+                var insertedIds = new List<int>();
+
+                foreach (var employeeId in employeeIds)
+                {
+                    assignScheduler.EmployeeId = employeeId;
+
+                    var insertedId = await con.ExecuteScalarAsync<int>(sql, assignScheduler);
+                    insertedIds.Add(insertedId);
+                }
+
+                return insertedIds;
             }
         }
 

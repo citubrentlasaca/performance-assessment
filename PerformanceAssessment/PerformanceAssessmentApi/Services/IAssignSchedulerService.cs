@@ -1,11 +1,10 @@
 ﻿using PerformanceAssessmentApi.Dtos;
-using PerformanceAssessmentApi.Models;
 
 namespace PerformanceAssessmentApi.Services
 {
     public interface IAssignSchedulerService
     {
-        Task<AssignScheduler> CreateAssignScheduler(AssignSchedulerCreationDto schedule);
+        Task<IEnumerable<int>> CreateAssignSchedulers(IEnumerable<int> employeeIds, AssignSchedulerCreationDto assignScheduler);
         Task<IEnumerable<AssignSchedulerDto>> GetAllAssignSchedulers();
         Task<AssignSchedulerDto> GetAssignSchedulerById(int id);
         Task<IEnumerable<AssignSchedulerDto>> GetAssignSchedulerByAssessmentId(int assessmentId);

@@ -5,7 +5,7 @@ namespace PerformanceAssessmentApi.Repositories
 {
     public interface IAssignSchedulerRepository
     {
-        Task<int> CreateAssignScheduler(AssignScheduler assignScheduler);
+        Task<IEnumerable<int>> CreateAssignSchedulers(IEnumerable<int> employeeIds, AssignScheduler assignScheduler);
         Task<IEnumerable<AssignSchedulerDto>> GetAllAssignSchedulers();
         Task<AssignSchedulerDto> GetAssignSchedulerById(int id);
         Task<IEnumerable<AssignSchedulerDto>> GetAssignSchedulerByAssessmentId(int assessmentId);

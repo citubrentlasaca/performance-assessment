@@ -7,9 +7,6 @@ namespace PerformanceAssessmentApi.Dtos
         [Required(ErrorMessage = "The assessmentId is required.")]
         public int AssessmentId { get; set; }
 
-        [Required(ErrorMessage = "The employeeId is required.")]
-        public int EmployeeId { get; set; }
-
         [Required(ErrorMessage = "The reminder is required.")]
         public string? Reminder { get; set; }
 
