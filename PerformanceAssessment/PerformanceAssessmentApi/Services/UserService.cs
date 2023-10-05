@@ -34,6 +34,11 @@ namespace PerformanceAssessmentApi.Services
             return _repository.GetUserById(id);
         }
 
+        public Task<User> GetUserByEmailAddressAndPassword(string email, string password)
+        {
+            return _repository.GetUserByEmailAddressAndPassword(email, password);
+        }
+
         public async Task<int> UpdateUser(int id, UserUpdationDto user)
         {
             var model = _mapper.Map<User>(user);
