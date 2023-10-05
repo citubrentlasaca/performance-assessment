@@ -6,6 +6,7 @@ import UserAssessment from './Answer Assessment/UserAssessment';
 import AnswerAssessment from './Answer Assessment/AnswerAssessment';
 import UserRegistration from './User Registration/UserRegistration';
 import Login from './Login/Login.js';
+import EmployeeAnalytics from './Analytics/EmployeeAnalytics';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/answerassessment/:id" element={<AnswerAssessment />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<UserRegistration />} />
+          <Route path="/employeeanalytics" element={<EmployeeAnalytics />} />
         </Routes>
       </Router>
     </div>
