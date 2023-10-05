@@ -11,6 +11,8 @@ namespace PerformanceAssessmentApi.Services
 
         Task<UserDto> GetUserById(int id);
 
+        Task<User> GetUserByEmailAddressAndPassword(string email, string password);
+
         Task<int> UpdateUser(int id, UserUpdationDto user);
 
         Task<int> DeleteUser(int id);
