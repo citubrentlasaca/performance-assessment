@@ -9,6 +9,7 @@ import LandingPage from './Landing Page/LandingPage';
 
 import SuccessPage from './Team Creation/SuccessPage.js';
 import TeamCreation from './Team Creation/TeamCreation';
+import Home from './Homepage/Home';
 
 function App() {
   return (
@@ -29,7 +30,8 @@ function App() {
           <Route path="/answerassessment/:id" element={<AnswerAssessment />} />
           <Route path="/login" element={<Login />} />
           <Route path="/success" element={<SuccessPage />} />
-          <Route path="/teamcreation" element={<TeamCreation />} />
+          <Route path="/create-team" element={<TeamCreation />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </Router>
     </div>
