@@ -63,5 +63,9 @@
     <Build Include="Tables\Choice.sql" />
     <Build Include="Tables\Item.sql" />
     <Build Include="Tables\Answer.sql" />
+    <Build Include="Tables\User.sql" />
+    <Build Include="Tables\Team.sql" />
+    <Build Include="Tables\Employee.sql" />
+    <Build Include="Tables\AssignScheduler.sql" />
   </ItemGroup>
 </Project>
