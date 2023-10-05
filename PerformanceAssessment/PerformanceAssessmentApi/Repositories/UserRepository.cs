@@ -46,6 +46,16 @@ namespace PerformanceAssessmentApi.Repositories
             }
         }
 
+        public async Task<User> GetUserByEmailAddressAndPassword(string email, string password)
+        {
+            var sql = "SELECT * FROM [dbo].[User] WHERE [EmailAddress] = @EmailAddress AND [Password] = @Password;";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QueryFirstOrDefaultAsync<User>(sql, new { EmailAddress = email, Password = password });
+            }
+        }
+
         public async Task<int> UpdateUser(User user)
         {
             var sql = "UPDATE [dbo].[User] SET " +
