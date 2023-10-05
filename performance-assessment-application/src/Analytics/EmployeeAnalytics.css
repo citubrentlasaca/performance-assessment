@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  padding: 0 50px;
+  padding: 30px 50px;
 }
 
 .emp-analytics-item {
