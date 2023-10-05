@@ -16,9 +16,9 @@ function Home() {
                     Let's get started
                 </b>
             </Stack>
-            <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={5}
+            <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={7}
                 style={{
-                    paddingLeft: "50px"
+                    paddingLeft: "70px"
                 }}
             >
                 <a href="/create-team" style={{ textDecoration: 'none' }}>
