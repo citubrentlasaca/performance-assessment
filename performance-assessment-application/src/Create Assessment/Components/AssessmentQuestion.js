@@ -156,7 +156,11 @@ function AssessmentQuestion() {
 
   return (
     <NavBar>
-      <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
+      <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}
+        style={{
+          padding: "40px"
+        }}
+      >
         <AssessmentTitle title={title} description={description} setTitle={setTitle} setDescription={setDescription} />
         {components.map((component) => (
           <NewQuestion
