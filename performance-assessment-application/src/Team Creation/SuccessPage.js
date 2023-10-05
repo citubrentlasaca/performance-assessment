@@ -1,7 +1,10 @@
 import React from 'react';
 import './SuccessPage.css';
+import { useParams } from 'react-router-dom';
 
 function SuccessPage() {
+  const { data } = useParams();
+
   return (
     <div className="success-page">
       <div className="container">
@@ -18,6 +21,7 @@ function SuccessPage() {
           id="textField"
           type="text"
           placeholder="https://workpa.com"
+          value={data}
         />
         <button type='button' class='successpage-button btn'>COPY</button>
       </div>

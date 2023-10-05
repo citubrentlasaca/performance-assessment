@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TeamCreation.css'; 
 import image from "../Images/teamRegistration.png";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function TeamCreation() {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const data = {};
-        formData.forEach((value, key) => {
-        data[key] = value;
-        });
-        console.log('Form Data Submitted:', data);
-    };
+  const [formData, setFormData] = useState({});
+  const [submittedData, setSubmittedData] = useState(null);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {};
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
+
+    console.log('Form Data Submitted:', data);
+
+    try {
+      const response = await axios.post('https://localhost:7236/api/teams', data);
+
+      setSubmittedData(response.data);
+
+      navigate(`/success/${response.data}`);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <div className="tc-container">
@@ -33,8 +50,8 @@ function TeamCreation() {
               <input type="text" id="lastName" name="lastName" required />
             </div>
             <div className="tc-form-group">
-              <label htmlFor="type">Type of Business / Company</label>
-              <input type="text" id="type" name="type" required />
+              <label htmlFor="businessType">Type of Business / Company</label>
+              <input type="text" id="type" name="businessType" required />
             </div>
             <div className="tc-form-group">
               <label htmlFor="businessAddress">Business Address</label>

@@ -29,7 +29,7 @@ function App() {
           <Route path="/userassessments" element={<UserAssessment />} />
           <Route path="/answerassessment/:id" element={<AnswerAssessment />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/success" element={<SuccessPage />} />
+          <Route path="/success/:data" element={<SuccessPage />} />
           <Route path="/create-team" element={<TeamCreation />} />
           <Route path="/home" element={<Home />} />
         </Routes>
