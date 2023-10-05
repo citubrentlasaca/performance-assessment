@@ -2,7 +2,6 @@ import React from 'react'
 import { Stack } from '@mui/material'
 import TopBar from './TopBar'
 import SideBar from './SideBar'
-import TopBarTwo from './TopBarTwo'
 
 function NavBar({ children }) {
   return (
@@ -38,13 +37,11 @@ function NavBar({ children }) {
             width: "100%"
           }}
         >
-          <TopBarTwo />
           <div
             style={{
-              height: 'calc(100% - 100px)',
+              height: '100%',
               width: '100%',
               overflowY: 'auto',
-              padding: '40px'
             }}
           >
             <main>
