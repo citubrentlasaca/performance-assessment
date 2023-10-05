@@ -6,7 +6,8 @@ import logo from "../Images/WorkPA-logo.png";
 function Login() {
   return (
     <div className="login-container">
-      <div className="left-section">
+      <div className="login-content">
+      <div className="login-image-container">
         <img src={loginpic} alt="Login Pic" draggable="false" />
         <div className="description">
           <p>Assess and track</p>
@@ -15,13 +16,24 @@ function Login() {
         </div>
       </div>
 
-      <div className="right-section">
-        <img className="logo" src={logo} alt="Logo" draggable="false" />
-        <label class='login-label'>Email</label>
-        <input class='login-input' type="email" id="email" />
-        <label class='login-label'>Password</label>
-        <input class='login-input' type="password" id="password" />
-        <button class='login-button'>Login</button>
+      <div className="login-form-container">
+        <form>
+          <div className="login-form-group">
+            <img className="logo" src={logo} alt="Logo" draggable="false" />
+          </div>
+          <div className="login-form-group">
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" name="email" required/>
+          </div>
+          <div className="login-form-group">
+            <label  htmlFor="password">Password</label>
+            <input type="password" id="password" name="password" required/>
+          </div>
+          <div className="login-button-container">
+            <button className="login-button" type="login">Login</button>
+          </div>
+        </form>
+      </div>
       </div>
     </div>
   );
