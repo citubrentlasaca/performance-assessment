@@ -16,12 +16,12 @@ namespace PerformanceAssessmentApi.Services
             _mapper = mapper;
         }
 
-        public async Task<AssignScheduler> CreateAssignScheduler(AssignSchedulerCreationDto schedule)
+        public async Task<IEnumerable<int>> CreateAssignSchedulers(IEnumerable<int> employeeIds, AssignSchedulerCreationDto schedule)
         {
-            var model = _mapper.Map<AssignScheduler>(schedule);
-            model.Id = await _repository.CreateAssignScheduler(model);
+            var assignScheduler = _mapper.Map<AssignScheduler>(schedule);
+            var insertedIds = await _repository.CreateAssignSchedulers(employeeIds, assignScheduler);
 
-            return model;
+            return insertedIds;
         }
 
         public Task<IEnumerable<AssignSchedulerDto>> GetAllAssignSchedulers()
