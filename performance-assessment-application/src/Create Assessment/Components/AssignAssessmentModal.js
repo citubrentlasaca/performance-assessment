@@ -169,35 +169,54 @@ function AssignAssessmentModal({ open, handleClose }) {
                                             Clear
                                         </button>
                                     </Stack>
-                                    <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                        spacing={2}
-                                        sx={{
-                                            width: '100%'
+                                    <div
+                                        style={{
+                                            height: '160px',
+                                            width: '100%',
+                                            overflowY: 'auto',
                                         }}
                                     >
                                         <Stack
-                                            direction="row"
+                                            direction="column"
                                             justifyContent="center"
                                             alignItems="center"
                                             spacing={2}
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                                            </svg>
-                                            <p className='mb-0'>John Doe</p>
-                                        </Stack>
-                                        <div class="form-check"
-                                            style={{
-                                                marginRight: '17px'
+                                            sx={{
+                                                width: '100%',
                                             }}
                                         >
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1" />
-                                        </div>
-                                    </Stack>
+                                            <Stack
+                                                direction="row"
+                                                justifyContent="space-between"
+                                                alignItems="center"
+                                                spacing={2}
+                                                sx={{
+                                                    width: '100%'
+                                                }}
+                                            >
+                                                <Stack
+                                                    direction="row"
+                                                    justifyContent="center"
+                                                    alignItems="center"
+                                                    spacing={2}
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                                                    </svg>
+                                                    <p className='mb-0'>John Doe</p>
+                                                </Stack>
+                                                <div class="form-check"
+                                                    style={{
+                                                        marginRight: '17px'
+                                                    }}
+                                                >
+                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1" />
+                                                </div>
+                                            </Stack>
+
+                                        </Stack>
+                                    </div>
                                 </div>
                             </Stack>
                         </Stack>

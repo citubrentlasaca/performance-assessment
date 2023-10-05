@@ -10,15 +10,14 @@ function SuccessPage() {
           <h2>Thank you for choosing <span className="darkblue-text">WorkPA!</span></h2>
         </div>
       </div>
-      <div className="copy-container">
+      <div className="copy-container gap-3">
         <input
           class="successpage-input"
           id="textField"
           type="text"
-          defaultValue="https://workpa.com"
-          readOnly
+          placeholder="https://workpa.com"
         />
-        <button class='successpage-button'>Copy</button>
+        <button type='button' class='successpage-button btn'>COPY</button>
       </div>
 
     </div>
