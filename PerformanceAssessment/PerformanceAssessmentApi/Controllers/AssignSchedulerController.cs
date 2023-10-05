@@ -19,41 +19,48 @@ namespace PerformanceAssessmentApi.Controllers
         }
 
         /// <summary>
-        /// Creates a new scheduler
+        /// Creates new schedulers for multiple employees.
         /// </summary>
-        /// <param name="scheduler">Scheduler details</param>
-        /// <returns>Returns the newly created scheduler</returns>
+        /// <param name="employeeIds">A list of employee IDs for whom the scheduler records will be created.</param>
+        /// <param name="scheduler">Common scheduler details for all employees.</param>
+        /// <returns>Returns the IDs of the newly created scheduler records.</returns>
         /// <remarks>
         /// Sample request:
         ///
         ///     POST /api/schedulers
         ///     {
-        ///         "assessmentId": 1,
-        ///         "employeeId": 1,
-        ///         "reminder": "Everyday",
-        ///         "occurrence": "Once",
-        ///         "dueDate": "Wednesday, October 4, 2023",
-        ///         "time": "11:59 PM"
+        ///         "employeeIds": [1, 2, 3, 4, 5],
+        ///         "scheduler": {
+        ///             "assessmentId": 1,
+        ///             "reminder": "Everyday",
+        ///             "occurrence": "Once",
+        ///             "dueDate": "Wednesday, October 4, 2023",
+        ///             "time": "11:59 PM"
+        ///         }
         ///     }
         ///
         /// </remarks>
-        /// <response code="201">Successfully created a new scheduler</response>
-        /// <response code="400">Scheduler details are invalid</response>
+        /// <response code="201">Successfully created new scheduler records.</response>
+        /// <response code="400">Scheduler details are invalid or employee IDs are empty.</response>
         /// <response code="500">Internal server error</response>
-        [HttpPost(Name = "CreateAssignScheduler")]
+        [HttpPost(Name = "CreateAssignSchedulers")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(AssignSchedulerCreationDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(AssignSchedulerDetailsDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateAssignScheduler([FromBody] AssignSchedulerCreationDto scheduler)
+        public async Task<IActionResult> CreateAssignSchedulers([FromBody] AssignSchedulerDetailsDto assignScheduler)
         {
             try
             {
-                // Create a new scheduler
-                var newScheduler = await _assignSchedulerService.CreateAssignScheduler(scheduler);
+                if (assignScheduler.EmployeeIds == null || assignScheduler.EmployeeIds.Count == 0)
+                {
+                    return BadRequest("Employee IDs cannot be empty.");
+                }
 
-                return CreatedAtRoute("GetAssignSchedulerById", new { id = newScheduler.Id }, newScheduler);
+                var insertedIds = await _assignSchedulerService.CreateAssignSchedulers(assignScheduler.EmployeeIds, assignScheduler.Scheduler);
+
+                return CreatedAtRoute("GetAssignSchedulerById", new { id = insertedIds }, insertedIds);
             }
             catch (Exception e)
             {
