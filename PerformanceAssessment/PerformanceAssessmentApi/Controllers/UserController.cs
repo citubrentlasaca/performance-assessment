@@ -127,6 +127,41 @@ namespace PerformanceAssessmentApi.Controllers
         }
 
         /// <summary>
+        /// Gets the user by email address and password
+        /// </summary>
+        /// <param name="email">Email Address of the User</param>
+        /// <param name="password">Password of the User</param>
+        /// <returns>Returns the details of the user</returns>
+        /// <response code="200">User found</response>
+        /// <response code="404">User not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet("authenticate", Name = "GetUserByEmailAddressAndPassword")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetUserByEmailAddressAndPassword(string email, string password)
+        {
+            try
+            {
+                // Retrieve the user by username and password
+                var foundUser = await _userService.GetUserByEmailAddressAndPassword(email, password);
+
+                if (foundUser == null)
+                {
+                    return StatusCode(404, "User not found");
+                }
+
+                return Ok(foundUser);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
+
+        /// <summary>
         /// Updates an existing user
         /// </summary>
         /// <param name="id">The id of the user that will be updated</param>
