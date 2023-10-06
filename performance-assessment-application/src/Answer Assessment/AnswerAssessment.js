@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../Shared/NavBar'
 import { Stack } from '@mui/material'
 import { useParams } from 'react-router-dom'
+import TopBarThree from "../Shared/TopBarThree"
 
 function AnswerAssessment() {
     const { id } = useParams();
@@ -56,6 +57,7 @@ function AnswerAssessment() {
 
     return (
         <NavBar>
+            <TopBarThree />
             {loading ? (
                 <Stack
                     justifyContent="center"
@@ -76,6 +78,10 @@ function AnswerAssessment() {
                     justifyContent="flex-start"
                     alignItems="center"
                     spacing={2}
+                    style={{
+                        paddingTop: "50px",
+                        paddingBottom: "50px"
+                    }}
                 >
                     <div
                         style={{
