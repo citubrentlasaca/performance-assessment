@@ -9,16 +9,22 @@ function AnswerAssessment() {
     const [itemData, setItemData] = useState(null);
     const [choiceData, setChoiceData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [counterValue, setCounterValue] = useState(0);
+    const [counterValues, setCounterValues] = useState({});
 
-    const handleDecrement = () => {
-        if (counterValue > 0) {
-            setCounterValue(counterValue - 1);
-        }
+    const handleIncrement = (itemId) => {
+        setCounterValues((prevValues) => ({
+            ...prevValues,
+            [itemId]: (prevValues[itemId] || 0) + 1,
+        }));
     };
 
-    const handleIncrement = () => {
-        setCounterValue(counterValue + 1);
+    const handleDecrement = (itemId) => {
+        if (counterValues[itemId] > 0) {
+            setCounterValues((prevValues) => ({
+                ...prevValues,
+                [itemId]: (prevValues[itemId] || 0) - 1,
+            }));
+        }
     };
 
     useEffect(() => {
@@ -76,6 +82,9 @@ function AnswerAssessment() {
                     justifyContent="flex-start"
                     alignItems="center"
                     spacing={2}
+                    sx={{
+                        padding: '40px'
+                    }}
                 >
                     <div
                         style={{
@@ -214,17 +223,17 @@ function AnswerAssessment() {
                                                 width: "100%",
                                             }}
                                         >
-                                            <button type='btn' class='btn' onClick={handleDecrement}>
+                                            <button type='btn' class='btn' onClick={() => handleDecrement(item.id)}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#27c6d9" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
                                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z" />
                                                 </svg>
                                             </button>
-                                            <input type='number' value={counterValue}
+                                            <input type='number' value={counterValues[item.id] || 0}
                                                 style={{
                                                     textAlign: 'center',
                                                 }}
                                             />
-                                            <button type='btn' class='btn' onClick={handleIncrement}>
+                                            <button type='btn' class='btn' onClick={() => handleIncrement(item.id)}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#27c6d9" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
                                                 </svg>
