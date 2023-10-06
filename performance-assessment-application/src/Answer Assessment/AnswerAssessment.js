@@ -16,6 +16,7 @@ function AnswerAssessment() {
     const separator = ',';
     const [submissionComplete, setSubmissionComplete] = useState(false);
     const navigate = useNavigate();
+    const [employeeId, setEmployeeId] = useState(1);
 
     const handleIncrement = (itemId) => {
         setCounterValues((prevValues) => ({
@@ -69,12 +70,13 @@ function AnswerAssessment() {
         try {
             for (const item of itemData) {
                 const postData = {
+                    employeeId: employeeId,
                     itemId: item.id,
                     answerText: answerData[item.id]?.answerText || 'NA',
                     selectedChoices: (answerData[item.id]?.selectedChoices || ['NA']).join(separator),
                     counterValue: counterValues[item.id] || 0,
                 };
-    
+
                 const response = await fetch('https://localhost:7236/api/answers', {
                     method: 'POST',
                     headers: {
@@ -82,14 +84,14 @@ function AnswerAssessment() {
                     },
                     body: JSON.stringify(postData),
                 });
-    
+
                 if (response.ok) {
                     console.log(`Answer for item ${item.id} submitted successfully`);
                 } else {
                     console.error(`Failed to submit answer for item ${item.id}`);
                 }
             }
-    
+
             console.log('All answers submitted successfully');
             setSubmissionComplete(true);
         } catch (error) {
@@ -119,7 +121,7 @@ function AnswerAssessment() {
                     </div>
                 </Stack>
             ) : submissionComplete ? (
-                <Stack direction="column" justifyContent="center" alignItems="center" spacing={7} 
+                <Stack direction="column" justifyContent="center" alignItems="center" spacing={7}
                     style={{
                         paddingTop: "100px"
                     }}
@@ -146,7 +148,7 @@ function AnswerAssessment() {
                         >
                             <button type="button" class="btn" onClick={handleCancelButtonClick}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                                 </svg>
                             </button>
                         </Stack>
@@ -378,7 +380,7 @@ function AnswerAssessment() {
                                         {choiceData[item.id] &&
                                             choiceData[item.id].map((choice, choiceIndex) => (
                                                 <div key={choiceIndex} className="form-check">
-                                                    <input className="form-check-input" type="radio" name={`flexRadioDefault${item.id}`} id={`flexRadioDefault${item.id}${choiceIndex}`} 
+                                                    <input className="form-check-input" type="radio" name={`flexRadioDefault${item.id}`} id={`flexRadioDefault${item.id}${choiceIndex}`}
                                                         onChange={() => {
                                                             setAnswerData({
                                                                 ...answerData,
@@ -424,13 +426,13 @@ function AnswerAssessment() {
                                         {choiceData[item.id] &&
                                             choiceData[item.id].map((choice, choiceIndex) => (
                                                 <div key={choiceIndex} className="form-check">
-                                                    <input className="form-check-input" type="checkbox" name={`flexCheckDefault${item.id}`} id={`flexCheckDefault${item.id}${choiceIndex}`} 
+                                                    <input className="form-check-input" type="checkbox" name={`flexCheckDefault${item.id}`} id={`flexCheckDefault${item.id}${choiceIndex}`}
                                                         onChange={(e) => {
                                                             const isChecked = e.target.checked;
                                                             const selectedChoices = answerData[item.id]
                                                                 ? [...answerData[item.id].selectedChoices]
                                                                 : [];
-                              
+
                                                             if (isChecked) {
                                                                 selectedChoices.push(choice.choiceValue);
                                                             } else {
@@ -441,7 +443,7 @@ function AnswerAssessment() {
                                                                     selectedChoices.splice(index, 1);
                                                                 }
                                                             }
-                              
+
                                                             setAnswerData({
                                                                 ...answerData,
                                                                 [item.id]: {

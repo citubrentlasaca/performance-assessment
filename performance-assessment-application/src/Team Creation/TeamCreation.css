@@ -23,26 +23,27 @@ body {
     height: 100%;
     margin: 0;
     overflow: hidden;
-    padding-left: 10%;
-    padding-right: 10%;
     flex-direction: row;
 }
 
-.tc-form-container,
-.tc-image-container {
+
+.tc-form-container {
     flex: 1;
     background-color: rgba(39, 198, 217, 0.19);
     width: 50%;
-    height: 85%;
-    justify-content: center;
-    align-items: center;
+    height: 100%;
     margin: 0;
     overflow: hidden;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
 }
 
-.tc-form-container {
-    padding: 30px;
+.teamcreation-form-container {
+    width: 100%;
 }
 
 .tc-image-container {
@@ -50,12 +51,6 @@ body {
     justify-content: center;
     align-items: center;
     background-color: white;
-}
-
-.tc-image {
-    /* max-width: 50%;
-    max-height: 50%; */
-    object-fit: contain;
 }
 
 .tc-form-container h2 {
@@ -67,6 +62,7 @@ body {
 
 .tc-form-group {
     margin-bottom: 15px;
+    width: 100%;
 }
 
 .tc-form-group label {
@@ -89,8 +85,8 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     border-color: #27C6D9;
-    font-family: Montserrat; 
-  }
+    font-family: Montserrat;
+}
 
 .tc-button-container {
     display: flex;
@@ -109,7 +105,6 @@ body {
     border: 1px solid rgba(39, 198, 217, 0.90);
     background: linear-gradient(254deg, #0273FF 40.22%, #00C0FE 76.98%, #00C0FE 88.25%);
     color: white;
-    font-weight: bold;
     padding: 10px 20px;
     font-size: 20px;
     cursor: pointer;
@@ -117,4 +112,4 @@ body {
 
 .tc-submit-button:hover {
     background: linear-gradient(254deg, #00C0FE 40.22%, #0273FF 76.98%, #0273FF 88.25%);
-  }
+}
