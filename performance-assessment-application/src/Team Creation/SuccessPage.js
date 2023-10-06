@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import './SuccessPage.css';
+import { useParams } from 'react-router-dom';
 
 function SuccessPage() {
+  const { data } = useParams();
+
+  const inputRef = useRef(null);
+
+  const handleCopyClick = () => {
+    if (inputRef.current) {
+      inputRef.current.select();
+      document.execCommand('copy');
+    }
+  };
+
   return (
     <div className="success-page">
       <div className="container">
@@ -18,10 +30,11 @@ function SuccessPage() {
           id="textField"
           type="text"
           placeholder="https://workpa.com"
+          value={data}
+          ref={inputRef}
         />
-        <button type='button' class='successpage-button btn'>COPY</button>
+        <button type='button' class='successpage-button btn' onClick={handleCopyClick}>COPY</button>
       </div>
-
     </div>
   );
 }
