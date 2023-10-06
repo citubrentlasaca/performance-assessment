@@ -83,6 +83,15 @@ body {
     border-color: #27C6D9;
 }
 
+.tc-form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    border-color: #27C6D9;
+    font-family: Montserrat; 
+  }
+
 .tc-button-container {
     display: flex;
     justify-content: center;

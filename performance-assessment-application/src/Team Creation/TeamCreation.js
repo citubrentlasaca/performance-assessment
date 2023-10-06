@@ -51,7 +51,12 @@ function TeamCreation() {
             </div>
             <div className="tc-form-group">
               <label htmlFor="businessType">Type of Business / Company</label>
-              <input type="text" id="type" name="businessType" required />
+              <select id="businessType" name="businessType" required>
+                <option value="Sales">Sales</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Construction">Construction</option>
+                <option value="Delivery and Logistics">Delivery and Logistics</option>
+              </select>
             </div>
             <div className="tc-form-group">
               <label htmlFor="businessAddress">Business Address</label>
