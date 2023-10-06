@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import NavBar from '../Shared/NavBar'
 import { Box, Stack } from '@mui/material'
 import { NavLink } from 'react-router-dom';
-import TopBarTwo from '../Shared/TopBarTwo';
+import TopBarThree from '../Shared/TopBarThree';
 
 function UserAssessment() {
     const [assessments, setAssessments] = useState([]);
-
+    
     useEffect(() => {
         fetch('https://localhost:7236/api/assessments')
             .then((response) => response.json())
@@ -29,7 +29,7 @@ function UserAssessment() {
                     height: "100%",
                 }}
             >
-                <TopBarTwo />
+                <TopBarThree />
                 <Stack
                     direction="column"
                     justifyContent="center"
