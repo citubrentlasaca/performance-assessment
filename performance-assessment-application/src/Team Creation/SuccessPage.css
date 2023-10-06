@@ -28,7 +28,7 @@
     padding-right: 100px;
 }
 
-h3 {
+.successpage-h3 {
     color: #000;
     font-family: Montserrat;
     font-size: 24px;
@@ -36,7 +36,7 @@ h3 {
     font-weight: italic;
 }
 
-h2 {
+.successpage-h2 {
     color: #000;
     font-family: Montserrat;
     font-size: 22px;
@@ -85,4 +85,3 @@ h2 {
     margin-right: 0;
     background-color: #4addfb;
 }
-
