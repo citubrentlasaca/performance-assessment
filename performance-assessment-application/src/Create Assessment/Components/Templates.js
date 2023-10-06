@@ -67,7 +67,7 @@ function Templates() {
                             padding: '40px'
                         }}
                     >
-                        <AssignAssessmentModal open={open} handleClose={handleClose} />
+
                         <Stack
                             direction="row"
                             justifyContent="space-between"
@@ -148,6 +148,7 @@ function Templates() {
                                     marginBottom: '10px',
                                 }}
                             >
+                                <AssignAssessmentModal open={open} handleClose={handleClose} assessmentId={assessment.id} />
                                 <Stack
                                     direction="row"
                                     justifyContent="space-between"
