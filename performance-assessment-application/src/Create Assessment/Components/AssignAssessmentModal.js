@@ -91,31 +91,34 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
         setSelectedUserIds(newSelectedUserIds);
     };
 
-    const sendPostRequest = async (userId) => {
-        try {
-            const schedulerData = {
-                employeeIds: [userId],
-                scheduler: {
-                    assessmentId: assessmentId,
-                    reminder: reminder,
-                    occurrence: occurrence,
-                    dueDate: date,
-                    time: time,
-                },
-            };
-
-            await axios.post('https://localhost:7236/api/schedulers', schedulerData);
-            console.log(`Scheduler created for user with ID: ${userId}`);
-        } catch (error) {
-            console.error('Error creating scheduler:', error);
-            console.log(selectedUserIds)
-        }
-    };
-
-
     const handlePublishClick = async () => {
         for (const userId of selectedUserIds) {
-            await sendPostRequest(userId);
+            try {
+                const employeeResponse = await axios.get(`https://localhost:7236/api/employees/users/${userId}`);
+                const employeeData = employeeResponse.data;
+
+                if (employeeData && employeeData.id) {
+                    const employeeId = employeeData.id;
+
+                    const schedulerData = {
+                        employeeIds: [employeeId],
+                        scheduler: {
+                            assessmentId: assessmentId,
+                            reminder: reminder,
+                            occurrence: occurrence,
+                            dueDate: date,
+                            time: time,
+                        },
+                    };
+
+                    await axios.post('https://localhost:7236/api/schedulers', schedulerData);
+                    console.log(`Scheduler created for employee with ID: ${employeeId}`);
+                } else {
+                    console.error(`Employee not found for user with ID: ${userId}`);
+                }
+            } catch (error) {
+                console.error('Error creating scheduler:', error);
+            }
         }
     };
 
