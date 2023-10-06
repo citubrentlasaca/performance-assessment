@@ -65,7 +65,7 @@ function SideBar() {
                         </a>
                     </li>
                     <li class="nav-item w-100">
-                        <a class="nav-link p-0" href="#"
+                        <a class="nav-link p-0" href="organizations"
                             style={{
                                 color: "black"
                             }}
