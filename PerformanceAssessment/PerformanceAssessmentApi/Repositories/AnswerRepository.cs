@@ -17,8 +17,8 @@ namespace PerformanceAssessmentApi.Repositories
         public async Task<int> SaveAnswers(Answer answer)
         {
             var sql = "INSERT INTO [dbo].[Answer] " +
-                      "([ItemId], [AnswerText], [SelectedChoices], [CounterValue], [IsDeleted], [DateTimeAnswered]) " +
-                      "VALUES (@ItemId, @AnswerText, @SelectedChoices, @CounterValue, 0, @DateTimeAnswered); " +
+                      "([EmployeeId], [ItemId], [AnswerText], [SelectedChoices], [CounterValue], [IsDeleted], [DateTimeAnswered]) " +
+                      "VALUES (@EmployeeId, @ItemId, @AnswerText, @SelectedChoices, @CounterValue, 0, @DateTimeAnswered); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())

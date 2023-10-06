@@ -27,6 +27,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     POST /api/answers
         ///     {
+        ///         "employeeId": 1,
         ///         "itemId": 1,
         ///         "answerText": "My performance was great.",
         ///         "selectedChoices": "Efficiency, Teamwork",
@@ -138,6 +139,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     PUT /api/answers
         ///     {
+        ///         "employeeId": 2,
         ///         "itemId": 2,
         ///         "answerText": "The team was good.",
         ///         "selectedChoices": "Punctuality, Evaluation",
