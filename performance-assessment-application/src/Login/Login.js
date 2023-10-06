@@ -25,7 +25,7 @@ function Login() {
             alignItems="flex-start"
             spacing={2}
             sx={{
-              width: "100%",
+              width: "75%",
             }}
           >
             <b>Email</b>
@@ -39,7 +39,7 @@ function Login() {
             <input type='text' className='form-control'
               style={{
                 border: '2px solid #aee5ed',
-                borderRadius: '10px'
+                borderRadius: '10px',
               }}
             />
           </Stack>
@@ -48,7 +48,7 @@ function Login() {
               background: 'linear-gradient(to right, #0076fe, #00c5ff)',
               border: 'none',
               borderRadius: '10px',
-              width: '100%',
+              width: '100px',
               height: '40px',
               color: 'white'
             }}
