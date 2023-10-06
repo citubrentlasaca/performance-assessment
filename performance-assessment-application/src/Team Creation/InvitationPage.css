@@ -1,4 +1,4 @@
-.success-page {
+.invitation-page {
     background: #D6F4F8;
     height: 100vh;
     display: flex;
@@ -7,18 +7,15 @@
     justify-content: center;
 }
 
-.container {
-    width: 700px;
-    height: 400px;
+.invitation-container {
+    width: 650px;
+    height: 300px;
     border-radius: 50px;
     background: rgba(39, 198, 217, 0.39);
 }
 
-.message {
+.invitation-message {
     text-align: center;
-    margin-bottom: 20px;
-    margin-top: 70px;
-    margin-top: 40px;
     font-family: Montserrat;
     font-size: 30px;
     font-style: normal;
@@ -26,31 +23,37 @@
     line-height: normal;
     padding-left: 100px;
     padding-right: 100px;
-}
-
-.successpage-h3 {
-    color: #000;
-    font-family: Montserrat;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: italic;
-}
-
-.successpage-h2 {
-    color: #000;
-    font-family: Montserrat;
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-}
-
-.darkblue-text {
+    padding-top: 50px;
     color: #055C9D;
     font-weight: bold;
 }
 
-.copy-container {
+.email-icon {
+    color: #055C9D;
+    padding-bottom: 10px;
+}
+
+.invitation-message h2 {
+    color: #055C9D;
+    font-family: Montserrat;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    padding-bottom: 10px;
+}
+
+.invitation-message h3 {
+    font-family: Montserrat;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: italic;
+    color: #055C9D;
+    margin-top: 10px;
+
+}
+
+.join-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -64,7 +67,7 @@
     margin-top: 30px;
 }
 
-.successpage-input {
+.invitationpage-input {
     width: 315px;
     height: 53px;
     flex-shrink: 0;
@@ -75,7 +78,7 @@
     border: 1px solid black;
 }
 
-.successpage-button {
+.invitationpage-button {
     width: 189px;
     height: 53px;
     flex-shrink: 0;

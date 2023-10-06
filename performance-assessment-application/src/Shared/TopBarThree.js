@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material'
 import React from 'react'
 
-function TopBarTwo() {
+function TopBarThree() {
     return (
         <Box
             sx={{
@@ -56,16 +56,16 @@ function TopBarTwo() {
                         </a>
                     </li>
                     <li class="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <a class="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" href="#"
+                        <a class="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" href="performance"
                             style={{
                                 color: 'white',
                             }}
                         >
-                            <b>Employees</b>
+                            <b>Performance</b>
                         </a>
                     </li>
                     <li class="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <a class="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" href="adminassessments"
+                        <a class="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" href="userassessments"
                             style={{
                                 color: 'white',
                             }}
@@ -95,4 +95,4 @@ function TopBarTwo() {
     )
 }
 
-export default TopBarTwo
+export default TopBarThree
