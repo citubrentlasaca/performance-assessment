@@ -10,6 +10,8 @@ import InvitationPage from './Team Creation/InvitationPage';
 import SuccessPage from './Team Creation/SuccessPage.js';
 import TeamCreation from './Team Creation/TeamCreation';
 import Home from './Homepage/Home';
+import Organizations from './OrganizationsPage/Organizations';
+import Performance from './PerformancePage/Performance';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path="/success/:data" element={<SuccessPage />} />
           <Route path="/create-team" element={<TeamCreation />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/organizations" element={<Organizations />} />
+          <Route path="/performance" element={<Performance />} />
         </Routes>
       </Router>
     </div>
