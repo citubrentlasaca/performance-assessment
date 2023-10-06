@@ -4,6 +4,9 @@ namespace PerformanceAssessmentApi.Dtos
 {
     public class AnswerUpdationDto
     {
+        [Required(ErrorMessage = "The employeeId is required.")]
+        public int EmployeeId { get; set; }
+
         [Required(ErrorMessage = "The itemId is required.")]
         public int ItemId { get; set; }
 

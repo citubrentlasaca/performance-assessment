@@ -2,7 +2,8 @@
 {
     public class Answer
     {
-        public int Id { get; set; }        
+        public int Id { get; set; }
+        public int EmployeeId {  get; set; }
         public int ItemId { get; set; }
         public string? AnswerText { get; set; }
         public string? SelectedChoices { get; set; }
