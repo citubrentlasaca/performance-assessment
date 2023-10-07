@@ -2,6 +2,7 @@ import React from 'react'
 import { Stack } from '@mui/material';
 import logo from './Images/Work PA Logo.png';
 import landingPhoto from './Images/Landing Page Photo.png';
+import { NavLink } from 'react-router-dom';
 
 function LandingPage() {
     return (
@@ -51,18 +52,20 @@ function LandingPage() {
                         </li>
                     </ul>
                 </Stack>
-                <button
-                    style={{
-                        background: 'linear-gradient(to right, #0076fe, #00c5ff)',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '10px',
-                        width: '100px',
-                        height: '40px'
-                    }}
-                >
-                    Sign In
-                </button>
+                <NavLink to="/login">
+                    <button
+                        style={{
+                            background: 'linear-gradient(to right, #0076fe, #00c5ff)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '10px',
+                            width: '100px',
+                            height: '40px'
+                        }}
+                    >
+                        Sign In
+                    </button>
+                </NavLink>
             </div>
             <Stack
                 direction="row"
