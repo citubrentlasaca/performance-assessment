@@ -42,12 +42,12 @@ namespace PerformanceAssessmentApi.Services
             return await _repository.GetEmployeeById(id);
         }
 
-        public async Task<EmployeeDto> GetEmployeeByUserId(int userId)
+        public async Task<IEnumerable<EmployeeDto>> GetEmployeeByUserId(int userId)
         {
             return await _repository.GetEmployeeByUserId(userId);
         }
 
-        public async Task<EmployeeDto> GetEmployeeByTeamId(int teamId)
+        public async Task<IEnumerable<EmployeeDto>> GetEmployeeByTeamId(int teamId)
         {
             return await _repository.GetEmployeeByTeamId(teamId);
         }
