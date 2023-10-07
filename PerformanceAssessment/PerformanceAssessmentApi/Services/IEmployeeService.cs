@@ -6,6 +6,7 @@ namespace PerformanceAssessmentApi.Services
     public interface IEmployeeService
     {
         Task<Employee> CreateEmployee(EmployeeCreationDto employee);
+        Task<Employee> CreateEmployeeWithTeamCode(EmployeeTeamInfoDto employee);
         Task<IEnumerable<EmployeeDto>> GetAllEmployees();
         Task<EmployeeDto> GetEmployeeById(int id);
         Task<EmployeeDto> GetEmployeeByUserId(int userId);
