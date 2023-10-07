@@ -34,7 +34,8 @@ namespace PerformanceAssessmentApi.Controllers
         ///             "reminder": "Everyday",
         ///             "occurrence": "Once",
         ///             "dueDate": "Wednesday, October 4, 2023",
-        ///             "time": "11:59 PM"
+        ///             "time": "11:59 PM",
+        ///             "score": 0 (Default Value)
         ///         }
         ///     }
         ///
@@ -218,7 +219,8 @@ namespace PerformanceAssessmentApi.Controllers
         ///         "reminder": "Task Deadline",
         ///         "occurrence": "Weekly",
         ///         "dueDate": "Thursday, October 5, 2023",
-        ///         "time": "10:00 PM"
+        ///         "time": "10:00 PM",
+        ///         "score": 100
         ///     }
         ///
         /// </remarks>
