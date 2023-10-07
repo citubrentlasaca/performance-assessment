@@ -1,7 +1,9 @@
 ﻿using Dapper;
+using Microsoft.Data.SqlClient;
 using PerformanceAssessmentApi.Context;
 using PerformanceAssessmentApi.Dtos;
 using PerformanceAssessmentApi.Models;
+using PerformanceAssessmentApi.Utils;
 
 namespace PerformanceAssessmentApi.Repositories
 {
@@ -22,7 +24,36 @@ namespace PerformanceAssessmentApi.Repositories
 
             using (var con = _context.CreateConnection())
             {
+                employee.Status = "Active";
                 return await con.ExecuteScalarAsync<int>(sql, employee);
+            }
+        }
+
+        public async Task<int> CreateEmployeeWithTeamCode(EmployeeTeamInfoDto employee)
+        {
+            var teamCode = employee.TeamCode;
+            var teamIdSql = "SELECT TOP 1 [Id] FROM [dbo].[Team] WHERE [TeamCode] = @TeamCode;";
+
+            using (var con = _context.CreateConnection())
+            {
+                var teamId = await con.ExecuteScalarAsync<int>(teamIdSql, new { TeamCode = teamCode });
+
+                if (teamId == 0)
+                {
+                    throw new Exception("Team not found");
+                }
+
+                var sql = "INSERT INTO [dbo].[Employee] ([UserId], [TeamId], [Status], [DateTimeJoined]) " +
+                          "VALUES (@UserId, (SELECT TOP 1 [Id] FROM [dbo].[Team] WHERE [TeamCode] = @TeamCode), @Status, @DateTimeJoined); " +
+                          "SELECT SCOPE_IDENTITY();";
+
+                return await con.ExecuteScalarAsync<int>(sql, new
+                {
+                    UserId = employee.UserId,
+                    TeamCode = teamCode,
+                    Status = employee.Status,
+                    DateTimeJoined = StringUtil.GetCurrentDateTime()
+                });
             }
         }
 
