@@ -46,6 +46,16 @@ namespace PerformanceAssessmentApi.Repositories
             }
         }
 
+        public async Task<TeamDto> GetTeamByCode(Guid teamCode)
+        {
+            var sql = "SELECT * FROM [dbo].[Team] WHERE [TeamCode] = @TeamCode;";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QuerySingleOrDefaultAsync<TeamDto>(sql, new { TeamCode = teamCode });
+            }
+        }
+
         public async Task<int> UpdateTeam(Team team)
         {
             var sql = "UPDATE [dbo].[Team] SET " +

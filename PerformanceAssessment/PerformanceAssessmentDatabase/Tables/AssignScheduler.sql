@@ -7,6 +7,7 @@
     [Occurrence] NVARCHAR(MAX) NOT NULL,
     [DueDate] NVARCHAR(MAX) NOT NULL,
     [Time] NVARCHAR(MAX) NOT NULL,
+    [Score] FLOAT NOT NULL DEFAULT 0,
     [DateTimeCreated] DATETIME NOT NULL,
     [DateTimeUpdated] DATETIME NOT NULL,
     CONSTRAINT [FK_AssignSchedulerAssessment] FOREIGN KEY ([AssessmentId]) REFERENCES [Assessment]([Id]) ON DELETE CASCADE,

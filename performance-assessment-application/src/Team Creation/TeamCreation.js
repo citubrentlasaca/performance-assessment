@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './TeamCreation.css'; 
+import './TeamCreation.css';
 import image from "../Images/teamRegistration.png";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -33,11 +33,10 @@ function TeamCreation() {
   return (
     <div className="tc-container">
       <div className="tc-content">
-        <div className="tc-form-container">
-          <h2>Team Creation</h2>
-          <h2>Registration Form</h2>
-          <form onSubmit={handleSubmit}>            
-          <div className="tc-form-group">
+        <div className="tc-form-container gap-2">
+          <h2>Team Creation <br /> Registration Form</h2>
+          <form onSubmit={handleSubmit} className='teamcreation-form-container'>
+            <div className="tc-form-group">
               <label htmlFor="organization">Organization / Company Name</label>
               <input type="text" id="organization" name="organization" required />
             </div>
@@ -69,12 +68,24 @@ function TeamCreation() {
             </div>
           </form>
         </div>
-        <div className="tc-image-container">
-          <img src={image} alt="UserRegistration" className="registration-image" />
+        <div className="tc-image-container"
+          style={{
+            width: "50%",
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <img src={image} alt='Work PA'
+            style={{
+              height: '100%'
+            }}
+          />
         </div>
       </div>
 
-    </div>
+    </div >
   );
 }
 

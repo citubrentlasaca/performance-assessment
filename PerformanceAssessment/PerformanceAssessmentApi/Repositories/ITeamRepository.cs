@@ -8,6 +8,7 @@ namespace PerformanceAssessmentApi.Repositories
         Task<Guid> CreateTeam(Team team);
         Task<IEnumerable<TeamDto>> GetAllTeams();
         Task<TeamDto> GetTeamById(int id);
+        Task<TeamDto> GetTeamByCode(Guid teamCode);
         Task<int> UpdateTeam(Team team);
         Task<int> DeleteTeam(int id);
     }
