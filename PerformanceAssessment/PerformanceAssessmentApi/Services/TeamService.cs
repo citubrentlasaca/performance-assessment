@@ -34,6 +34,11 @@ namespace PerformanceAssessmentApi.Services
             return _repository.GetTeamById(id);
         }
 
+        public Task<TeamDto> GetTeamByCode(Guid teamCode)
+        {
+            return _repository.GetTeamByCode(teamCode);
+        }
+
         public async Task<int> UpdateTeam(int id, TeamUpdationDto team)
         {
             var model = _mapper.Map<Team>(team);
