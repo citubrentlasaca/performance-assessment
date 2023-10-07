@@ -2,6 +2,7 @@
 using PerformanceAssessmentApi.Context;
 using PerformanceAssessmentApi.Dtos;
 using PerformanceAssessmentApi.Models;
+using PerformanceAssessmentApi.Utils;
 
 namespace PerformanceAssessmentApi.Repositories
 {
@@ -16,8 +17,11 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<int> CreateUser(User user)
         {
-            var sql = "INSERT INTO [dbo].[User] ([FirstName], [LastName], [EmailAddress], [Password], [DateTimeCreated], [DateTimeUpdated]) " +
-                      "VALUES (@FirstName, @LastName, @EmailAddress, @Password, @DateTimeCreated, @DateTimeUpdated); " +
+            // Generate a random salt
+            (user.Password, user.Salt) = PasswordHasher.HashPassword(user.Password);
+
+            var sql = "INSERT INTO [dbo].[User] ([FirstName], [LastName], [EmailAddress], [Password], [Salt], [DateTimeCreated], [DateTimeUpdated]) " +
+                      "VALUES (@FirstName, @LastName, @EmailAddress, @Password, @Salt, @DateTimeCreated, @DateTimeUpdated); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
@@ -48,11 +52,17 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<User> GetUserByEmailAddressAndPassword(string email, string password)
         {
-            var sql = "SELECT * FROM [dbo].[User] WHERE [EmailAddress] = @EmailAddress AND [Password] = @Password;";
+            var sql = "SELECT * FROM [dbo].[User] WHERE [EmailAddress] = @EmailAddress;";
 
             using (var con = _context.CreateConnection())
             {
-                return await con.QueryFirstOrDefaultAsync<User>(sql, new { EmailAddress = email, Password = password });
+                var user = await con.QuerySingleOrDefaultAsync<User>(sql, new { EmailAddress = email });
+
+                if (user != null && PasswordHasher.VerifyPassword(password, user.Password, user.Salt))
+                {
+                    return user;
+                }
+                return null; // Password doesn't match or user not found
             }
         }
 
@@ -63,8 +73,12 @@ namespace PerformanceAssessmentApi.Repositories
                       "[LastName] = @LastName, " +
                       "[EmailAddress] = @EmailAddress, " +
                       "[Password] = @Password, " +
+                      "[Salt] = @Salt, " +
                       "[DateTimeUpdated] = @DateTimeUpdated " +
                       "WHERE Id = @Id;";
+
+            // Generate a new salt and hash for the new password
+            (user.Password, user.Salt) = PasswordHasher.HashPassword(user.Password);
 
             using (var con = _context.CreateConnection())
             {
@@ -77,6 +91,7 @@ namespace PerformanceAssessmentApi.Repositories
                         LastName = user.LastName,
                         EmailAddress = user.EmailAddress,
                         Password = user.Password,
+                        Salt = user.Salt,
                         DateTimeUpdated = user.DateTimeUpdated
                     }
                 );
