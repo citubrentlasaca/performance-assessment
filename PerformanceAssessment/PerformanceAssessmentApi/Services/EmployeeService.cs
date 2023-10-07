@@ -24,6 +24,14 @@ namespace PerformanceAssessmentApi.Services
             return model;
         }
 
+        public async Task<Employee> CreateEmployeeWithTeamCode(EmployeeTeamInfoDto employee)
+        {
+            var model = _mapper.Map<Employee>(employee);
+            model.Id = await _repository.CreateEmployeeWithTeamCode(employee);
+
+            return model;
+        }
+
         public Task<IEnumerable<EmployeeDto>> GetAllEmployees()
         {
             return _repository.GetAllEmployees();
