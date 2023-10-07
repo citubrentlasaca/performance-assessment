@@ -6,6 +6,7 @@ namespace PerformanceAssessmentApi.Repositories
     public interface IEmployeeRepository
     {
         Task<int> CreateEmployee(Employee employee);
+        Task<int> CreateEmployeeWithTeamCode(EmployeeTeamInfoDto employee);
         Task<IEnumerable<EmployeeDto>> GetAllEmployees();
         Task<EmployeeDto> GetEmployeeById(int id);
         Task<EmployeeDto> GetEmployeeByUserId(int userId);

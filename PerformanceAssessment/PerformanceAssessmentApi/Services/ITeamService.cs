@@ -11,6 +11,8 @@ namespace PerformanceAssessmentApi.Services
 
         Task<TeamDto> GetTeamById(int id);
 
+        Task<TeamDto> GetTeamByCode(Guid teamCode);
+
         Task<int> UpdateTeam(int id, TeamUpdationDto team);
 
         Task<int> DeleteTeam(int id);
