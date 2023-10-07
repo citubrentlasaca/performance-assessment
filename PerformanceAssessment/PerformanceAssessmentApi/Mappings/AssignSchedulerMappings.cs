@@ -15,6 +15,7 @@ namespace PerformanceAssessmentApi.Mappings
                 .ForMember(dto => dto.Occurrence, opt => opt.MapFrom(st => (st.Occurrence!)))
                 .ForMember(dto => dto.DueDate, opt => opt.MapFrom(st => st.DueDate))
                 .ForMember(dto => dto.Time, opt => opt.MapFrom(st => st.Time))
+                .ForMember(dto => dto.Score, opt => opt.MapFrom(st => st.Score))
                 .ForMember(dto => dto.DateTimeCreated, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()))
                 .ForMember(dto => dto.DateTimeUpdated, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()));
 
@@ -23,6 +24,7 @@ namespace PerformanceAssessmentApi.Mappings
                 .ForMember(dto => dto.Occurrence, opt => opt.MapFrom(st => (st.Occurrence!)))
                 .ForMember(dto => dto.DueDate, opt => opt.MapFrom(st => st.DueDate))
                 .ForMember(dto => dto.Time, opt => opt.MapFrom(st => st.Time))
+                .ForMember(dto => dto.Score, opt => opt.MapFrom(st => st.Score))
                 .ForMember(dto => dto.DateTimeUpdated, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()));
         }
     }
