@@ -128,6 +128,40 @@ namespace PerformanceAssessmentApi.Controllers
         }
 
         /// <summary>
+        /// Gets the team by code
+        /// </summary>
+        /// <param name="teamCode">Team code</param>
+        /// <returns>Returns the details of the team with code <paramref name="teamCode"/></returns>
+        /// <response code="200">Team found</response>
+        /// <response code="404">Team not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet("code/{teamCode}", Name = "GetTeamByCode")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetTeamByCode(Guid teamCode)
+        {
+            try
+            {
+                // Check if team exists
+                var foundTeam = await _teamService.GetTeamByCode(teamCode);
+
+                if (foundTeam == null)
+                {
+                    return StatusCode(404, "Team not found");
+                }
+
+                return Ok(foundTeam);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
+
+        /// <summary>
         /// Updates an existing team
         /// </summary>
         /// <param name="id">The id of the team that will be updated</param>
