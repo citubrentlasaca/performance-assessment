@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 import { Stack, IconButton, Box, Button } from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
@@ -19,6 +20,7 @@ function AssessmentQuestion() {
   const [open, setOpen] = useState(false);
   const [dialogText, setDialogText] = useState('');
   const [totalWeight, setTotalWeight] = useState(0);
+  const navigate = useNavigate();
 
   const calculateTotalWeight = () => {
     return components.reduce((sum, component) => sum + parseFloat(component.weight), 0);
@@ -99,6 +101,9 @@ function AssessmentQuestion() {
     else {
       updateAssessment();
       setDialogText("ASSESSMENT PUBLISHED");
+      setTimeout(() => {
+        navigate('/adminassessments');
+      }, 3000);
     }
   };
 
