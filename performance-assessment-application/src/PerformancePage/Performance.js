@@ -93,7 +93,6 @@ function Performance() {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     padding: '30px',
-                                    marginBottom: '10px',
                                 }}
                             >
                                 <Stack

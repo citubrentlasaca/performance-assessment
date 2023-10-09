@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material'
 import React, { useState, useEffect } from 'react'
-import NavBar from '../../Shared/NavBar'
-import TopBarTwo from '../../Shared/TopBarTwo'
+import NavBar from '../Shared/NavBar'
+import TopBarTwo from '../Shared/TopBarTwo'
 import { NavLink } from 'react-router-dom';
 import AssignAssessmentModal from './AssignAssessmentModal';
 
@@ -59,6 +59,8 @@ function Templates() {
                         width: "100%"
                     }}
                 >
+
+                    <AssignAssessmentModal open={open} handleClose={handleClose} assessmentId={selectedAssessmentId} />
                     <TopBarTwo />
                     <Stack
                         direction="column"
@@ -152,7 +154,6 @@ function Templates() {
                                     marginBottom: '10px',
                                 }}
                             >
-                                <AssignAssessmentModal open={open} handleClose={handleClose} assessmentId={selectedAssessmentId} />
                                 <Stack
                                     direction="row"
                                     justifyContent="space-between"
