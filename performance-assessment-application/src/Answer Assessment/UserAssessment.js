@@ -32,8 +32,8 @@ function UserAssessment() {
                 padding: '10px',
             }}
         >
-            {assessments.map((assessment) => (
-                <Box
+            {assessments.map((assessment, index) => (
+                <Box key={index}
                     sx={{
                         width: '100%',
                         height: '100px',
