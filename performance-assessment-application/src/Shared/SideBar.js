@@ -90,7 +90,7 @@ function SideBar() {
                                     justifyContent: 'center',
                                 }}
                             >
-                                <a class="nav-link" href="#"
+                                <a class="nav-link" href="/home"
                                     style={{
                                         color: 'black'
                                     }}
@@ -108,7 +108,7 @@ function SideBar() {
                                     justifyContent: 'center',
                                 }}
                             >
-                                <a class="nav-link" href="#"
+                                <a class="nav-link" href="/organizations"
                                     style={{
                                         color: 'black'
                                     }}
@@ -178,7 +178,7 @@ function SideBar() {
                                     height: '96px',
                                 }}
                             >
-                                <a class="nav-link" href="#"
+                                <a class="nav-link" href="/home"
                                     style={{
                                         color: 'black'
                                     }}
@@ -205,7 +205,7 @@ function SideBar() {
                                     height: '96px',
                                 }}
                             >
-                                <a class="nav-link" href="#"
+                                <a class="nav-link" href="/organizations"
                                     style={{
                                         color: 'black'
                                     }}

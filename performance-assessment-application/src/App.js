@@ -1,7 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import AssessmentQuestion from './Create Assessment/Components/AssessmentQuestion';
-import Templates from './Create Assessment/Components/Templates';
+import Templates from './Create Assessment/Templates';
 import UserAssessment from './Answer Assessment/UserAssessment';
 import AnswerAssessment from './Answer Assessment/AnswerAssessment';
 import Login from './Login/Login.js';
@@ -12,6 +11,7 @@ import TeamCreation from './Team Creation/TeamCreation';
 import Home from './Homepage/Home';
 import Organizations from './OrganizationsPage/Organizations';
 import Performance from './PerformancePage/Performance';
+import CreateAssessment from './Create Assessment/CreateAssessment';
 
 function App() {
   return (
@@ -26,7 +26,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/createassessment" element={<AssessmentQuestion />} />
+          <Route path="/createassessment" element={<CreateAssessment />} />
           <Route path="/adminassessments" element={<Templates />} />
           <Route path="/userassessments" element={<UserAssessment />} />
           <Route path="/answerassessment/:id" element={<AnswerAssessment />} />
