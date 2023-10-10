@@ -25,10 +25,9 @@ function App() {
     >
       <Router>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route index element={<LandingPage />} />
           <Route path="/createassessment" element={<CreateAssessment />} />
           <Route path="/adminassessments" element={<Templates />} />
-          <Route path="/userassessments" element={<UserAssessment />} />
           <Route path="/answerassessment/:id" element={<AnswerAssessment />} />
           <Route path="/login" element={<Login />} />
           <Route path="/join-team" element={<InvitationPage />} />
@@ -36,7 +35,8 @@ function App() {
           <Route path="/create-team" element={<TeamCreation />} />
           <Route path="/home" element={<Home />} />
           <Route path="/organizations" element={<Organizations />} />
-          <Route path="/performance" element={<Performance />} />
+          <Route path="/organizations/performance" element={<Performance />} />
+          <Route path="/organizations/userassessments" element={<UserAssessment />} />
         </Routes>
       </Router>
     </div>
