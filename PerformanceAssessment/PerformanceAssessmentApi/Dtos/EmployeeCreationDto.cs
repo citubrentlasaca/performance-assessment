@@ -9,8 +9,5 @@ namespace PerformanceAssessmentApi.Dtos
 
         [Required(ErrorMessage = "The teamId is required.")]
         public int TeamId { get; set; }
-
-        [Required(ErrorMessage = "The status is required.")]
-        public string? Status { get; set; }
     }
 }

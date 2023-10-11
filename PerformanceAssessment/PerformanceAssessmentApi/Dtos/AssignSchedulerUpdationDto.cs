@@ -21,5 +21,7 @@ namespace PerformanceAssessmentApi.Dtos
 
         [Required(ErrorMessage = "The time is required.")]
         public string? Time { get; set; }
+
+        public float Score { get; set; }
     }
 }

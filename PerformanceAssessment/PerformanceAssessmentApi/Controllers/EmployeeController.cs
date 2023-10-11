@@ -10,11 +10,13 @@ namespace PerformanceAssessmentApi.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
+        private readonly ITeamService _teamService;
         private readonly ILogger<EmployeeController> _logger;
 
-        public EmployeeController(IEmployeeService employeeService, ILogger<EmployeeController> logger)
+        public EmployeeController(IEmployeeService employeeService, ITeamService teamService, ILogger<EmployeeController> logger)
         {
             _employeeService = employeeService;
+            _teamService = teamService;
             _logger = logger;
         }
 
@@ -29,8 +31,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///     POST /api/employees
         ///     {
         ///         "userId": 1,
-        ///         "teamId": 1,
-        ///         "status": "Active"
+        ///         "teamId": 1
         ///     }
         ///
         /// </remarks>
@@ -56,6 +57,56 @@ namespace PerformanceAssessmentApi.Controllers
             {
                 _logger.LogError(e.Message);
                 return StatusCode(500, "Something went wrong");
+            }
+        }
+
+        /// <summary>
+        /// Creates a new employee by providing a team code
+        /// </summary>
+        /// <param name="employee">Employee details with a team code</param>
+        /// <returns>Returns the newly created employee</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/employees/withteamcode
+        ///     {
+        ///         "userId": 1,
+        ///         "teamCode": "team-code-guid-here"
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Successfully created a new employee</response>
+        /// <response code="400">Employee details are invalid</response>
+        /// <response code="404">Team not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpPost("withteamcode", Name = "CreateEmployeeWithTeamCode")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(EmployeeTeamInfoDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateEmployeeWithTeamCode([FromBody] EmployeeTeamInfoDto employee)
+        {
+            try
+            {
+                // Check if the team with the provided team code exists
+                var team = await _teamService.GetTeamByCode(employee.TeamCode);
+
+                if (team == null)
+                {
+                    return StatusCode(404, "Team not found");
+                }
+
+                // Create a new employee
+                var newEmployee = await _employeeService.CreateEmployeeWithTeamCode(employee);
+
+                return CreatedAtRoute("GetEmployeeById", new { id = newEmployee.Id }, newEmployee);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "TeamId does not match the provided TeamCode");
             }
         }
 
