@@ -65,7 +65,7 @@ function TopBarTwo() {
                         </a>
                     </li>
                     <li class="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <a class="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" href="adminassessments"
+                        <a class="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" href="/organizations/adminassessments"
                             style={{
                                 color: 'white',
                             }}

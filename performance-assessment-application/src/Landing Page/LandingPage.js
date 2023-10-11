@@ -93,9 +93,9 @@ function LandingPage() {
                             fontWeight: 'bold'
                         }}
                     >
-                        Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur
+                        Revolutionize Your Workforce Performance
                     </h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p>Unlock Greater Productivity, Boost Engagement, and Foster Growth with Our Innovative Performance Assessment App</p>
                     <b
                         style={{
                             color: '#065d9d'

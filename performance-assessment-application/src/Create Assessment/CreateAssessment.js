@@ -10,6 +10,7 @@ function CreateAssessment() {
     const [description, setDescription] = useState('');
     const [showAlert, setShowAlert] = useState(false);
     const [showPublishSuccessAlert, setShowPublishSuccessAlert] = useState(false);
+    const [deletedChoiceIds, setDeletedChoiceIds] = useState([]);
     const [questions, setQuestions] = useState([
         {
             id: 1,
@@ -18,7 +19,7 @@ function CreateAssessment() {
             multipleChoices: [
                 {
                     id: 1,
-                    text: 'Option 1',
+                    text: 'Option',
                     valueText: '',
                     choiceWeight: 0,
                 },
@@ -26,7 +27,7 @@ function CreateAssessment() {
             checkboxesChoices: [
                 {
                     id: 1,
-                    text: 'Option 1',
+                    text: 'Option',
                     valueText: '',
                     choiceWeight: 0,
                 },
@@ -47,25 +48,26 @@ function CreateAssessment() {
         setDescription(e.target.value);
     }
 
+    const updateDeletedChoiceIds = (newDeletedChoiceIds) => {
+        setDeletedChoiceIds(newDeletedChoiceIds);
+    };
+
     async function postAssessment() {
         try {
-            // Check if the total weight is equal to 100
             if (totalWeight !== 100) {
-                setShowAlert(true); // Show the Bootstrap alert
+                setShowAlert(true);
                 setTimeout(() => {
-                    setShowAlert(false); // Hide the Bootstrap alert after 5 seconds
-                }, 5000); // 5000 milliseconds = 5 seconds
+                    setShowAlert(false);
+                }, 5000);
                 return;
             }
 
-            // Step 1: POST assessment
             const assessmentResponse = await axios.post('https://localhost:7236/api/assessments', {
                 title,
                 description,
             });
             const assessmentId = assessmentResponse.data.id;
 
-            // Step 2: POST each question as an item
             for (const question of questions) {
                 const itemResponse = await axios.post('https://localhost:7236/api/items', {
                     question: question.questionText,
@@ -77,7 +79,6 @@ function CreateAssessment() {
                 });
                 const itemId = itemResponse.data.id;
 
-                // Step 3: POST choices for Multiple choice or Checkboxes
                 if (question.questionType === 'Multiple choice' || question.questionType === 'Checkboxes') {
                     const choices = question.questionType === 'Multiple choice'
                         ? question.multipleChoices
@@ -93,11 +94,10 @@ function CreateAssessment() {
                 }
             }
 
-            // All data has been posted successfully
             console.log('Assessment has been posted successfully');
             setShowPublishSuccessAlert(true);
             setTimeout(() => {
-                navigate('/adminassessments');
+                navigate('/organizations/adminassessments');
             }, 3000);
         } catch (error) {
             console.error('Error while posting assessment:', error);
@@ -105,7 +105,7 @@ function CreateAssessment() {
     }
 
     const discardAssessment = () => {
-        navigate('/adminassessments');
+        navigate('/organizations/adminassessments');
     }
 
     return (
@@ -131,18 +131,6 @@ function CreateAssessment() {
                         height: '100%',
                     }}
                 >
-                    {showAlert && (
-                        <div className="alert alert-danger alert-dismissible fade show w-100" role="alert">
-                            Total weight must be equal to 100.
-                            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={() => setShowAlert(false)}></button>
-                        </div>
-                    )}
-                    {showPublishSuccessAlert && (
-                        <div className="alert alert-success alert-dismissible fade show w-100" role="alert">
-                            Assessment published successfully.
-                            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={() => setShowPublishSuccessAlert(false)}></button>
-                        </div>
-                    )}
                     <div className='gap-2'
                         style={{
                             width: '100%',
@@ -170,7 +158,19 @@ function CreateAssessment() {
                             }}
                         />
                     </div>
-                    <QuestionBox questions={questions} setQuestions={setQuestions} />
+                    <QuestionBox questions={questions} setQuestions={setQuestions} deletedChoiceIds={deletedChoiceIds} setDeletedChoiceIds={setDeletedChoiceIds} />
+                    {showAlert && (
+                        <div className="alert alert-danger alert-dismissible fade show w-100" role="alert">
+                            Total weight must be equal to 100.
+                            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={() => setShowAlert(false)}></button>
+                        </div>
+                    )}
+                    {showPublishSuccessAlert && (
+                        <div className="alert alert-success alert-dismissible fade show w-100" role="alert">
+                            Assessment published successfully.
+                            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={() => setShowPublishSuccessAlert(false)}></button>
+                        </div>
+                    )}
                     <Stack
                         direction="row"
                         justifyContent="center"
@@ -180,8 +180,16 @@ function CreateAssessment() {
                             width: '100%',
                         }}
                     >
-                        <button type="button" class="btn btn-success" onClick={postAssessment}>Publish Assessment</button>
-                        <button type="button" class="btn btn-danger" onClick={discardAssessment}>Discard Assessment</button>
+                        <button type="button" class="btn btn-success" onClick={postAssessment}
+                            style={{
+                                width: '200px'
+                            }}
+                        >Publish Assessment</button>
+                        <button type="button" class="btn btn-danger" onClick={discardAssessment}
+                            style={{
+                                width: '200px'
+                            }}
+                        >Discard Assessment</button>
                     </Stack>
                 </Stack>
             </Stack>
