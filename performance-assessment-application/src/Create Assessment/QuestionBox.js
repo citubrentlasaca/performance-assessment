@@ -1,9 +1,12 @@
 import { Stack } from '@mui/material'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 
-function QuestionBox({ questions, setQuestions }) {
+function QuestionBox({ questions, setQuestions, deletedChoiceIds, setDeletedChoiceIds }) {
+    const [maxChoiceId, setMaxChoiceId] = useState(1);
+    const [maxItemId, setMaxItemId] = useState(1);
     const duplicateQuestionBox = () => {
-        const newQuestionId = questions.length + 1;
+        const newQuestionId = maxItemId + 1;
         const newQuestion = {
             id: newQuestionId,
             questionText: '',
@@ -11,7 +14,7 @@ function QuestionBox({ questions, setQuestions }) {
             multipleChoices: [
                 {
                     id: 1,
-                    text: 'Option 1',
+                    text: 'Option',
                     valueText: '',
                     choiceWeight: 0,
                 },
@@ -19,7 +22,7 @@ function QuestionBox({ questions, setQuestions }) {
             checkboxesChoices: [
                 {
                     id: 1,
-                    text: 'Option 1',
+                    text: 'Option',
                     valueText: '',
                     choiceWeight: 0,
                 },
@@ -29,12 +32,18 @@ function QuestionBox({ questions, setQuestions }) {
             questionRequired: false,
         };
         setQuestions([...questions, newQuestion]);
+        setMaxItemId(maxItemId + 1);
     };
 
     const deleteQuestionBox = (questionId) => {
+        if (questions.length === 1) {
+            return;
+        }
+
         const updatedQuestions = questions.filter((question) => question.id !== questionId);
         setQuestions(updatedQuestions);
     };
+
 
     const handleQuestionTextChange = (e, questionId) => {
         const updatedQuestions = questions.map((question) => {
@@ -52,13 +61,50 @@ function QuestionBox({ questions, setQuestions }) {
     const handleQuestionTypeChange = (e, questionId) => {
         const updatedQuestions = questions.map((question) => {
             if (question.id === questionId) {
-                return {
-                    ...question,
-                    questionType: e.target.value,
-                };
+                const newQuestionType = e.target.value;
+
+                if (newQuestionType !== question.questionType) {
+                    const newChoices = [];
+
+                    if (newQuestionType === 'Multiple choice') {
+                        setMaxChoiceId(maxChoiceId + 1);
+
+                        newChoices.push({
+                            id: maxChoiceId + 1,
+                            text: `Option`,
+                            valueText: '',
+                            choiceWeight: 0,
+                        });
+                    } else if (newQuestionType === 'Checkboxes') {
+                        setMaxChoiceId(maxChoiceId + 1);
+
+                        newChoices.push({
+                            id: maxChoiceId + 1,
+                            text: `Option`,
+                            valueText: '',
+                            choiceWeight: 0,
+                        });
+                    }
+
+                    if (newQuestionType === 'Multiple choice') {
+                        deletedChoiceIds.push(...question.checkboxesChoices.map((choice) => choice.id));
+                    } else if (newQuestionType === 'Checkboxes') {
+                        deletedChoiceIds.push(...question.multipleChoices.map((choice) => choice.id));
+                    }
+
+                    return {
+                        ...question,
+                        questionType: newQuestionType,
+                        multipleChoices: newQuestionType === 'Multiple choice' ? newChoices : [],
+                        checkboxesChoices: newQuestionType === 'Checkboxes' ? newChoices : [],
+                    };
+                }
+                return question;
             }
             return question;
         });
+
+        setDeletedChoiceIds(deletedChoiceIds);
         setQuestions(updatedQuestions);
     };
 
@@ -179,14 +225,14 @@ function QuestionBox({ questions, setQuestions }) {
         setQuestions(updatedQuestions);
     };
 
-    const addChoice = (questionId) => {
+    const addChoice = async (questionId) => {
         const updatedQuestions = questions.map((question) => {
             if (question.id === questionId) {
                 if (question.questionType === 'Multiple choice') {
-                    const newChoiceId = question.multipleChoices.length + 1;
+                    const newChoiceId = maxChoiceId + 1;
                     const newChoice = {
                         id: newChoiceId,
-                        text: `Option ${newChoiceId}`,
+                        text: `Option`,
                         valueText: '',
                         choiceWeight: 0,
                     };
@@ -194,12 +240,11 @@ function QuestionBox({ questions, setQuestions }) {
                         ...question,
                         multipleChoices: [...question.multipleChoices, newChoice],
                     };
-                }
-                else if (question.questionType === 'Checkboxes') {
-                    const newChoiceId = question.checkboxesChoices.length + 1;
+                } else if (question.questionType === 'Checkboxes') {
+                    const newChoiceId = maxChoiceId + 1;
                     const newChoice = {
                         id: newChoiceId,
-                        text: `Option ${newChoiceId}`,
+                        text: `Option`,
                         valueText: '',
                         choiceWeight: 0,
                     };
@@ -211,13 +256,18 @@ function QuestionBox({ questions, setQuestions }) {
             }
             return question;
         });
+
         setQuestions(updatedQuestions);
+        setMaxChoiceId(maxChoiceId + 1);
     };
 
     const deleteChoice = (questionId, choiceId) => {
         const updatedQuestions = questions.map((question) => {
             if (question.id === questionId) {
                 if (question.questionType === 'Multiple choice') {
+                    const deletedChoiceId = choiceId;
+                    setDeletedChoiceIds([...deletedChoiceIds, deletedChoiceId]);
+
                     const updatedChoices = question.multipleChoices.filter(
                         (choice) => choice.id !== choiceId
                     );
@@ -225,8 +275,10 @@ function QuestionBox({ questions, setQuestions }) {
                         ...question,
                         multipleChoices: updatedChoices,
                     };
-                }
-                else if (question.questionType === 'Checkboxes') {
+                } else if (question.questionType === 'Checkboxes') {
+                    const deletedChoiceId = choiceId;
+                    setDeletedChoiceIds([...deletedChoiceIds, deletedChoiceId]);
+
                     const updatedChoices = question.checkboxesChoices.filter(
                         (choice) => choice.id !== choiceId
                     );
@@ -241,6 +293,28 @@ function QuestionBox({ questions, setQuestions }) {
         setQuestions(updatedQuestions);
     };
 
+    useEffect(() => {
+        Promise.all([
+            axios.get('https://localhost:7236/api/choices'),
+            axios.get('https://localhost:7236/api/items'),
+        ])
+            .then((responses) => {
+                const choicesResponse = responses[0];
+                const itemsResponse = responses[1];
+
+                const choices = choicesResponse.data;
+                const items = itemsResponse.data;
+
+                const maxChoiceId = Math.max(...choices.map(choice => choice.id));
+                const maxItemId = Math.max(...items.map(item => item.id));
+
+                setMaxChoiceId(maxChoiceId);
+                setMaxItemId(maxItemId);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
+    }, []);
 
     return (
         <>

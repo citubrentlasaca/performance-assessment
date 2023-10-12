@@ -12,6 +12,7 @@ import Home from './Homepage/Home';
 import Organizations from './OrganizationsPage/Organizations';
 import Performance from './PerformancePage/Performance';
 import CreateAssessment from './Create Assessment/CreateAssessment';
+import UpdateAssessment from './Create Assessment/UpdateAssessment';
 
 function App() {
   return (
@@ -26,8 +27,9 @@ function App() {
       <Router>
         <Routes>
           <Route index element={<LandingPage />} />
-          <Route path="/createassessment" element={<CreateAssessment />} />
-          <Route path="/adminassessments" element={<Templates />} />
+          <Route path="createassessment" element={<CreateAssessment />} />
+          <Route path="/adminassessments/:id" element={<UpdateAssessment />} />
+          <Route path="/organizations/adminassessments" element={<Templates />} />
           <Route path="/answerassessment/:id" element={<AnswerAssessment />} />
           <Route path="/login" element={<Login />} />
           <Route path="/join-team" element={<InvitationPage />} />
