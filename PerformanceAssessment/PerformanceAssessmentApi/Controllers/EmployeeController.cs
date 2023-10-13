@@ -43,11 +43,20 @@ namespace PerformanceAssessmentApi.Controllers
         [Produces("application/json")]
         [ProducesResponseType(typeof(EmployeeCreationDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateEmployee([FromBody] EmployeeCreationDto employee)
         {
             try
             {
+                // Check if the user is already in the specified team
+                var existingEmployee = await _employeeService.GetEmployeeByUserIdAndTeamId(employee.UserId, employee.TeamId);
+
+                if (existingEmployee != null)
+                {
+                    return StatusCode(409, "User is already in the specified team");
+                }
+
                 // Create a new employee
                 var newEmployee = await _employeeService.CreateEmployee(employee);
 
@@ -96,6 +105,14 @@ namespace PerformanceAssessmentApi.Controllers
                 if (team == null)
                 {
                     return StatusCode(404, "Team not found");
+                }
+
+                // Check if the user is already in the specified team
+                var existingEmployee = await _employeeService.GetEmployeeByUserIdAndTeamCode(employee.UserId, employee.TeamCode);
+
+                if (existingEmployee != null)
+                {
+                    return StatusCode(400, "User is already in the specified team");
                 }
 
                 // Create a new employee
