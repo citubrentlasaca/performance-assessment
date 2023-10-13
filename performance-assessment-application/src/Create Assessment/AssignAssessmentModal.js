@@ -3,7 +3,6 @@ import { Box, Modal, Stack } from '@mui/material'
 import axios from 'axios';
 
 function AssignAssessmentModal({ open, handleClose, assessmentId }) {
-    const [employees, setEmployees] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectAllChecked, setSelectAllChecked] = useState(false);
@@ -42,9 +41,9 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const employeesResponse = await fetch(`https://localhost:7236/api/employees`);
+                const employeesResponse = await fetch(`https://localhost:7236/api/employees/teams/${1}`);
                 const employeesData = await employeesResponse.json();
-                setEmployees(employeesData);
+                console.log(employeesData)
 
                 const usersData = await Promise.all(
                     employeesData.map(async (employee) => {
