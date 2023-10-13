@@ -68,7 +68,4 @@
     <Build Include="Tables\Employee.sql" />
     <Build Include="Tables\AssignScheduler.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="PerformanceAssessmentDatabase.publish.xml" />
-  </ItemGroup>
 </Project>
