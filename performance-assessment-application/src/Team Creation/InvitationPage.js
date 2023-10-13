@@ -7,31 +7,43 @@ import axios from 'axios';
 function InvitationPage() {
   const [teamCode, setTeamCode] = useState('');
   const navigate = useNavigate();
+  const [invalidCodeMessage, setInvalidCodeMessage] = useState('');
+  const [alreadyJoinedMessage, setAlreadyJoinedMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const handleJoinClick = async (e) => {
     e.preventDefault();
     console.log('Invitation Code Submitted:', teamCode);
     try {
-      const response = await axios.get(`https://localhost:7236/api/teams/code/${teamCode}`);
+      const response = await fetch(`https://localhost:7236/api/teams/code/${teamCode}`);
       if (response.status === 200) {
-        const data = response.data;
+        const data = await response.json();
         if (data.id) {
-          const joinResponse = await axios.post('https://localhost:7236/api/employees', {
-            userId: 1, // Temporarily using user ID 1
-            teamId: data.id,
+          const joinResponse = await fetch('https://localhost:7236/api/employees', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId: 1, // Temporarily using user ID 1
+              teamId: data.id,
+            }),
           });
+
           if (joinResponse.status === 201) {
             console.log('Successfully joined the team!');
             navigate('/organizations');
+          } else if (joinResponse.status === 409) {
+            setAlreadyJoinedMessage('You have already joined the team.');
+            setShowModal(true);
           } else {
             console.error('Failed to join the team.');
-            console.log(joinResponse);
           }
         } else {
           console.error('Invalid invitation code.');
         }
       } else {
-        console.error('Failed to check the invitation code.');
+        setInvalidCodeMessage('Invalid code. Please check the inputted code.');
       }
     } catch (error) {
       console.error('An error occurred:', error);
@@ -62,6 +74,11 @@ function InvitationPage() {
             JOIN
           </button>
         </div>
+        {invalidCodeMessage && (
+          <div className="error-message" style={{padding: '10px'}}>
+            <span style={{ color: 'red' }}>{invalidCodeMessage}</span>
+          </div>
+        )}
     </div>
   );
 }
