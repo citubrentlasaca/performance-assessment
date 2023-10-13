@@ -10,11 +10,13 @@ namespace PerformanceAssessmentApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly ITeamService _teamService;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserService userService, ILogger<UserController> logger)
+        public UserController(IUserService userService, ITeamService teamService, ILogger<UserController> logger)
         {
             _userService = userService;
+            _teamService = teamService;
             _logger = logger;
         }
 
@@ -237,6 +239,39 @@ namespace PerformanceAssessmentApi.Controllers
 
                 await _userService.DeleteUser(id);
                 return Ok("User deleted successfully");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
+
+        /// <summary>
+        /// Gets the teams associated with a user ID
+        /// </summary>
+        /// <param name="userId">User ID for which teams are to be retrieved</param>
+        /// <returns>Returns the teams associated with the user</returns>
+        /// <response code="200">Teams found</response>
+        /// <response code="204">No teams found for the user</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet("{userId}/teams", Name = "GetTeamsByUserId")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetTeamsByUserId(int userId)
+        {
+            try
+            {
+                var teams = await _teamService.GetTeamsByUserId(userId);
+
+                if (teams.IsNullOrEmpty())
+                {
+                    return NoContent();
+                }
+
+                return Ok(teams);
             }
             catch (Exception e)
             {
