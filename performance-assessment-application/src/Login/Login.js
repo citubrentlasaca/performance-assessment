@@ -1,10 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Login.css';
 import loginpic from "../Images/loginpic.png";
 import logo from "../Images/WorkPA-logo.png";
 import { Stack } from '@mui/material';
+import axios from 'axios'; 
 
 function Login() {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('https://localhost:7236/api/users/authenticate', formData);
+      if (response.status === 200) {
+        console.log('Login successful');
+      } else {
+        console.error('API request failed:', response.status);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-content">
@@ -37,19 +66,32 @@ function Login() {
             }}
           >
             <b>Email</b>
-            <input type='text' className='form-control'
+            <input
+              type='text'
+              className='form-control'
               style={{
                 width: '100%'
               }}
+              name="email" 
+              value={formData.email} 
+              onChange={handleChange} 
+              required
             />
             <b>Password</b>
-            <input type='text' className='form-control'
+            <input
+              type='password'
+              className='form-control'
               style={{
                 width: '100%'
               }}
+              name="password"
+              value={formData.password} 
+              onChange={handleChange} 
+              required
             />
           </Stack>
-          <button type='button'
+          <button
+            type='button'
             style={{
               width: '100px',
               height: '38px',
@@ -58,12 +100,16 @@ function Login() {
               borderRadius: '6px',
               color: 'white'
             }}
-          >Login</button>
+            onClick={handleSubmit}
+          >
+            Login
+          </button>
         </Stack>
 
       </div>
     </div >
   );
 }
+
 
 export default Login;
