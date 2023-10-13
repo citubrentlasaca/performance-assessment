@@ -4,6 +4,7 @@ import loginpic from "../Images/loginpic.png";
 import logo from "../Images/WorkPA-logo.png";
 import { Stack } from '@mui/material';
 import axios from 'axios'; 
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -23,7 +24,13 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://localhost:7236/api/users/authenticate', formData);
+      const response = await axios.get('https://localhost:7236/api/users/authenticate', {
+        params: {
+          email: formData.email,
+          password: formData.password,
+        }
+      });
+      console.log(response);
       if (response.status === 200) {
         console.log('Login successful');
       } else {
@@ -67,7 +74,7 @@ function Login() {
           >
             <b>Email</b>
             <input
-              type='text'
+              type='email'
               className='form-control'
               style={{
                 width: '100%'
