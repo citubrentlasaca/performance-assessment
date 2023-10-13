@@ -94,5 +94,17 @@ namespace PerformanceAssessmentApi.Repositories
                 return await con.ExecuteScalarAsync<int>(sql, new { Id = id });
             }
         }
+
+        public async Task<IEnumerable<TeamDto>> GetTeamsByUserId(int userId)
+        {
+            var sql = "SELECT t.* FROM [dbo].[Team] t " +
+                      "INNER JOIN [dbo].[Employee] e ON t.Id = e.TeamId " +
+                      "WHERE e.UserId = @UserId";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QueryAsync<TeamDto>(sql, new { UserId = userId });
+            }
+        }
     }
 }
