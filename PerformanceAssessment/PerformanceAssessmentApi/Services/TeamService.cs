@@ -51,5 +51,10 @@ namespace PerformanceAssessmentApi.Services
         {
             return await _repository.DeleteTeam(id);
         }
+
+        public async Task<IEnumerable<TeamDto>> GetTeamsByUserId(int userId)
+        {
+            return await _repository.GetTeamsByUserId(userId);
+        }
     }
 }
