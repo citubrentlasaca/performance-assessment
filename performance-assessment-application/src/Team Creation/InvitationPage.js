@@ -79,6 +79,16 @@ function InvitationPage() {
             <span style={{ color: 'red' }}>{invalidCodeMessage}</span>
           </div>
         )}
+        {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <b>{alreadyJoinedMessage}</b>
+            <button className="ok-button" onClick={() => navigate('/organizations')}>
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
