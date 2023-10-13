@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './InvitationPage.css';
 import MarkEmailReadOutlinedIcon from '@mui/icons-material/MarkEmailReadOutlined';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 function InvitationPage() {
   const [teamCode, setTeamCode] = useState('');
