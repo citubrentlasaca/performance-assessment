@@ -3,6 +3,7 @@ import NavBar from "../Shared/NavBar"
 import TopBarThree from "../Shared/TopBarThree"
 import TeamCard from "./TeamCard";
 import axios from "axios";
+import { Stack } from '@mui/material'
 
 function Organizations() {
     const [userTeams, setUserTeams] = useState([]);
@@ -22,14 +23,27 @@ function Organizations() {
     return (
         <NavBar>
             <TopBarThree />
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <Stack direction="row" justifyContent="flex-start" alignItems="center">
+                <b
+                    style={{
+                        color: '#065d9d',
+                        padding: '30px'
+                    }}
+                >
+                    Your teams
+                </b>
+            </Stack>
+            <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={4}
+                style={{
+                    paddingLeft: "70px",
+                }}
+            >
                 {chunkArray(userTeams, 4).map((teamRow, rowIndex) => (
                     <div
                         key={rowIndex}
                         style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        gap: "20px",
+                            display: "flex",
+                            gap: "30px",
                         }}
                     >
                         {teamRow.map((team) => (
@@ -41,7 +55,7 @@ function Organizations() {
                         ))}
                     </div>
                 ))}
-            </div>
+            </Stack>
         </NavBar>
     )
 }
