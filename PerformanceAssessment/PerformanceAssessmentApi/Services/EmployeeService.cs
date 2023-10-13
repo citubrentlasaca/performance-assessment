@@ -16,6 +16,11 @@ namespace PerformanceAssessmentApi.Services
             _mapper = mapper;
         }
 
+        public async Task<EmployeeDto> GetEmployeeByUserIdAndTeamId(int userId, int teamId)
+        {
+            return await _repository.GetEmployeeByUserIdAndTeamId(userId, teamId);
+        }
+
         public async Task<Employee> CreateEmployee(EmployeeCreationDto employee)
         {
             var model = _mapper.Map<Employee>(employee);
@@ -24,12 +29,24 @@ namespace PerformanceAssessmentApi.Services
             return model;
         }
 
+        public async Task<EmployeeDto> GetEmployeeByUserIdAndTeamCode(int userId, Guid teamCode)
+        {
+            return await _repository.GetEmployeeByUserIdAndTeamCode(userId, teamCode);
+        }
+
         public async Task<Employee> CreateEmployeeWithTeamCode(EmployeeTeamInfoDto employee)
         {
-            var model = _mapper.Map<Employee>(employee);
-            model.Id = await _repository.CreateEmployeeWithTeamCode(employee);
+            try
+            {
+                var model = _mapper.Map<Employee>(employee);
+                model.Id = await _repository.CreateEmployeeWithTeamCode(employee);
 
-            return model;
+                return model;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public Task<IEnumerable<EmployeeDto>> GetAllEmployees()

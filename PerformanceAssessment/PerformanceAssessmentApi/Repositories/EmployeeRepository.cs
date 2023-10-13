@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using Microsoft.Data.SqlClient;
 using PerformanceAssessmentApi.Context;
 using PerformanceAssessmentApi.Dtos;
 using PerformanceAssessmentApi.Models;
@@ -16,6 +15,16 @@ namespace PerformanceAssessmentApi.Repositories
             _context = context;
         }
 
+        public async Task<EmployeeDto> GetEmployeeByUserIdAndTeamId(int userId, int teamId)
+        {
+            var sql = "SELECT * FROM [dbo].[Employee] WHERE [UserId] = @UserId AND [TeamId] = @TeamId;";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QuerySingleOrDefaultAsync<EmployeeDto>(sql, new { UserId = userId, TeamId = teamId });
+            }
+        }
+
         public async Task<int> CreateEmployee(Employee employee)
         {
             var sql = "INSERT INTO [dbo].[Employee] ([UserId], [TeamId], [Status], [DateTimeJoined]) " +
@@ -25,35 +34,69 @@ namespace PerformanceAssessmentApi.Repositories
             using (var con = _context.CreateConnection())
             {
                 employee.Status = "Active";
+
+                var existingEmployee = await GetEmployeeByUserIdAndTeamId(employee.UserId, employee.TeamId);
+
+                if (existingEmployee != null)
+                {
+                    throw new Exception("User is already in the specified team");
+                }
+
                 return await con.ExecuteScalarAsync<int>(sql, employee);
+            }
+        }
+
+        public async Task<EmployeeDto> GetEmployeeByUserIdAndTeamCode(int userId, Guid teamCode)
+        {
+            var sql = "SELECT * FROM [dbo].[Employee] WHERE [UserId] = @UserId AND [TeamId] = (SELECT [Id] FROM [dbo].[Team] WHERE [TeamCode] = @TeamCode);";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QuerySingleOrDefaultAsync<EmployeeDto>(sql, new { UserId = userId, TeamCode = teamCode });
             }
         }
 
         public async Task<int> CreateEmployeeWithTeamCode(EmployeeTeamInfoDto employee)
         {
-            var teamCode = employee.TeamCode;
-            var teamIdSql = "SELECT TOP 1 [Id] FROM [dbo].[Team] WHERE [TeamCode] = @TeamCode;";
-
-            using (var con = _context.CreateConnection())
+            try
             {
-                var teamId = await con.ExecuteScalarAsync<int>(teamIdSql, new { TeamCode = teamCode });
+                var teamCode = employee.TeamCode;
+                var teamIdSql = "SELECT TOP 1 [Id] FROM [dbo].[Team] WHERE [TeamCode] = @TeamCode;";
 
-                if (teamId == 0)
+                using (var con = _context.CreateConnection())
                 {
-                    throw new Exception("Team not found");
+                    var teamId = await con.ExecuteScalarAsync<int>(teamIdSql, new { TeamCode = teamCode });
+
+                    if (teamId == 0)
+                    {
+                        throw new Exception("Team not found");
+                    }
+
+                    // Check if the user is already in the specified team
+                    var existingEmployee = await GetEmployeeByUserIdAndTeamCode(employee.UserId, teamCode);
+
+                    if (existingEmployee != null)
+                    {
+                        throw new Exception("User is already in the specified team");
+                    }
+
+                    var sql = "INSERT INTO [dbo].[Employee] ([UserId], [TeamId], [Status], [DateTimeJoined]) " +
+                              "VALUES (@UserId, @TeamId, @Status, @DateTimeJoined); " +
+                              "SELECT SCOPE_IDENTITY();";
+
+                    return await con.ExecuteScalarAsync<int>(sql, new
+                    {
+                        UserId = employee.UserId,
+                        TeamId = teamId,
+                        Status = employee.Status,
+                        DateTimeJoined = StringUtil.GetCurrentDateTime()
+                    });
                 }
-
-                var sql = "INSERT INTO [dbo].[Employee] ([UserId], [TeamId], [Status], [DateTimeJoined]) " +
-                          "VALUES (@UserId, (SELECT TOP 1 [Id] FROM [dbo].[Team] WHERE [TeamCode] = @TeamCode), @Status, @DateTimeJoined); " +
-                          "SELECT SCOPE_IDENTITY();";
-
-                return await con.ExecuteScalarAsync<int>(sql, new
-                {
-                    UserId = employee.UserId,
-                    TeamCode = teamCode,
-                    Status = employee.Status,
-                    DateTimeJoined = StringUtil.GetCurrentDateTime()
-                });
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions or log errors as needed
+                throw ex;
             }
         }
 
