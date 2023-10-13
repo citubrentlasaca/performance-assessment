@@ -11,5 +11,6 @@ namespace PerformanceAssessmentApi.Repositories
         Task<TeamDto> GetTeamByCode(Guid teamCode);
         Task<int> UpdateTeam(Team team);
         Task<int> DeleteTeam(int id);
+        Task<IEnumerable<TeamDto>> GetTeamsByUserId(int userId);
     }
 }
