@@ -8,6 +8,7 @@ function Performance() {
     const [assessments, setAssessments] = useState([]);
     const [activeTab, setActiveTab] = useState('Performance Report');
     const navigate = useNavigate();
+    const employeeId = 30; // Temporary variable for employeeId
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,6 +27,10 @@ function Performance() {
     const handleTabClick = (tabName) => {
         setActiveTab(tabName);
     };
+
+    const filteredAssessments = assessments.filter(
+        assessment => assessment.title === "Daily Performance Report"
+    );
 
     return (
         <NavBar>
@@ -81,7 +86,7 @@ function Performance() {
                             padding: '10px'
                         }}
                     >
-                        {assessments.map((assessment, index) => (
+                        {filteredAssessments.map((assessment, index) => (
                             <Box
                                 key={index}
                                 sx={{
