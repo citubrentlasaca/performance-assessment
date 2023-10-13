@@ -3,12 +3,13 @@ import './UserRegistration.css';
 import image from './userRegistration.png';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios'; 
 
 function UserRegistration() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    email: '',
+    emailAddress: '',
     password: '',
     confirmPassword: '',
   });
@@ -32,10 +33,19 @@ function UserRegistration() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Replace this with your registration logic
-    console.log('Form Data Submitted:', formData);
+
+    try {
+      const response = await axios.post('https://localhost:7236/api/users', formData);
+      if (response.status === 201) {
+        console.log('User created successfully');
+      } else {
+        console.error('API request failed:', response.status);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
   };
 
   return (
@@ -67,12 +77,12 @@ function UserRegistration() {
               />
             </div>
             <div className="registration-form-group">
-              <label htmlFor="email">Email Address</label>
+              <label htmlFor="emailAddress">Email Address</label>
               <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
+                type="emailAddress"
+                id="emailAddress"
+                name="emailAddress"
+                value={formData.emailAddress}
                 onChange={handleChange}
                 required
               />
