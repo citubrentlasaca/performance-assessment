@@ -1,8 +1,15 @@
 import { Box, Stack } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 function TopBarThree() {
+    const navigate = useNavigate();
+
+    const navigateToOrganizations = () => {
+        navigate('/organizations');
+    };
+
     return (
         <Box
             sx={{
@@ -84,7 +91,7 @@ function TopBarThree() {
                         </a>
                     </li>
                     <li className="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <button type="button" className="btn">
+                        <button type="button" className="btn" onClick={navigateToOrganizations}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" className="bi bi-three-dots" viewBox="0 0 16 16">
                                 <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
                             </svg>

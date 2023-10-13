@@ -15,6 +15,7 @@ import Organizations from './OrganizationsPage/Organizations';
 import Performance from './PerformancePage/Performance';
 import CreateAssessment from './Create Assessment/CreateAssessment';
 import UpdateAssessment from './Create Assessment/UpdateAssessment';
+import OrganizationDetails from './OrganizationsPage/OrganizationDetails';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/organizations" element={<Organizations />} />
           <Route path="/organizations/performance" element={<Performance />} />
           <Route path="/organizations/userassessments" element={<UserAssessment />} />
+          <Route path="/organizations/:teamId" element={<OrganizationDetails />} />
         </Routes>
       </Router>
     </div>
