@@ -16,5 +16,6 @@ namespace PerformanceAssessmentApi.Services
         Task<int> UpdateTeam(int id, TeamUpdationDto team);
 
         Task<int> DeleteTeam(int id);
+        Task<IEnumerable<TeamDto>> GetTeamsByUserId(int userId);
     }
 }
