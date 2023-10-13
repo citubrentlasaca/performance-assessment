@@ -22,7 +22,6 @@ function Organizations() {
 
     return (
         <NavBar>
-            <TopBarThree />
             <Stack direction="row" justifyContent="flex-start" alignItems="center">
                 <b
                     style={{
@@ -50,7 +49,7 @@ function Organizations() {
                         <TeamCard
                             key={team.id}
                             organization={team.organization}
-                            onClick={`/organizations/teams/${team.id}`}
+                            onClick={`/organizations/${team.id}`}
                         />
                         ))}
                     </div>
