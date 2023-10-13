@@ -16,7 +16,7 @@ function AnswerAssessment() {
     const separator = ',';
     const [submissionComplete, setSubmissionComplete] = useState(false);
     const navigate = useNavigate();
-    const [employeeId, setEmployeeId] = useState(1);
+    const [employeeId, setEmployeeId] = useState(30);
 
     const handleIncrement = (itemId) => {
         setCounterValues((prevValues) => ({
@@ -72,8 +72,8 @@ function AnswerAssessment() {
                 const postData = {
                     employeeId: employeeId,
                     itemId: item.id,
-                    answerText: answerData[item.id]?.answerText || 'NA',
-                    selectedChoices: (answerData[item.id]?.selectedChoices || ['NA']).join(separator),
+                    answerText: answerData[item.id]?.answerText || '',
+                    selectedChoices: (answerData[item.id]?.selectedChoices || ['']).join(separator),
                     counterValue: counterValues[item.id] || 0,
                 };
 
@@ -100,7 +100,7 @@ function AnswerAssessment() {
     };
 
     const handleCancelButtonClick = () => {
-        navigate('/performance');
+        navigate('/organizations/performance');
     };
 
     return (
