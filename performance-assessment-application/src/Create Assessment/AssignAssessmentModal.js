@@ -43,7 +43,6 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
             try {
                 const employeesResponse = await fetch(`https://localhost:7236/api/employees/teams/${1}`);
                 const employeesData = await employeesResponse.json();
-                console.log(employeesData)
 
                 const usersData = await Promise.all(
                     employeesData.map(async (employee) => {
@@ -95,10 +94,8 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
             try {
                 const employeeResponse = await axios.get(`https://localhost:7236/api/employees/users/${userId}`);
                 const employeeData = employeeResponse.data;
-
-                if (employeeData && employeeData.id) {
+                if (employeeData) {
                     const employeeId = employeeData.id;
-
                     const schedulerData = {
                         employeeIds: [employeeId],
                         scheduler: {
@@ -346,7 +343,6 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                                         <div class="form-check" style={{ marginRight: '17px' }}>
                                                             <input class="form-check-input" type="checkbox" value="" id={`flexCheckDefault${user.id}`} onClick={() => handleCheckboxClick(user.id)} />
                                                         </div>
-
                                                     </Stack>
                                                 ))}
                                             </Stack>

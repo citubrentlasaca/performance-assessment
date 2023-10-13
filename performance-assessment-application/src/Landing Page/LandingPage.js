@@ -1,10 +1,49 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Stack } from '@mui/material';
 import logo from './Images/Work PA Logo.png';
 import landingPhoto from './Images/Landing Page Photo.png';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function LandingPage() {
+    const [signInHover, setSignInHover] = useState(false);
+    const [registerHover, setRegisterHover] = useState(false);
+
+    const normalStyle = {
+        background: 'linear-gradient(to right, #0076fe, #00c5ff)',
+        color: 'white',
+        border: 'none',
+        borderRadius: '10px',
+        width: 'fit-content',
+        padding: '10px',
+    };
+
+    const hoverStyle = {
+        background: 'linear-gradient(to right, #0076fe, #00c5ff)',
+        color: 'white',
+        border: 'none',
+        borderRadius: '10px',
+        width: 'fit-content',
+        padding: '10px',
+        boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.3)'
+
+    };
+
+    const handleSignInHover = () => {
+        setSignInHover(true);
+    };
+
+    const handleSignInLeave = () => {
+        setSignInHover(false);
+    };
+
+    const handleRegisterHover = () => {
+        setRegisterHover(true);
+    };
+
+    const handleRegisterLeave = () => {
+        setRegisterHover(false);
+    };
+
     return (
         <Stack
             direction="column"
@@ -25,47 +64,18 @@ function LandingPage() {
                     width: "100%",
                     height: "100px",
                     backgroundColor: 'white',
-                    padding: "50px"
+                    padding: "20px"
                 }}
             >
-                <Stack
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={8}
-                >
-                    <img src={logo} alt="Work PA Logo" />
-                    <ul class="nav gap-4">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"
-                                style={{
-                                    color: 'black'
-                                }}
-                            >Pricing</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"
-                                style={{
-                                    color: 'black'
-                                }}
-                            >About Us</a>
-                        </li>
-                    </ul>
-                </Stack>
-                <NavLink to="/login">
-                    <button
-                        style={{
-                            background: 'linear-gradient(to right, #0076fe, #00c5ff)',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '10px',
-                            width: '100px',
-                            height: '40px'
-                        }}
+                <img src={logo} alt="Work PA Logo" />
+                <Link to="/login">
+                    <button style={signInHover ? { ...normalStyle, ...hoverStyle } : normalStyle}
+                        onMouseEnter={handleSignInHover}
+                        onMouseLeave={handleSignInLeave}
                     >
                         Sign In
                     </button>
-                </NavLink>
+                </Link>
             </div>
             <Stack
                 direction="row"
@@ -74,7 +84,7 @@ function LandingPage() {
                 spacing={2}
                 sx={{
                     width: '100%',
-                    height: '100%'
+                    height: 'calc(100% - 100px)'
                 }}
             >
                 <Stack
@@ -85,12 +95,13 @@ function LandingPage() {
                     sx={{
                         width: '50%',
                         height: '100%',
-                        padding: '50px'
+                        padding: '60px'
                     }}
                 >
                     <h1
                         style={{
-                            fontWeight: 'bold'
+                            fontWeight: 'bold',
+                            fontSize: '50px',
                         }}
                     >
                         Revolutionize Your Workforce Performance
@@ -103,47 +114,31 @@ function LandingPage() {
                     >
                         Assess and track employee performance with ease.
                     </b>
-                    <Stack
-                        direction="row"
-                        justifyContent="center"
-                        alignItems="center"
-                        spacing={2}
-                        sx={{
-                            width: '100%',
-                        }}
-                    >
-                        <button
-                            style={{
-                                background: 'linear-gradient(to right, #0076fe, #00c5ff)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '10px',
-                                width: '200px',
-                                height: '40px'
-                            }}
+                    <Link to="/register">
+                        <button style={registerHover ? { ...normalStyle, ...hoverStyle } : normalStyle}
+                            onMouseEnter={handleRegisterHover}
+                            onMouseLeave={handleRegisterLeave}
                         >
                             Register Now
                         </button>
-                    </Stack>
+                    </Link>
                 </Stack>
-                <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={2}
-                    sx={{
+                <div
+                    style={{
                         width: '50%',
                         height: '100%',
-                        padding: '50px'
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '60px'
                     }}
                 >
-                    <img src={landingPhoto} alt="Work PA Logo"
+                    <img src={landingPhoto} alt="Landing Page"
                         style={{
-                            width: '700px',
-                            height: '700px'
+                            height: '100%'
                         }}
                     />
-                </Stack>
+                </div>
             </Stack>
         </Stack>
     )
