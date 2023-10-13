@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './UserRegistration.css';
 import image from './userRegistration.png';
+import checkmark from './checkmark.png'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios'; 
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function UserRegistration() {
   const [formData, setFormData] = useState({
@@ -16,6 +18,7 @@ function UserRegistration() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,12 +36,17 @@ function UserRegistration() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  const handleLoginClick = () => {
+    window.location.href = '/login';
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post('https://localhost:7236/api/users', formData);
       if (response.status === 201) {
+        setRegistrationSuccess(true);
         console.log('User created successfully');
       } else {
         console.error('API request failed:', response.status);
@@ -50,6 +58,7 @@ function UserRegistration() {
 
   return (
     <div className="registration-container">
+      {registrationSuccess && <div className="register-backdrop"></div>}
       <div className="registration-content">
         <div className="registration-form-container">
           <h1>Registration Form</h1>
@@ -125,6 +134,15 @@ function UserRegistration() {
               </button>
             </div>
           </form>
+          {/* Registration Success Modal */}
+          {registrationSuccess && (
+            <div className="registration-success-modal active">
+              <img src={checkmark} alt="checkmark" className="checkmark" />
+              <p className='success-header'>AWESOME!</p>
+              <p className='success-text'>Your account has been <strong>successfully</strong> created</p>
+              <button className="login-button" onClick={handleLoginClick}>Login</button>
+            </div>
+          )}
         </div>
         <div className="registration-image-container">
           <img src={image} alt="UserRegistration" className="registration-image" />
