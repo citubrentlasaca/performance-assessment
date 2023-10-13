@@ -1,13 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './InvitationPage.css';
 import MarkEmailReadOutlinedIcon from '@mui/icons-material/MarkEmailReadOutlined';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function InvitationPage() {
-  const handleJoinClick = (e) => {
+  const [teamCode, setTeamCode] = useState('');
+  const navigate = useNavigate();
+
+  const handleJoinClick = async (e) => {
     e.preventDefault();
-    const invitationCode = document.getElementById('invitationCode').value;
-    // Process the invitation code here
-    console.log('Invitation Code Submitted:', invitationCode);
+    console.log('Invitation Code Submitted:', teamCode);
+    try {
+      const response = await axios.get(`https://localhost:7236/api/teams/code/${teamCode}`);
+      if (response.status === 200) {
+        const data = response.data;
+        if (data.id) {
+          const joinResponse = await axios.post('https://localhost:7236/api/employees', {
+            userId: 1, // Temporarily using user ID 1
+            teamId: data.id,
+          });
+          if (joinResponse.status === 201) {
+            console.log('Successfully joined the team!');
+            navigate('/organizations');
+          } else {
+            console.error('Failed to join the team.');
+            console.log(joinResponse);
+          }
+        } else {
+          console.error('Invalid invitation code.');
+        }
+      } else {
+        console.error('Failed to check the invitation code.');
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
   };
 
   return (
@@ -26,8 +54,9 @@ function InvitationPage() {
           <input
             className="invitationpage-input"
             type="text"
-            id="invitationCode"
+            value={teamCode}
             placeholder="Enter invitation code"
+            onChange={(e) => setTeamCode(e.target.value)}
           />
           <button type='button' className="invitationpage-button btn" onClick={handleJoinClick}>
             JOIN
