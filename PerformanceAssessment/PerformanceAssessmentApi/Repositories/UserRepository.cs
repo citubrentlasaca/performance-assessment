@@ -15,13 +15,13 @@ namespace PerformanceAssessmentApi.Repositories
             _context = context;
         }
 
-        public async Task<int> CreateUser(User user)
+        public async Task<int> CreateUser(UserDto user)
         {
             // Generate a random salt
             (user.Password, user.Salt) = PasswordHasher.HashPassword(user.Password);
 
-            var sql = "INSERT INTO [dbo].[User] ([FirstName], [LastName], [EmailAddress], [Password], [Salt], [DateTimeCreated], [DateTimeUpdated]) " +
-                      "VALUES (@FirstName, @LastName, @EmailAddress, @Password, @Salt, @DateTimeCreated, @DateTimeUpdated); " +
+            var sql = "INSERT INTO [dbo].[User] ([FirstName], [LastName], [Role], [EmailAddress], [Password], [Salt], [DateTimeCreated], [DateTimeUpdated]) " +
+                      "VALUES (@FirstName, @LastName, @Role, @EmailAddress, @Password, @Salt, @DateTimeCreated, @DateTimeUpdated); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
@@ -105,6 +105,17 @@ namespace PerformanceAssessmentApi.Repositories
             using (var con = _context.CreateConnection())
             {
                 return await con.ExecuteScalarAsync<int>(sql, new { Id = id });
+            }
+        }
+
+        public async Task<bool> CheckIfUserExists(string emailAddress)
+        {
+            var sql = "SELECT 1 FROM [dbo].[User] WHERE [EmailAddress] = @EmailAddress;";
+
+            using (var con = _context.CreateConnection())
+            {
+                var result = await con.ExecuteScalarAsync<int>(sql, new { EmailAddress = emailAddress });
+                return result == 1;
             }
         }
     }
