@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PerformanceAssessmentApi.Dtos;
 using PerformanceAssessmentApi.Services;
@@ -32,6 +33,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///     {
         ///         "firstName": "John",
         ///         "lastName": "Doe",
+        ///         "role": "Admin",
         ///         "emailAddress": "johndoe@email.com",
         ///         "password": "StrongPassword123#%!"
         ///     }
@@ -45,18 +47,25 @@ namespace PerformanceAssessmentApi.Controllers
         [Produces("application/json")]
         [ProducesResponseType(typeof(UserCreationDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateUser([FromBody] UserCreationDto user)
         {
             try
             {
-                // Create a new user
+                // Create a new user if they do not already exist
                 var newUser = await _userService.CreateUser(user);
 
                 return CreatedAtRoute("GetUserById", new { id = newUser.Id }, newUser);
             }
             catch (Exception e)
             {
+                // Check if the exception message indicates a user already exists
+                if (e.Message.Contains("User with the same email address already exists."))
+                {
+                    return Conflict("User with the same email address already exists.");
+                }
+
                 _logger.LogError(e.Message);
                 return StatusCode(500, "Something went wrong");
             }
@@ -135,12 +144,13 @@ namespace PerformanceAssessmentApi.Controllers
         /// <param name="password">Password of the User</param>
         /// <returns>Returns the details of the user</returns>
         /// <response code="200">User found</response>
-        /// <response code="404">User not found</response>
+        /// <response code="401">Unauthorized user</response>
         /// <response code="500">Internal server error</response>
         [HttpGet("authenticate", Name = "GetUserByEmailAddressAndPassword")]
         [Produces("application/json")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetUserByEmailAddressAndPassword(string email, string password)
         {
