@@ -5,7 +5,7 @@ namespace PerformanceAssessmentApi.Services
 {
     public interface IUserService
     {
-        Task<User> CreateUser(UserCreationDto user);
+        Task<UserDto> CreateUser(UserCreationDto user);
 
         Task<IEnumerable<UserDto>> GetAllUsers();
 
