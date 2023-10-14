@@ -9,9 +9,10 @@ namespace PerformanceAssessmentApi.Mappings
     {
         public UserMappings()
         {
-            CreateMap<UserCreationDto, User>(MemberList.None)
+            CreateMap<UserCreationDto, UserDto>(MemberList.None)
                 .ForMember(dto => dto.FirstName, opt => opt.MapFrom(st => (st.FirstName!)))
                 .ForMember(dto => dto.LastName, opt => opt.MapFrom(st => (st.LastName!)))
+                .ForMember(dto => dto.Role, opt => opt.MapFrom(st => (st.Role!)))
                 .ForMember(dto => dto.EmailAddress, opt => opt.MapFrom(st => (st.EmailAddress!)))
                 .ForMember(dto => dto.Password, opt => opt.MapFrom(st => (st.Password!)))
                 .ForMember(dto => dto.DateTimeCreated, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()))
