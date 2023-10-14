@@ -1,10 +1,17 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PerformanceAssessmentApi.Context;
 using PerformanceAssessmentApi.Repositories;
 using PerformanceAssessmentApi.Services;
+using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Initialize the configuration object
+IConfiguration configuration = builder.Configuration;
 
 ConfigureServices(builder.Services);
 
@@ -20,6 +27,8 @@ if (app.Environment.IsDevelopment())
 /*app.UseHttpsRedirection();*/
 
 app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
@@ -58,13 +67,39 @@ void ConfigureServices(IServiceCollection services)
             Description = "An assessment management API for measuring and improving performance.",
         });
 
+        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+        {
+            Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
+        });
+
+        options.OperationFilter<SecurityRequirementsOperationFilter>();
+
         // Feed generated xml api docs to swagger
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     });
 
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
     // Configure Automapper
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+    services.AddSingleton<IConfiguration>(builder.Configuration);
+    services.AddHttpContextAccessor();
 
     // Our services, interface, or DB Contexts that we want to inject
     services.AddTransient<DapperContext>();
@@ -85,4 +120,6 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IEmployeeService, EmployeeService>();
     services.AddScoped<IAssignSchedulerRepository, AssignSchedulerRepository>();
     services.AddScoped<IAssignSchedulerService, AssignSchedulerService>();
+
+    services.AddScoped<ITokenService, TokenService>();
 }
