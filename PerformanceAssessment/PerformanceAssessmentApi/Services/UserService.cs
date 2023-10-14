@@ -16,9 +16,14 @@ namespace PerformanceAssessmentApi.Services
             _mapper = mapper;
         }
 
-        public async Task<User> CreateUser(UserCreationDto user)
+        public async Task<UserDto> CreateUser(UserCreationDto user)
         {
-            var model = _mapper.Map<User>(user);
+            if (await _repository.CheckIfUserExists(user.EmailAddress))
+            {
+                throw new Exception("User with the same email address already exists.");
+            }
+
+            var model = _mapper.Map<UserDto>(user);
             model.Id = await _repository.CreateUser(model);
 
             return model;
