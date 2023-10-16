@@ -31,11 +31,9 @@ namespace PerformanceAssessmentApi.Controllers
         ///         "employeeIds": [1, 2, 3, 4, 5],
         ///         "scheduler": {
         ///             "assessmentId": 1,
-        ///             "reminder": "Everyday",
-        ///             "occurrence": "Once",
+        ///             "isAnswered": "false",
         ///             "dueDate": "Wednesday, October 4, 2023",
-        ///             "time": "11:59 PM",
-        ///             "score": 0 (Default Value)
+        ///             "time": "11:59 PM"
         ///         }
         ///     }
         ///
@@ -216,11 +214,9 @@ namespace PerformanceAssessmentApi.Controllers
         ///     {
         ///         "assessmentId": 2,
         ///         "employeeId": 2,
-        ///         "reminder": "Task Deadline",
-        ///         "occurrence": "Weekly",
+        ///         "isAnswered": "true",
         ///         "dueDate": "Thursday, October 5, 2023",
-        ///         "time": "10:00 PM",
-        ///         "score": 100
+        ///         "time": "10:00 PM"
         ///     }
         ///
         /// </remarks>
