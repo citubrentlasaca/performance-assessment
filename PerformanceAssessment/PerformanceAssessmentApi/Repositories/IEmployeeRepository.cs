@@ -5,7 +5,7 @@ namespace PerformanceAssessmentApi.Repositories
 {
     public interface IEmployeeRepository
     {
-        Task<EmployeeDto> GetEmployeeByUserIdAndTeamId(int userId, int teamId);
+        Task<Employee> GetEmployeeByUserIdAndTeamId(int userId, int teamId);
         Task<int> CreateEmployee(Employee employee);
         Task<EmployeeDto> GetEmployeeByUserIdAndTeamCode(int userId, Guid teamCode);
         Task<int> CreateEmployeeWithTeamCode(EmployeeTeamInfoDto employee);

@@ -4,8 +4,8 @@ namespace PerformanceAssessmentApi.Services
 {
     public interface ITokenService
     {
-        string CreateToken(User user);
+        string CreateToken(Employee employee);
         RefreshToken GenerateRefreshToken();
-        string VerifyToken(string refreshToken, User user);
+        string VerifyToken(string refreshToken, Employee employee);
     }
 }

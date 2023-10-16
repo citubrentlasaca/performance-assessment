@@ -120,6 +120,8 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IEmployeeService, EmployeeService>();
     services.AddScoped<IAssignSchedulerRepository, AssignSchedulerRepository>();
     services.AddScoped<IAssignSchedulerService, AssignSchedulerService>();
+    services.AddScoped<IResultRepository, ResultRepository>();
+    services.AddScoped<IResultService, ResultService>();
 
     services.AddScoped<ITokenService, TokenService>();
 }

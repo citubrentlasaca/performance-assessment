@@ -16,8 +16,8 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<IEnumerable<int>> CreateAssignSchedulers(IEnumerable<int> employeeIds, AssignScheduler assignScheduler)
         {
-            var sql = "INSERT INTO [dbo].[AssignScheduler] ([AssessmentId], [EmployeeId], [Reminder], [Occurrence], [DueDate], [Time], [Score], [DateTimeCreated], [DateTimeUpdated]) " +
-                      "VALUES (@AssessmentId, @EmployeeId, @Reminder, @Occurrence, @DueDate, @Time, @Score, @DateTimeCreated, @DateTimeUpdated); " +
+            var sql = "INSERT INTO [dbo].[AssignScheduler] ([AssessmentId], [EmployeeId], [IsAnswered], [DueDate], [Time], [DateTimeCreated], [DateTimeUpdated]) " +
+                      "VALUES (@AssessmentId, @EmployeeId, @IsAnswered, @DueDate, @Time, @DateTimeCreated, @DateTimeUpdated); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
@@ -27,7 +27,6 @@ namespace PerformanceAssessmentApi.Repositories
                 foreach (var employeeId in employeeIds)
                 {
                     assignScheduler.EmployeeId = employeeId;
-                    assignScheduler.Score = 0;
 
                     var insertedId = await con.ExecuteScalarAsync<int>(sql, assignScheduler);
                     insertedIds.Add(insertedId);
@@ -82,11 +81,9 @@ namespace PerformanceAssessmentApi.Repositories
             var sql = "UPDATE [dbo].[AssignScheduler] SET " +
                       "[AssessmentId] = @AssessmentId, " +
                       "[EmployeeId] = @EmployeeId, " +
-                      "[Reminder] = @Reminder, " +
-                      "[Occurrence] = @Occurrence, " +
+                      "[IsAnswered] = @IsAnswered, " +
                       "[DueDate] = @DueDate, " +
                       "[Time] = @Time, " +
-                      "[Score] = @Score, " +
                       "[DateTimeUpdated] = @DateTimeUpdated " +
                       "WHERE Id = @Id;";
 
@@ -99,11 +96,9 @@ namespace PerformanceAssessmentApi.Repositories
                         Id = assignScheduler.Id,
                         AssessmentId = assignScheduler.AssessmentId,
                         EmployeeId = assignScheduler.EmployeeId,
-                        Reminder = assignScheduler.Reminder,
-                        Occurrence = assignScheduler.Occurrence,
+                        IsAnswered = assignScheduler.IsAnswered,
                         DueDate = assignScheduler.DueDate,
                         Time = assignScheduler.Time,
-                        Score = assignScheduler.Score,
                         DateTimeUpdated = assignScheduler.DateTimeUpdated
                     }
                 );

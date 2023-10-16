@@ -33,7 +33,6 @@ namespace PerformanceAssessmentApi.Controllers
         ///     {
         ///         "firstName": "John",
         ///         "lastName": "Doe",
-        ///         "role": "Admin",
         ///         "emailAddress": "johndoe@email.com",
         ///         "password": "StrongPassword123#%!"
         ///     }

@@ -2,7 +2,7 @@
 
 namespace PerformanceAssessmentApi.Dtos
 {
-    public class AssignSchedulerUpdationDto
+    public class ResultUpdationDto
     {
         [Required(ErrorMessage = "The assessmentId is required.")]
         public int AssessmentId { get; set; }
@@ -10,12 +10,10 @@ namespace PerformanceAssessmentApi.Dtos
         [Required(ErrorMessage = "The employeeId is required.")]
         public int EmployeeId { get; set; }
 
-        public bool IsAnswered { get; set; }
+        [Required(ErrorMessage = "The score is required.")]
+        public float Score { get; set; }
 
         [Required(ErrorMessage = "The dueDate is required.")]
-        public string? DueDate { get; set; }
-
-        [Required(ErrorMessage = "The time is required.")]
-        public string? Time { get; set; }
+        public string? DateTimeDue { get; set; }
     }
 }

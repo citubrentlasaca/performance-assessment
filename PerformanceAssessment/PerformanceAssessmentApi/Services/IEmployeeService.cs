@@ -5,7 +5,7 @@ namespace PerformanceAssessmentApi.Services
 {
     public interface IEmployeeService
     {
-        Task<EmployeeDto> GetEmployeeByUserIdAndTeamId(int userId, int teamId);
+        Task<Employee> GetEmployeeByUserIdAndTeamId(int userId, int teamId);
         Task<Employee> CreateEmployee(EmployeeCreationDto employee);
         Task<EmployeeDto> GetEmployeeByUserIdAndTeamCode(int userId, Guid teamCode);
         Task<Employee> CreateEmployeeWithTeamCode(EmployeeTeamInfoDto employee);

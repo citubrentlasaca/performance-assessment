@@ -16,8 +16,8 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<Guid> CreateTeam(Team team)
         {
-            var sql = "INSERT INTO [dbo].[Team] ([Organization], [FirstName], [LastName], [BusinessType], [BusinessAddress], [TeamCode], [DateTimeCreated], [DateTimeUpdated]) " +
-                      "VALUES (@Organization, @FirstName, @LastName, @BusinessType, @BusinessAddress, NEWID(), @DateTimeCreated, @DateTimeUpdated); " +
+            var sql = "INSERT INTO [dbo].[Team] ([Organization], [BusinessType], [BusinessAddress], [TeamCode], [DateTimeCreated], [DateTimeUpdated]) " +
+                      "VALUES (@Organization, @BusinessType, @BusinessAddress, NEWID(), @DateTimeCreated, @DateTimeUpdated); " +
                       "SELECT [TeamCode] FROM [dbo].[Team] WHERE [Id] = SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
@@ -60,8 +60,6 @@ namespace PerformanceAssessmentApi.Repositories
         {
             var sql = "UPDATE [dbo].[Team] SET " +
                       "[Organization] = @Organization, " +
-                      "[FirstName] = @FirstName, " +
-                      "[LastName] = @LastName, " +
                       "[BusinessType] = @BusinessType, " +
                       "[BusinessAddress] = @BusinessAddress, " +
                       "[DateTimeUpdated] = @DateTimeUpdated " +
@@ -75,8 +73,6 @@ namespace PerformanceAssessmentApi.Repositories
                     {
                         Id = team.Id,
                         Organization = team.Organization,
-                        FirstName = team.FirstName,
-                        LastName = team.LastName,
                         BusinessType = team.BusinessType,
                         BusinessAddress = team.BusinessAddress,
                         DateTimeUpdated = team.DateTimeUpdated

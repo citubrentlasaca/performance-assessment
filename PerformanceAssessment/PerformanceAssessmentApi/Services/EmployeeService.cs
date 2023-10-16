@@ -16,7 +16,7 @@ namespace PerformanceAssessmentApi.Services
             _mapper = mapper;
         }
 
-        public async Task<EmployeeDto> GetEmployeeByUserIdAndTeamId(int userId, int teamId)
+        public async Task<Employee> GetEmployeeByUserIdAndTeamId(int userId, int teamId)
         {
             return await _repository.GetEmployeeByUserIdAndTeamId(userId, teamId);
         }
