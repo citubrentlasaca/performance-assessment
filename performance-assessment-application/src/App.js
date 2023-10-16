@@ -17,6 +17,7 @@ import CreateAssessment from './Create Assessment/CreateAssessment';
 import UpdateAssessment from './Create Assessment/UpdateAssessment';
 import OrganizationDetails from './OrganizationsPage/OrganizationDetails';
 import Employees from './Employees/Employees';
+import CreateReport from './Create Assessment/CreateReport';
 
 function App() {
   return (
@@ -31,7 +32,8 @@ function App() {
       <Router>
         <Routes>
           <Route index element={<LandingPage />} />
-          <Route path="createassessment" element={<CreateAssessment />} />
+          <Route path="/createassessment" element={<CreateAssessment />} />
+          <Route path="/createreport" element={<CreateReport />} />
           <Route path="/adminassessments/:id" element={<UpdateAssessment />} />
           <Route path="/organizations/adminassessments" element={<Templates />} />
           <Route path="/answerassessment/:id" element={<AnswerAssessment />} />

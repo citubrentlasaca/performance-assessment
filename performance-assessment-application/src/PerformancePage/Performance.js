@@ -3,34 +3,66 @@ import NavBar from "../Shared/NavBar"
 import { Box, Stack } from '@mui/material'
 import TopBarThree from "../Shared/TopBarThree"
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Performance() {
     const [assessments, setAssessments] = useState([]);
+    const [completedAssessments, setCompletedAssessments] = useState([]);
     const [activeTab, setActiveTab] = useState('Performance Report');
     const navigate = useNavigate();
-    const employeeId = 30; // Temporary variable for employeeId
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchAssessments = async () => {
             try {
-                const assessmentResponse = await fetch(`https://localhost:7236/api/assessments`);
-                const assessmentData = await assessmentResponse.json();
-                setAssessments(assessmentData);
+                const employeeId = 1;
+                const schedulersResponse = await axios.get(`https://localhost:7236/api/schedulers/employees/${employeeId}`);
+
+                if (schedulersResponse.data) {
+                    const schedulers = schedulersResponse.data;
+                    const assessmentsArray = [];
+                    const completedAssessmentsArray = [];
+
+                    for (const scheduler of schedulers) {
+                        if (scheduler.isAnswered === false) {
+                            const assessmentId = scheduler.assessmentId;
+                            const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${assessmentId}`);
+
+                            if (assessmentResponse.data) {
+                                const assessment = assessmentResponse.data;
+
+                                if (assessment.title === "Daily Performance Report") {
+                                    assessmentsArray.push(assessment);
+                                }
+                            }
+                        }
+                        else if (scheduler.isAnswered === true) {
+                            const assessmentId = scheduler.assessmentId;
+                            const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${assessmentId}`);
+
+                            if (assessmentResponse.data) {
+                                const assessment = assessmentResponse.data;
+
+                                if (assessment.title === "Daily Performance Report") {
+                                    completedAssessmentsArray.push(assessment);
+                                }
+                            }
+                        }
+                    }
+
+                    setAssessments(assessmentsArray);
+                    setCompletedAssessments(completedAssessmentsArray);
+                }
             } catch (error) {
-                console.error(`Error fetching data:`, error);
+                console.error("Error fetching data:", error);
             }
         };
 
-        fetchData();
+        fetchAssessments();
     }, []);
 
     const handleTabClick = (tabName) => {
         setActiveTab(tabName);
     };
-
-    const filteredAssessments = assessments.filter(
-        assessment => assessment.title === "Daily Performance Report"
-    );
 
     return (
         <NavBar>
@@ -79,6 +111,42 @@ function Performance() {
                         </li>
                     </ul>
                 </Stack>
+                {activeTab === 'Completed' && (
+                    <Stack direction="column" justifyContent="center" alignItems="stretch" spacing={2}
+                        style={{
+                            width: "100%",
+                            padding: '10px'
+                        }}
+                    >
+                        {completedAssessments.map((assessment, index) => (
+                            <Box
+                                key={index}
+                                sx={{
+                                    height: "100px",
+                                    width: "100%",
+                                    backgroundColor: "white",
+                                    borderRadius: "10px",
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: '30px',
+                                }}
+                            >
+                                <Stack
+                                    direction="row"
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    spacing={2}
+                                    sx={{
+                                        width: "100%"
+                                    }}
+                                >
+                                    <b>{assessment.title}</b>
+                                </Stack>
+                            </Box>
+                        ))}
+                    </Stack>
+                )}
                 {activeTab === 'Performance Report' && (
                     <Stack direction="column" justifyContent="center" alignItems="stretch" spacing={2}
                         style={{
@@ -86,7 +154,7 @@ function Performance() {
                             padding: '10px'
                         }}
                     >
-                        {filteredAssessments.map((assessment, index) => (
+                        {assessments.map((assessment, index) => (
                             <Box
                                 key={index}
                                 sx={{

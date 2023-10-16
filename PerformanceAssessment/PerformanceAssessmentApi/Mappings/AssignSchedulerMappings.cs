@@ -21,6 +21,13 @@ namespace PerformanceAssessmentApi.Mappings
                 .ForMember(dto => dto.DueDate, opt => opt.MapFrom(st => st.DueDate))
                 .ForMember(dto => dto.Time, opt => opt.MapFrom(st => st.Time))
                 .ForMember(dto => dto.DateTimeUpdated, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()));
+
+            CreateMap<AssignSchedulerDto, AssignSchedulerUpdationDto>()
+                .ForMember(dto => dto.AssessmentId, opt => opt.MapFrom(src => src.AssessmentId))
+                .ForMember(dto => dto.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
+                .ForMember(dto => dto.IsAnswered, opt => opt.MapFrom(src => src.IsAnswered))
+                .ForMember(dto => dto.DueDate, opt => opt.MapFrom(src => src.DueDate))
+                .ForMember(dto => dto.Time, opt => opt.MapFrom(src => src.Time));
         }
     }
 }

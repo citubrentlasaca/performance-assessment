@@ -2,6 +2,8 @@
 using Microsoft.IdentityModel.Tokens;
 using PerformanceAssessmentApi.Dtos;
 using PerformanceAssessmentApi.Services;
+using Hangfire;
+using System.Globalization;
 
 namespace PerformanceAssessmentApi.Controllers
 {
@@ -57,6 +59,15 @@ namespace PerformanceAssessmentApi.Controllers
                 }
 
                 var insertedIds = await _assignSchedulerService.CreateAssignSchedulers(assignScheduler.EmployeeIds, assignScheduler.Scheduler);
+                var scheduler = await _assignSchedulerService.GetAssignSchedulerById(insertedIds.First());
+
+                var dueDateTime = DateTime.ParseExact($"{scheduler.DueDate} {scheduler.Time}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                var delay = dueDateTime - DateTime.Now;
+                BackgroundJob.Schedule(() => DeleteAssignScheduler(scheduler.Id), delay);
+                RecurringJob.AddOrUpdate($"SetIsAnsweredToFalse_{scheduler.Id}", () => _assignSchedulerService.SetIsAnsweredToFalse(scheduler.Id), Cron.Daily, new RecurringJobOptions
+                {
+                    TimeZone = TimeZoneInfo.Local
+                });
 
                 return CreatedAtRoute("GetAssignSchedulerById", new { id = insertedIds }, insertedIds);
             }
@@ -276,6 +287,7 @@ namespace PerformanceAssessmentApi.Controllers
                     return StatusCode(404, "Scheduler not found");
                 }
 
+                RecurringJob.RemoveIfExists($"SetIsAnsweredToFalse_{id}");
                 await _assignSchedulerService.DeleteAssignScheduler(id);
                 return Ok("Scheduler deleted successfully");
             }

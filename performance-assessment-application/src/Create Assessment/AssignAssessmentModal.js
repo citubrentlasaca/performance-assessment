@@ -8,8 +8,6 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
     const [selectAllChecked, setSelectAllChecked] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUserIds, setSelectedUserIds] = useState([]);
-    const [reminder, setReminder] = useState('Daily');
-    const [occurrence, setOccurrence] = useState('Once');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
 
@@ -19,14 +17,6 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
 
     const handleDateChange = (event) => {
         setDate(event.target.value);
-    };
-
-    const handleOccurrenceChange = (event) => {
-        setOccurrence(event.target.value);
-    };
-
-    const handleReminderChange = (event) => {
-        setReminder(event.target.value);
     };
 
     const handleSearchChange = (event) => {
@@ -100,10 +90,9 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                         employeeIds: [employeeId],
                         scheduler: {
                             assessmentId: assessmentId,
-                            reminder: reminder,
-                            occurrence: occurrence,
                             dueDate: date,
                             time: time,
+                            isAnswered: false,
                         },
                     };
 
@@ -372,20 +361,6 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                         height: '100%',
                                     }}
                                 >
-
-                                    <p className='mb-0'>Reminder</p>
-                                    <select class="form-select" value={reminder} onChange={handleReminderChange}>
-                                        <option value="Daily">Daily</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Monthly">Monthly</option>
-                                    </select>
-                                    <p className='mb-0'>Occurrence</p>
-                                    <select class="form-select" value={occurrence} onChange={handleOccurrenceChange}>
-                                        <option value="Once">Once</option>
-                                        <option value="Daily">Daily</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Monthly">Monthly</option>
-                                    </select>
                                     <p className='mb-0'>Due Date</p>
                                     <input type="date" class="form-control" value={date} onChange={handleDateChange} ></input>
                                     <p className='mb-0'>Time</p>

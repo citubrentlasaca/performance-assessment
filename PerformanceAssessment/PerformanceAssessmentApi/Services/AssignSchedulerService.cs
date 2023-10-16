@@ -56,5 +56,19 @@ namespace PerformanceAssessmentApi.Services
         {
             return await _repository.DeleteAssignScheduler(id);
         }
+
+        public async Task SetIsAnsweredToFalse(int id)
+        {
+            // Get the scheduler by ID
+            var scheduler = await GetAssignSchedulerById(id);
+
+            if (scheduler != null)
+            {
+                // Update the scheduler's isAnswered field to false
+                scheduler.IsAnswered = false;
+                await UpdateAssignScheduler(id, _mapper.Map<AssignSchedulerUpdationDto>(scheduler));
+            }
+        }
+
     }
 }
