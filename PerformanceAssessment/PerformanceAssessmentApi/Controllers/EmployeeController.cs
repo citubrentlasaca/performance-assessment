@@ -274,6 +274,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///     {
         ///         "userId": 2,
         ///         "teamId": 2,
+        ///         "role": "Admin",
         ///         "status": "Inactive"
         ///     }
         ///
@@ -284,7 +285,7 @@ namespace PerformanceAssessmentApi.Controllers
         [HttpPut("{id}", Name = "UpdateEmployee")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(TeamUpdationDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(EmployeeUpdationDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateEmployee(int id, [FromBody] EmployeeUpdationDto employee)
