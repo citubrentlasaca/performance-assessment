@@ -22,13 +22,21 @@
 }
 
 .employee-controls {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 10px; 
 }
 
+.sort-buttons,
+.search-input,
+.view-button {
+    display: flex;
+    align-items: center;
+}
+
+
 .sort-buttons button {
-    margin-right: 10px;
+    margin-right: 15px;
     background-color: #27C6D9;
     color: #ffffff;
     border: none;
@@ -41,9 +49,23 @@
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    border-color: #27C6D9;
-    background-color: rgba(5, 92, 157, 0.26);
+    border-color:  rgba(5, 92, 157, 0.26);
+    background-color:  rgba(5, 92, 157, 0.26);
     color: #ffffff;
+}
+
+.employee-controls input::placeholder {
+    color: #ffffff;
+}
+
+
+.view-button button {
+    background-color: #27C6D9;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .employee-department {
