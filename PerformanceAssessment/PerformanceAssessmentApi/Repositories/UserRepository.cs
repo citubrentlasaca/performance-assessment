@@ -20,8 +20,8 @@ namespace PerformanceAssessmentApi.Repositories
             // Generate a random salt
             (user.Password, user.Salt) = PasswordHasher.HashPassword(user.Password);
 
-            var sql = "INSERT INTO [dbo].[User] ([FirstName], [LastName], [Role], [EmailAddress], [Password], [Salt], [DateTimeCreated], [DateTimeUpdated]) " +
-                      "VALUES (@FirstName, @LastName, @Role, @EmailAddress, @Password, @Salt, @DateTimeCreated, @DateTimeUpdated); " +
+            var sql = "INSERT INTO [dbo].[User] ([FirstName], [LastName], [EmailAddress], [Password], [Salt], [DateTimeCreated], [DateTimeUpdated]) " +
+                      "VALUES (@FirstName, @LastName, @EmailAddress, @Password, @Salt, @DateTimeCreated, @DateTimeUpdated); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
