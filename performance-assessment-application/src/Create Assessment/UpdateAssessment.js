@@ -302,12 +302,21 @@ function UpdateAssessment() {
                                 padding: '20px'
                             }}
                         >
-                            <input type='text' className='form-control form-control-lg' placeholder='Untitled assessment' value={title} onChange={handleTitleChange}
-                                style={{
-                                    border: 'none',
-                                    padding: '0px'
-                                }}
-                            />
+                            {title === 'Daily Performance Report' ? (
+                                <input type='text' className='form-control form-control-lg' placeholder='Untitled assessment' value={title} disabled
+                                    style={{
+                                        border: 'none',
+                                        padding: '0px'
+                                    }}
+                                />
+                            ) : (
+                                <input type='text' className='form-control form-control-lg' placeholder='Untitled assessment' value={title} onChange={handleTitleChange}
+                                    style={{
+                                        border: 'none',
+                                        padding: '0px'
+                                    }}
+                                />
+                            )}
                             <input type='text' className='form-control' placeholder='Assessment description' value={description} onChange={handleDescriptionChange}
                                 style={{
                                     border: 'none',

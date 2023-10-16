@@ -1,3 +1,4 @@
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -32,6 +33,8 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseHangfireDashboard();
+
 app.MapControllers();
 
 app.Run();
@@ -50,6 +53,11 @@ void ConfigureServices(IServiceCollection services)
                     .AllowAnyHeader();
             });
     });
+
+    //Hangfire
+    string connectionString = builder.Configuration.GetConnectionString("SqlServer");
+    services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
+    services.AddHangfireServer();
 
     // Controller support
     services.AddControllers().ConfigureApiBehaviorOptions(x => { x.SuppressMapClientErrors = true; });
