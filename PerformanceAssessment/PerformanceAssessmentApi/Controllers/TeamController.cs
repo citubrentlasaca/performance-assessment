@@ -29,8 +29,6 @@ namespace PerformanceAssessmentApi.Controllers
         ///     POST /api/teams
         ///     {
         ///         "organization": "Acme Inc.",
-        ///         "firstName": "John",
-        ///         "lastName": "Doe",
         ///         "businessType": "Technology",
         ///         "businessAddress": "123 Main Street"
         ///     }
@@ -173,8 +171,6 @@ namespace PerformanceAssessmentApi.Controllers
         ///     PUT /api/teams
         ///     {
         ///         "organization": "XYZ Corporation",
-        ///         "firstName": "Alice",
-        ///         "lastName": "Smith",
         ///         "businessType": "Finance",
         ///         "businessAddress": "456 Elm Avenue"
         ///     }
