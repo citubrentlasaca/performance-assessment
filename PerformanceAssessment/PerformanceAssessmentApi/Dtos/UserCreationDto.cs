@@ -10,9 +10,6 @@ namespace PerformanceAssessmentApi.Dtos
         [Required(ErrorMessage = "The lastName is required.")]
         public string? LastName { get; set; }
 
-        [Required(ErrorMessage = "The role is required.")]
-        public string? Role { get; set; }
-
         [Required(ErrorMessage = "The emailAddress is required.")]
         [RegularExpression(
             @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"
