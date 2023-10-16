@@ -16,12 +16,12 @@ namespace PerformanceAssessmentApi.Services
             _configuration = configuration;
         }
 
-        public string CreateToken(User user)
+        public string CreateToken(Employee employee)
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.EmailAddress),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.NameIdentifier, employee.UserId.ToString()),
+                new Claim(ClaimTypes.Role, employee.Role)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
@@ -49,13 +49,13 @@ namespace PerformanceAssessmentApi.Services
             };
         }
 
-        public string VerifyToken(string refreshToken, User user)
+        public string VerifyToken(string refreshToken, Employee employee)
         {
-            if (!user.RefreshToken.Equals(refreshToken))
+            if (!employee.RefreshToken.Equals(refreshToken))
             {
                 return "Invalid Token";
             }
-            else if (user.TokenExpires < DateTime.Now)
+            else if (employee.TokenExpires < DateTime.Now)
             {
                 return "Expired Token";
             }
