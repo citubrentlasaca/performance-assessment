@@ -12,5 +12,8 @@ namespace PerformanceAssessmentApi.Dtos
 
         [Required(ErrorMessage = "The status is required.")]
         public string? Status { get; set; }
+
+        [Required(ErrorMessage = "The role is required.")]
+        public string? Role { get; set; }
     }
 }
