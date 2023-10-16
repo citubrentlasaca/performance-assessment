@@ -40,6 +40,9 @@ function Employees() {
         setEmployees(sortedEmployees);
     };
 
+    const handleChangeView = () => {
+        // Add logic for changing view here
+    }
 
     return (
         <NavBar>
@@ -65,6 +68,9 @@ function Employees() {
                                     console.log(e.target.value); // Add this line for debugging
                                 }}
                             />
+                        </div>
+                        <div className="view-button">
+                            <button onClick={handleChangeView}>Change View</button>
                         </div>
                     </div>
                 </div>
