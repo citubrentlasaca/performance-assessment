@@ -21,7 +21,6 @@ function Employees() {
             });
     }, []);
 
-
     return (
         <NavBar>
             <TopBarTwo />
