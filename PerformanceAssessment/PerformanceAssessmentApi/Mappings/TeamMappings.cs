@@ -11,8 +11,6 @@ namespace PerformanceAssessmentApi.Mappings
         {
             CreateMap<TeamCreationDto, Team>(MemberList.None)
                 .ForMember(dto => dto.Organization, opt => opt.MapFrom(st => (st.Organization!)))
-                .ForMember(dto => dto.FirstName, opt => opt.MapFrom(st => (st.FirstName!)))
-                .ForMember(dto => dto.LastName, opt => opt.MapFrom(st => (st.LastName!)))
                 .ForMember(dto => dto.BusinessType, opt => opt.MapFrom(st => (st.BusinessType!)))
                 .ForMember(dto => dto.BusinessAddress, opt => opt.MapFrom(st => (st.BusinessAddress!)))
                 .ForMember(dto => dto.TeamCode, opt => opt.Ignore())
@@ -21,8 +19,6 @@ namespace PerformanceAssessmentApi.Mappings
 
             CreateMap<TeamUpdationDto, Team>(MemberList.None)
                 .ForMember(dto => dto.Organization, opt => opt.MapFrom(st => (st.Organization!)))
-                .ForMember(dto => dto.FirstName, opt => opt.MapFrom(st => (st.FirstName!)))
-                .ForMember(dto => dto.LastName, opt => opt.MapFrom(st => (st.LastName!)))
                 .ForMember(dto => dto.BusinessType, opt => opt.MapFrom(st => (st.BusinessType!)))
                 .ForMember(dto => dto.BusinessAddress, opt => opt.MapFrom(st => (st.BusinessAddress!)))
                 .ForMember(dto => dto.DateTimeUpdated, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()));
