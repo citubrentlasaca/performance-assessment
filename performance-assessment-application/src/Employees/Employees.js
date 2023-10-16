@@ -6,6 +6,7 @@ import "./Employees.css";
 function Employees() {
     const [employees, setEmployees] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [listView, setListView] = useState(true);
 
     useEffect(() => {
         fetch('https://localhost:7236/api/employees')
@@ -41,7 +42,7 @@ function Employees() {
     };
 
     const handleChangeView = () => {
-        // Add logic for changing view here
+        setListView(!listView); // Toggle the view
     }
 
     return (
@@ -78,7 +79,7 @@ function Employees() {
                 <div>
                     <hr className="employee-divider" />
                 </div>
-
+                {listView ? (
                 <div className="employee-department">
                     <h4>Manufacturing</h4>
                     {employees.map((employee, index) => {
@@ -99,6 +100,31 @@ function Employees() {
                         );
                     })}
                 </div>
+                ) : (
+                    <div className="employee-table">
+                        {/* Render employees in table format */}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Position</th>
+                                    <th>Date Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {employees.map((employee, index) => (
+                                    <tr key={index}>
+                                        <td>{employee.firstName} {employee.lastName}</td>
+                                        <td>{employee.emailAddress}</td>
+                                        <td>{employee.role}</td>
+                                        <td>{employee.dateTimeCreated}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
 
 
             </div>
