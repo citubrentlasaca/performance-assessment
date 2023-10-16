@@ -16,6 +16,7 @@ namespace PerformanceAssessmentApi.Mappings
 
             CreateMap<EmployeeTeamInfoDto, Employee>(MemberList.None)
                 .ForMember(dto => dto.UserId, opt => opt.MapFrom(st => (st.UserId!)))
+                .ForMember(dto => dto.Role, opt => opt.MapFrom(st => (st.Role!)))
                 .ForMember(dto => dto.DateTimeJoined, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()));
 
             CreateMap<EmployeeUpdationDto, Employee>(MemberList.None)
