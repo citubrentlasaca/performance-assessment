@@ -10,37 +10,37 @@ namespace PerformanceAssessmentApi.Controllers
     [ApiController]
     public class TokenController : ControllerBase
     {
-        private readonly ILogger<UserController> _logger;
-        private static User _user = new User();
+        private readonly ILogger<EmployeeController> _logger;
+        private static Employee _employee = new Employee();
         private readonly ITokenService _tokenService;
-        private readonly IUserService _userService;
+        private readonly IEmployeeService _employeeService;
 
-        public TokenController(ILogger<UserController> logger, ITokenService tokenService, IUserService userService)
+        public TokenController(ILogger<EmployeeController> logger, ITokenService tokenService, IEmployeeService employeeService)
         {
             _logger = logger;
             _tokenService = tokenService;
-            _userService = userService;
+            _employeeService = employeeService;
         }
 
         /// <summary>
-        /// Creates a new token for a user based on their credentials
+        /// Creates a new token for an employee based on their credentials
         /// </summary>
-        /// <param name="userLogin">User credentials (email address and password)</param>
+        /// <param name="employeeDetails">Employee details</param>
         /// <returns>Returns a token pair (access token and refresh token)</returns>
         [HttpPost("create")]
         [AllowAnonymous]
         [Consumes("application/json")]
         [ProducesResponseType(typeof(TokenDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateToken([FromBody] UserLoginDto userLogin)
+        public async Task<IActionResult> CreateToken([FromBody] EmployeeInfoDto employeeDetails)
         {
             try
             {
                 // Authenticate the user and get their information
-                _user = await _userService.GetUserByEmailAddressAndPassword(userLogin.EmailAddress, userLogin.Password);
+                _employee = await _employeeService.GetEmployeeByUserIdAndTeamId(employeeDetails.UserId, employeeDetails.TeamId);
 
                 // Create a new access token and a refresh token
-                string accessToken = _tokenService.CreateToken(_user);
+                string accessToken = _tokenService.CreateToken(_employee);
                 var refreshToken = _tokenService.GenerateRefreshToken();
 
                 // Set the new refresh token and return the token pair
@@ -74,7 +74,7 @@ namespace PerformanceAssessmentApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult RefreshToken([FromBody] RenewTokenDto request)
         {
-            string tokenStatus = _tokenService.VerifyToken(request.RefreshToken, _user);
+            string tokenStatus = _tokenService.VerifyToken(request.RefreshToken, _employee);
 
             if (tokenStatus == "Invalid Token")
             {
@@ -86,7 +86,7 @@ namespace PerformanceAssessmentApi.Controllers
             }
 
             // Create a new access token and a refresh token
-            string accessToken = _tokenService.CreateToken(_user);
+            string accessToken = _tokenService.CreateToken(_employee);
             var newRefreshToken = _tokenService.GenerateRefreshToken();
 
             // Set the new refresh token and return the token pair
@@ -110,9 +110,9 @@ namespace PerformanceAssessmentApi.Controllers
             };
             Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
 
-            _user.RefreshToken = newRefreshToken.Token;
-            _user.TokenCreated = newRefreshToken.Created;
-            _user.TokenExpires = newRefreshToken.Expires;
+            _employee.RefreshToken = newRefreshToken.Token;
+            _employee.TokenCreated = newRefreshToken.Created;
+            _employee.TokenExpires = newRefreshToken.Expires;
         }
     }
 }
