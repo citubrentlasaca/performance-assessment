@@ -15,24 +15,25 @@ namespace PerformanceAssessmentApi.Repositories
             _context = context;
         }
 
-        public async Task<EmployeeDto> GetEmployeeByUserIdAndTeamId(int userId, int teamId)
+        public async Task<Employee> GetEmployeeByUserIdAndTeamId(int userId, int teamId)
         {
             var sql = "SELECT * FROM [dbo].[Employee] WHERE [UserId] = @UserId AND [TeamId] = @TeamId;";
 
             using (var con = _context.CreateConnection())
             {
-                return await con.QuerySingleOrDefaultAsync<EmployeeDto>(sql, new { UserId = userId, TeamId = teamId });
+                return await con.QuerySingleOrDefaultAsync<Employee>(sql, new { UserId = userId, TeamId = teamId });
             }
         }
 
         public async Task<int> CreateEmployee(Employee employee)
         {
-            var sql = "INSERT INTO [dbo].[Employee] ([UserId], [TeamId], [Status], [DateTimeJoined]) " +
-                      "VALUES (@UserId, @TeamId, @Status, @DateTimeJoined); " +
+            var sql = "INSERT INTO [dbo].[Employee] ([UserId], [TeamId], [Role], [Status], [DateTimeJoined]) " +
+                      "VALUES (@UserId, @TeamId, @Role, @Status, @DateTimeJoined); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
             {
+                employee.Role = "Admin";
                 employee.Status = "Active";
 
                 var existingEmployee = await GetEmployeeByUserIdAndTeamId(employee.UserId, employee.TeamId);
@@ -80,14 +81,15 @@ namespace PerformanceAssessmentApi.Repositories
                         throw new Exception("User is already in the specified team");
                     }
 
-                    var sql = "INSERT INTO [dbo].[Employee] ([UserId], [TeamId], [Status], [DateTimeJoined]) " +
-                              "VALUES (@UserId, @TeamId, @Status, @DateTimeJoined); " +
+                    var sql = "INSERT INTO [dbo].[Employee] ([UserId], [TeamId], [Role], [Status], [DateTimeJoined]) " +
+                              "VALUES (@UserId, @TeamId, @Role, @Status, @DateTimeJoined); " +
                               "SELECT SCOPE_IDENTITY();";
 
                     return await con.ExecuteScalarAsync<int>(sql, new
                     {
                         UserId = employee.UserId,
                         TeamId = teamId,
+                        Role = employee.Role,
                         Status = employee.Status,
                         DateTimeJoined = StringUtil.GetCurrentDateTime()
                     });
@@ -145,6 +147,7 @@ namespace PerformanceAssessmentApi.Repositories
             var sql = "UPDATE [dbo].[Employee] SET " +
                       "[UserId] = @UserId, " +
                       "[TeamId] = @TeamId, " +
+                      "[Role] = @Role, " +
                       "[Status] = @Status " +
                       "WHERE Id = @Id;";
 
@@ -157,6 +160,7 @@ namespace PerformanceAssessmentApi.Repositories
                         Id = employee.Id,
                         UserId = employee.UserId,
                         TeamId = employee.TeamId,
+                        Role = employee.Role,
                         Status = employee.Status
                     }
                 );
