@@ -10,6 +10,8 @@ namespace PerformanceAssessmentApi.Dtos
         [Required(ErrorMessage = "The teamCode is required.")]
         public Guid TeamCode { get; set; }
 
+        public string Role = "User";
+
         public string Status = "Active";
     }
 }
