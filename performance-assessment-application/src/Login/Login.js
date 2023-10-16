@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -20,6 +21,8 @@ function Login() {
     });
   };
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -32,8 +35,10 @@ function Login() {
       });
       console.log(response);
       if (response.status === 200) {
-        console.log('Login successful');
+        console.log('Successfully logged in!');
+        navigate('/home');
       } else {
+        setErrorMessage('Invalid email or password'); 
         console.error('API request failed:', response.status);
       }
     } catch (error) {
@@ -112,8 +117,12 @@ function Login() {
             Login
           </button>
         </Stack>
-
       </div>
+      {errorMessage && (
+        <div className="error-message" style={{padding: '10px'}}>
+          <span style={{ color: 'red' }}>{errorMessage}</span>
+        </div>
+      )}
     </div >
   );
 }
