@@ -13,39 +13,32 @@ function InvitationPage() {
 
   const handleJoinClick = async (e) => {
     e.preventDefault();
-    console.log('Invitation Code Submitted:', teamCode);
-    try {
-      const response = await fetch(`https://localhost:7236/api/teams/code/${teamCode}`);
-      if (response.status === 200) {
-        const data = await response.json();
-        if (data.id) {
-          const joinResponse = await fetch('https://localhost:7236/api/employees', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              userId: 6, // Temporarily using user ID 1
-              teamId: data.id,
-            }),
-          });
 
-          if (joinResponse.status === 201) {
-            console.log('Successfully joined the team!');
-            setTimeout(() => {
-              navigate('/organizations');
-            }, 3000);
-          } else if (joinResponse.status === 409) {
-            setAlreadyJoinedMessage('You have already joined the team.');
-            setShowModal(true);
-          } else {
-            console.error('Failed to join the team.');
-          }
-        } else {
-          console.error('Invalid invitation code.');
-        }
+    try {
+      const joinResponse = await fetch('https://localhost:7236/api/employees/withteamcode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: localStorage.getItem('userId'),
+          teamCode: teamCode,
+        }),
+      });
+
+      if (joinResponse.status === 201) {
+        console.log('Successfully joined the team!');
+        setTimeout(() => {
+          navigate('/organizations');
+        }, 3000);
+      } else if (joinResponse.status === 409) {
+        setAlreadyJoinedMessage('You have already joined the team.');
+        setShowModal(true);
+      } else if (joinResponse.status === 404) {
+        setInvalidCodeMessage("Team does not exist");
       } else {
-        setInvalidCodeMessage('Invalid code. Please check the inputted code.');
+        setInvalidCodeMessage("Invalid invitation code");
+        console.error('Failed to join the team.');
       }
     } catch (error) {
       console.error('An error occurred:', error);
