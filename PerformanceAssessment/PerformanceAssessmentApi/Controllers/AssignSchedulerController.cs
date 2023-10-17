@@ -33,9 +33,8 @@ namespace PerformanceAssessmentApi.Controllers
         ///         "employeeIds": [1, 2, 3, 4, 5],
         ///         "scheduler": {
         ///             "assessmentId": 1,
-        ///             "isAnswered": "false",
-        ///             "dueDate": "Wednesday, October 4, 2023",
-        ///             "time": "11:59 PM"
+        ///             "dueDate": "2023-10-16",
+        ///             "time": "14:30"
         ///         }
         ///     }
         ///
@@ -226,8 +225,8 @@ namespace PerformanceAssessmentApi.Controllers
         ///         "assessmentId": 2,
         ///         "employeeId": 2,
         ///         "isAnswered": "true",
-        ///         "dueDate": "Thursday, October 5, 2023",
-        ///         "time": "10:00 PM"
+        ///         "dueDate": "2023-10-17",
+        ///         "time": "15:00"
         ///     }
         ///
         /// </remarks>
