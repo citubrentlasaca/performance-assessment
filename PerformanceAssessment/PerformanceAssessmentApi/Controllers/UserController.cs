@@ -12,12 +12,14 @@ namespace PerformanceAssessmentApi.Controllers
     {
         private readonly IUserService _userService;
         private readonly ITeamService _teamService;
+        private readonly ITokenService _tokenService;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserService userService, ITeamService teamService, ILogger<UserController> logger)
+        public UserController(IUserService userService, ITeamService teamService, ITokenService tokenService, ILogger<UserController> logger)
         {
             _userService = userService;
             _teamService = teamService;
+            _tokenService = tokenService;
             _logger = logger;
         }
 
@@ -163,7 +165,10 @@ namespace PerformanceAssessmentApi.Controllers
                     return StatusCode(404, "User not found");
                 }
 
-                return Ok(foundUser);
+                // Generate a JWT token
+                var token = _tokenService.GenerateJwtToken(foundUser.Id);
+
+                return Ok(new { Token = token, UserData = foundUser });
             }
             catch (Exception e)
             {
