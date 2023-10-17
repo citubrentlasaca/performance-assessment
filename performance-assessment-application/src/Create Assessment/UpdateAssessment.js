@@ -71,11 +71,9 @@ function UpdateAssessment() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${id}`);
+                const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${id}/items`);
                 const assessmentData = assessmentResponse.data;
-
-                const itemsResponse = await axios.get(`https://localhost:7236/api/items?assessmentId=${assessmentData.id}`);
-                const itemsData = itemsResponse.data;
+                const itemsData = assessmentData.items;
 
                 const transformedQuestions = itemsData.map((item) => ({
                     id: item.id,

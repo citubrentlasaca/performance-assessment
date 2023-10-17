@@ -4,6 +4,7 @@ using PerformanceAssessmentApi.Dtos;
 using PerformanceAssessmentApi.Services;
 using Hangfire;
 using System.Globalization;
+using PerformanceAssessmentApi.Models;
 
 namespace PerformanceAssessmentApi.Controllers
 {
@@ -13,12 +14,14 @@ namespace PerformanceAssessmentApi.Controllers
     {
         private readonly IAssignSchedulerService _assignSchedulerService;
         private readonly IAssessmentService _assessmentService;
+        private readonly IEmployeeAssignSchedulerNotificationService _employeeAssignSchedulerNotificationService;
         private readonly ILogger<AssignSchedulerController> _logger;
 
-        public AssignSchedulerController(IAssignSchedulerService assignSchedulerService, IAssessmentService assessmentService, ILogger<AssignSchedulerController> logger)
+        public AssignSchedulerController(IAssignSchedulerService assignSchedulerService, IAssessmentService assessmentService, IEmployeeAssignSchedulerNotificationService employeeAssignSchedulerNotificationService, ILogger<AssignSchedulerController> logger)
         {
             _assignSchedulerService = assignSchedulerService;
             _assessmentService = assessmentService;
+            _employeeAssignSchedulerNotificationService = employeeAssignSchedulerNotificationService;
             _logger = logger;
         }
 
@@ -62,6 +65,13 @@ namespace PerformanceAssessmentApi.Controllers
                 var insertedIds = await _assignSchedulerService.CreateAssignSchedulers(assignScheduler.EmployeeIds, assignScheduler.Scheduler);
                 var scheduler = await _assignSchedulerService.GetAssignSchedulerById(insertedIds.First());
                 var assessment = await _assessmentService.GetAssessmentById(scheduler.AssessmentId);
+                var employeeNotification = new EmployeeAssignSchedulerNotificationCreationDto
+                {
+                    EmployeeId = scheduler.EmployeeId,
+                    AssessmentId = assessment.Id,
+                };
+                await _employeeAssignSchedulerNotificationService.CreateEmployeeNotification(employeeNotification);
+
                 var dueDateTime = DateTime.ParseExact($"{scheduler.DueDate} {scheduler.Time}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
                 var delay = dueDateTime - DateTime.Now;
                 BackgroundJob.Schedule(() => DeleteAssignScheduler(scheduler.Id), delay);
