@@ -16,8 +16,8 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<int> CreateAnnouncement(Announcement announcement)
         {
-            var sql = "INSERT INTO [dbo].[Announcement] ([Content], [DateTimeCreated], [DateTimeUpdated]) " +
-                      "VALUES (@Content, @DateTimeCreated, @DateTimeUpdated); " +
+            var sql = "INSERT INTO [dbo].[Announcement] ([TeamId], [Content], [DateTimeCreated], [DateTimeUpdated]) " +
+                      "VALUES (@TeamId, @Content, @DateTimeCreated, @DateTimeUpdated); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())

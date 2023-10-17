@@ -5,45 +5,44 @@ using PerformanceAssessmentApi.Services;
 
 namespace PerformanceAssessmentApi.Controllers
 {
-    [Route("api/employee-notifications")]
+    [Route("api/employee-assignscheduler-notifications")]
     [ApiController]
-    public class EmployeeNotificationController : ControllerBase
+    public class EmployeeAssignSchedulerNotificationController : ControllerBase
     {
-        private readonly IEmployeeNotificationService _employeeNotificationService;
-        private readonly ILogger<EmployeeNotificationController> _logger;
+        private readonly IEmployeeAssignSchedulerNotificationService _employeeNotificationService;
+        private readonly ILogger<EmployeeAssignSchedulerNotificationController> _logger;
 
-        public EmployeeNotificationController(IEmployeeNotificationService employeeNotificationService, ILogger<EmployeeNotificationController> logger)
+        public EmployeeAssignSchedulerNotificationController(IEmployeeAssignSchedulerNotificationService employeeNotificationService, ILogger<EmployeeAssignSchedulerNotificationController> logger)
         {
             _employeeNotificationService = employeeNotificationService;
             _logger = logger;
         }
 
         /// <summary>
-        /// Creates a new employee notification
+        /// Creates a new employee assign scheduler notification
         /// </summary>
         /// <param name="employeeNotification">Employee notification details</param>
         /// <returns>Returns the newly created employee notification</returns>
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST /api/employee-notifications
+        ///     POST /api/employee-assignscheduler-notifications
         ///     {
         ///         "employeeId": 1,
         ///         "assessmentId": 1,
-        ///         "announcementId": 1
         ///     }
         ///
         /// </remarks>
         /// <response code="201">Successfully created a new employee notification</response>
         /// <response code="400">Employee notification details are invalid</response>
         /// <response code="500">Internal server error</response>
-        [HttpPost(Name = "CreateEmployeeNotification")]
+        [HttpPost(Name = "CreateEmployeeAssignSchedulerNotification")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(EmployeeNotificationCreationDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(EmployeeAssignSchedulerNotificationCreationDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateEmployeeNotification([FromBody] EmployeeNotificationCreationDto employeeNotification)
+        public async Task<IActionResult> CreateEmployeeNotification([FromBody] EmployeeAssignSchedulerNotificationCreationDto employeeNotification)
         {
             try
             {
@@ -66,7 +65,7 @@ namespace PerformanceAssessmentApi.Controllers
         /// <response code="200">Employee notifications found</response>
         /// <response code="204">No employee notifications found</response>
         /// <response code="500">Internal server error</response>
-        [HttpGet(Name = "GetAllEmployeeNotifications")]
+        [HttpGet(Name = "GetAllEmployeeAssignSchedulerNotifications")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -99,7 +98,7 @@ namespace PerformanceAssessmentApi.Controllers
         /// <response code="200">Employee notification found</response>
         /// <response code="404">Employee notification not found</response>
         /// <response code="500">Internal server error</response>
-        [HttpGet("{id}", Name = "GetEmployeeNotificationById")]
+        [HttpGet("{id}", Name = "GetEmployeeAssignSchedulerNotificationById")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -110,6 +109,40 @@ namespace PerformanceAssessmentApi.Controllers
             {
                 // Check if employee notification exists
                 var foundEmployeeNotification = await _employeeNotificationService.GetEmployeeNotificationById(id);
+
+                if (foundEmployeeNotification == null)
+                {
+                    return StatusCode(404, "Employee notification not found");
+                }
+
+                return Ok(foundEmployeeNotification);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
+
+        /// <summary>
+        /// Gets the employee notification by employee id
+        /// </summary>
+        /// <param name="employeeId">Employee notification id</param>
+        /// <returns>Returns the details of an employee notification with id <paramref name="employeeId"/></returns>
+        /// <response code="200">Employee notification found</response>
+        /// <response code="404">Employee notification not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet("employees/{employeeId}", Name = "GetEmployeeAssignSchedulerNotificationByEmployeeId")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetEmployeeNotificationByEmployeeId(int employeeId)
+        {
+            try
+            {
+                // Check if employee notification exists
+                var foundEmployeeNotification = await _employeeNotificationService.GetAllEmployeeNotificationsByEmployeeId(employeeId);
 
                 if (foundEmployeeNotification == null)
                 {

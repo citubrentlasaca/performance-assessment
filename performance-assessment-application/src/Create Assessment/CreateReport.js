@@ -95,7 +95,6 @@ function CreateReport() {
             setTimeout(() => {
                 navigate('/organizations/adminassessments');
             }, 3000);
-            console.log(questions)
         } catch (error) {
             console.error('Error while posting assessment:', error);
         }

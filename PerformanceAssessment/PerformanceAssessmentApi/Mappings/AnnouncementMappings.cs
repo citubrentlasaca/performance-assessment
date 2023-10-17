@@ -10,6 +10,7 @@ namespace PerformanceAssessmentApi.Mappings
         public AnnouncementMappings()
         {
             CreateMap<AnnouncementCreationDto, Announcement>(MemberList.None)
+                .ForMember(dto => dto.TeamId, opt => opt.MapFrom(st => (st.TeamId!)))
                 .ForMember(dto => dto.Content, opt => opt.MapFrom(st => (st.Content!)))
                 .ForMember(dto => dto.DateTimeCreated, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()))
                 .ForMember(dto => dto.DateTimeUpdated, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()));

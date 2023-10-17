@@ -5,14 +5,13 @@ using PerformanceAssessmentApi.Utils;
 
 namespace PerformanceAssessmentApi.Mappings
 {
-    public class EmployeeNotificationMappings : Profile
+    public class EmployeeAssignSchedulerNotificationMappings : Profile
     {
-        public EmployeeNotificationMappings()
+        public EmployeeAssignSchedulerNotificationMappings()
         {
-            CreateMap<EmployeeNotificationCreationDto, EmployeeNotification>(MemberList.None)
+            CreateMap<EmployeeAssignSchedulerNotificationCreationDto, EmployeeAssignSchedulerNotification>(MemberList.None)
                 .ForMember(dto => dto.EmployeeId, opt => opt.MapFrom(st => (st.EmployeeId!)))
                 .ForMember(dto => dto.AssessmentId, opt => opt.MapFrom(st => (st.AssessmentId!)))
-                .ForMember(dto => dto.AnnouncementId, opt => opt.MapFrom(st => (st.AnnouncementId!)))
                 .ForMember(dto => dto.DateTimeCreated, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()));
         }
     }

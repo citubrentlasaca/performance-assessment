@@ -1,10 +1,9 @@
-﻿namespace PerformanceAssessmentApi.Models
+﻿namespace PerformanceAssessmentApi.Dtos
 {
-    public class EmployeeNotification
+    public class EmployeeAnnouncementNotificationDto
     {
         public int Id { get; set; }
         public int EmployeeId { get; set; }
-        public int AssessmentId { get; set; }
         public int AnnouncementId { get; set; }
         public string? DateTimeCreated { get; set; }
     }
