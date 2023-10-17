@@ -87,6 +87,7 @@ namespace PerformanceAssessmentApi.Controllers
         /// <response code="201">Successfully created a new employee</response>
         /// <response code="400">Employee details are invalid</response>
         /// <response code="404">Team not found</response>
+        /// <response code="409">Conflict/response>
         /// <response code="500">Internal server error</response>
         [HttpPost("withteamcode", Name = "CreateEmployeeWithTeamCode")]
         [Consumes("application/json")]
@@ -94,6 +95,7 @@ namespace PerformanceAssessmentApi.Controllers
         [ProducesResponseType(typeof(EmployeeTeamInfoDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateEmployeeWithTeamCode([FromBody] EmployeeTeamInfoDto employee)
         {
@@ -112,7 +114,7 @@ namespace PerformanceAssessmentApi.Controllers
 
                 if (existingEmployee != null)
                 {
-                    return StatusCode(400, "User is already in the specified team");
+                    return StatusCode(409, "User is already in the specified team");
                 }
 
                 // Create a new employee
