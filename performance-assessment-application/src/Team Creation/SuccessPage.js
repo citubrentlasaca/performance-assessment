@@ -26,14 +26,15 @@ function SuccessPage() {
       </div>
       <div className="copy-container gap-3">
         <input
-          class="successpage-input"
+          className="successpage-input"
           id="textField"
           type="text"
           placeholder="https://workpa.com"
-          value={data}
+          defaultValue={data}
+          readOnly
           ref={inputRef}
         />
-        <button type='button' class='successpage-button btn' onClick={handleCopyClick}>COPY</button>
+        <button type='button' className='successpage-button btn' onClick={handleCopyClick}>COPY</button>
       </div>
     </div>
   );
