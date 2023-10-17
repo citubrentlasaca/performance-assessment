@@ -130,6 +130,12 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IAssignSchedulerService, AssignSchedulerService>();
     services.AddScoped<IResultRepository, ResultRepository>();
     services.AddScoped<IResultService, ResultService>();
+    services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+    services.AddScoped<IAnnouncementService, AnnouncementService>();
+    services.AddScoped<IEmployeeNotificationRepository, EmployeeNotificationRepository>();
+    services.AddScoped<IEmployeeNotificationService, EmployeeNotificationService>();
+    services.AddScoped<IAdminNotificationRepository, AdminNotificationRepository>();
+    services.AddScoped<IAdminNotificationService, AdminNotificationService>();
 
     services.AddScoped<ITokenService, TokenService>();
 }
