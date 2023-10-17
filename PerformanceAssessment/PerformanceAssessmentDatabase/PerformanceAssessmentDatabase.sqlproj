@@ -68,5 +68,8 @@
     <Build Include="Tables\Employee.sql" />
     <Build Include="Tables\AssignScheduler.sql" />
     <Build Include="Tables\Result.sql" />
+    <Build Include="Tables\Announcement.sql" />
+    <Build Include="Tables\EmployeeNotification.sql" />
+    <Build Include="Tables\AdminNotification.sql" />
   </ItemGroup>
 </Project>
