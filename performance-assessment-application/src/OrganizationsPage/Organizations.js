@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../Shared/NavBar"
-import TopBarThree from "../Shared/TopBarThree"
 import TeamCard from "./TeamCard";
 import axios from "axios";
 import { Stack } from '@mui/material'
 
 function Organizations() {
     const [userTeams, setUserTeams] = useState([]);
-    const userId = 1;
+    const userId = localStorage.getItem('userId');
 
     useEffect(() => {
         axios
