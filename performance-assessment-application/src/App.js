@@ -45,15 +45,12 @@ function App() {
           <Route path="/join-team" element={<InvitationPage />} />
           <Route path="/success/:data" element={<SuccessPage />} />
           <Route path="/create-team" element={<TeamCreation />} />
-          <Route path="/organizations" element={<Organizations />} />
+          <Route path="/organizations" element={<PrivateRoute redirectTo="/login" component={Organizations} />}/>
           <Route path="/organizations/performance" element={<Performance />} />
           <Route path="/organizations/userassessments" element={<UserAssessment />} />
           <Route path="/organizations/:teamId" element={<OrganizationDetails />} />
           <Route path="/organizations/employees" element={<Employees />} />
-          <Route
-            path="/home"
-            element={<PrivateRoute redirectTo="/login" component={Home} />}
-          />
+          <Route path="/home" element={<PrivateRoute redirectTo="/login" component={Home} />}/>
         </Routes>
       </Router>
     </div>
