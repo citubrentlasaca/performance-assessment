@@ -110,7 +110,7 @@ function Employees() {
                 ) : (
                     <div className="employee-table">
                         {/* Render employees in table format */}
-                        <table>
+                        <table className="styled-table">
                             <thead>
                                 <tr>
                                     <th>Name</th>
