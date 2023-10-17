@@ -99,3 +99,29 @@
 .employee-info div {
     font-weight: bold;
 }
+
+.styled-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.styled-table td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.styled-table th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+.styled-table th {
+    background-color: #27C6D9;
+    color: #ffffff;
+}
+
+.styled-table tr:nth-child(even) {
+    background-color: #ffffff;
+}
