@@ -41,14 +41,6 @@ function TeamCreation() {
               <input type="text" id="organization" name="organization" required />
             </div>
             <div className="tc-form-group">
-              <label htmlFor="firstName">First Name</label>
-              <input type="text" id="firstName" name="firstName" required />
-            </div>
-            <div className="tc-form-group">
-              <label htmlFor="lastName">Last Name</label>
-              <input type="text" id="lastName" name="lastName" required />
-            </div>
-            <div className="tc-form-group">
               <label htmlFor="businessType">Type of Business / Company</label>
               <select id="businessType" name="businessType" required>
                 <option value="Sales">Sales</option>
