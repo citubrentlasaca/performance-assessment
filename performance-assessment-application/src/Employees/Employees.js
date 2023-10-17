@@ -45,6 +45,13 @@ function Employees() {
         setListView(!listView); // Toggle the view
     }
 
+    const filterEmployees = (data, query) => {
+        return data.filter(employee => {
+            const fullName = `${employee.firstName} ${employee.lastName}`;
+            return fullName.toLowerCase().includes(query.toLowerCase());
+        });
+    };
+
     return (
         <NavBar>
             <TopBarTwo />
@@ -113,14 +120,14 @@ function Employees() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {employees.map((employee, index) => (
-                                    <tr key={index}>
-                                        <td>{employee.firstName} {employee.lastName}</td>
-                                        <td>{employee.emailAddress}</td>
-                                        <td>{employee.role}</td>
-                                        <td>{employee.dateTimeCreated}</td>
-                                    </tr>
-                                ))}
+                            {filterEmployees(employees, searchQuery).map((employee, index) => (
+                                <tr key={index}>
+                                    <td>{employee.firstName} {employee.lastName}</td>
+                                    <td>{employee.emailAddress}</td>
+                                    <td>{employee.role}</td>
+                                    <td>{employee.dateTimeCreated}</td>
+                                </tr>
+                            ))}
                             </tbody>
                         </table>
                     </div>
