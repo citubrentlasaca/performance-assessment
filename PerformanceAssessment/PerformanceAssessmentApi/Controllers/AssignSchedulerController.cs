@@ -12,11 +12,13 @@ namespace PerformanceAssessmentApi.Controllers
     public class AssignSchedulerController : ControllerBase
     {
         private readonly IAssignSchedulerService _assignSchedulerService;
+        private readonly IAssessmentService _assessmentService;
         private readonly ILogger<AssignSchedulerController> _logger;
 
-        public AssignSchedulerController(IAssignSchedulerService assignSchedulerService, ILogger<AssignSchedulerController> logger)
+        public AssignSchedulerController(IAssignSchedulerService assignSchedulerService, IAssessmentService assessmentService, ILogger<AssignSchedulerController> logger)
         {
             _assignSchedulerService = assignSchedulerService;
+            _assessmentService = assessmentService;
             _logger = logger;
         }
 
@@ -59,14 +61,17 @@ namespace PerformanceAssessmentApi.Controllers
 
                 var insertedIds = await _assignSchedulerService.CreateAssignSchedulers(assignScheduler.EmployeeIds, assignScheduler.Scheduler);
                 var scheduler = await _assignSchedulerService.GetAssignSchedulerById(insertedIds.First());
-
+                var assessment = await _assessmentService.GetAssessmentById(scheduler.AssessmentId);
                 var dueDateTime = DateTime.ParseExact($"{scheduler.DueDate} {scheduler.Time}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
                 var delay = dueDateTime - DateTime.Now;
                 BackgroundJob.Schedule(() => DeleteAssignScheduler(scheduler.Id), delay);
-                RecurringJob.AddOrUpdate($"SetIsAnsweredToFalse_{scheduler.Id}", () => _assignSchedulerService.SetIsAnsweredToFalse(scheduler.Id), Cron.Daily, new RecurringJobOptions
+                if(assessment.Title == "Daily Performance Report")
                 {
-                    TimeZone = TimeZoneInfo.Local
-                });
+                    RecurringJob.AddOrUpdate($"SetIsAnsweredToFalse_{scheduler.Id}", () => _assignSchedulerService.SetIsAnsweredToFalse(scheduler.Id), Cron.Daily, new RecurringJobOptions
+                    {
+                        TimeZone = TimeZoneInfo.Local
+                    });
+                }
 
                 return CreatedAtRoute("GetAssignSchedulerById", new { id = insertedIds }, insertedIds);
             }
