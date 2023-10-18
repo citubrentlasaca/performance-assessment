@@ -33,5 +33,10 @@ namespace PerformanceAssessmentApi.Services
         {
             return _repository.GetAdminNotificationById(id);
         }
+
+        public Task<IEnumerable<AdminNotificationDto>> GetAdminNotificationByEmployeeId(int employeeId)
+        {
+            return _repository.GetAdminNotificationByEmployeeId(employeeId);
+        }
     }
 }

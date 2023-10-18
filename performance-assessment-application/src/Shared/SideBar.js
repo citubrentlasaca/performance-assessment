@@ -6,6 +6,7 @@ import miniLogo from '../Images/Mini Logo.png'
 
 function SideBar() {
     const [collapsed, setCollapsed] = useState(false);
+    const userId = localStorage.getItem('userId');
     const location = useLocation();
 
     const toggleCollapse = () => {
@@ -135,7 +136,7 @@ function SideBar() {
                                     backgroundColor: isActive('/notifications') ? '#055c9d' : '#abe9f0',
                                 }}
                             >
-                                <a className="nav-link" href="/notifications/1"
+                                <a className="nav-link" href={`/notifications/${userId}`}
                                     style={{
                                         color: 'black'
                                     }}
@@ -225,7 +226,7 @@ function SideBar() {
                                     backgroundColor: isActive('/notifications') ? '#055c9d' : '#abe9f0',
                                 }}
                             >
-                                <a className="nav-link" href="/notifications/1"
+                                <a className="nav-link" href={`/notifications/${userId}`}
                                     style={{
                                         color: 'black'
                                     }}
