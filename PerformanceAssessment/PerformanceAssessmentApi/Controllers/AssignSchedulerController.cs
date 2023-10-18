@@ -340,5 +340,40 @@ namespace PerformanceAssessmentApi.Controllers
                 return StatusCode(500, "Something went wrong");
             }
         }
+
+        /// <summary>
+        /// Gets the scheduler by employee ID and assessment ID
+        /// </summary>
+        /// <param name="employeeId">Employee ID</param>
+        /// <param name="assessmentId">Assessment ID</param>
+        /// <returns>Returns the details of the scheduler with the specified employee ID and assessment ID</returns>
+        /// <response code="200">Scheduler found</response>
+        /// <response code="404">Scheduler not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet("get-by-employee-and-assessment", Name = "GetAssignSchedulerByEmployeeIdAndAssessmentId")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAssignSchedulerByEmployeeIdAndAssessmentId([FromQuery(Name = "employeeId")] int employeeId, [FromQuery(Name = "assessmentId")] int assessmentId)
+        {
+            try
+            {
+                // Check if the scheduler exists
+                var foundScheduler = await _assignSchedulerService.GetAssignSchedulerByEmployeeIdAndAssessmentId(employeeId, assessmentId);
+
+                if (foundScheduler == null)
+                {
+                    return StatusCode(404, "Scheduler not found");
+                }
+
+                return Ok(foundScheduler);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
     }
 }
