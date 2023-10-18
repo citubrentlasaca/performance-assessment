@@ -5,8 +5,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function TeamCreation() {
-  const [formData, setFormData] = useState({});
-  const [submittedData, setSubmittedData] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,12 +15,16 @@ function TeamCreation() {
       data[key] = value;
     });
 
-    console.log('Form Data Submitted:', data);
-
     try {
       const response = await axios.post('https://localhost:7236/api/teams', data);
+      console.log("Team is created successfully");
 
-      setSubmittedData(response.data);
+      const teamDetails = await axios.get(`https://localhost:7236/api/teams/code/${response.data}`);
+
+      await axios.post('https://localhost:7236/api/employees', {
+        userId: localStorage.getItem('userId'),
+        teamId: teamDetails.data.id
+      });
 
       navigate(`/success/${response.data}`);
     } catch (error) {
@@ -39,14 +41,6 @@ function TeamCreation() {
             <div className="tc-form-group">
               <label htmlFor="organization">Organization / Company Name</label>
               <input type="text" id="organization" name="organization" required />
-            </div>
-            <div className="tc-form-group">
-              <label htmlFor="firstName">First Name</label>
-              <input type="text" id="firstName" name="firstName" required />
-            </div>
-            <div className="tc-form-group">
-              <label htmlFor="lastName">Last Name</label>
-              <input type="text" id="lastName" name="lastName" required />
             </div>
             <div className="tc-form-group">
               <label htmlFor="businessType">Type of Business / Company</label>
