@@ -16,8 +16,8 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<int> CreateAdminNotification(AdminNotification adminNotification)
         {
-            var sql = "INSERT INTO [dbo].[AdminNotification] ([EmployeeId], [AssessmentId], [DateTimeCreated]) " +
-                      "VALUES (@EmployeeId, @AssessmentId, @DateTimeCreated); " +
+            var sql = "INSERT INTO [dbo].[AdminNotification] ([EmployeeId], [EmployeeName], [AssessmentTitle], [TeamName], [DateTimeCreated]) " +
+                      "VALUES (@EmployeeId, @EmployeeName, @AssessmentTitle, @TeamName, @DateTimeCreated); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
