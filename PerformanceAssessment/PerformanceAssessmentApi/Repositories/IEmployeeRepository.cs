@@ -16,5 +16,6 @@ namespace PerformanceAssessmentApi.Repositories
         Task<int> UpdateEmployee(Employee employee);
         Task<int> DeleteEmployee(int id);
         Task<EmployeeDetailsDto> GetEmployeeDetailsById(int id);
+        Task<EmployeeDto> GetEmployeeByTeamIdAndUserId(int teamId, int userId);
     }
 }

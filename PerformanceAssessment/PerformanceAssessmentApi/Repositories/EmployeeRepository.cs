@@ -202,5 +202,15 @@ namespace PerformanceAssessmentApi.Repositories
                 return result.FirstOrDefault();
             }
         }
+
+        public async Task<EmployeeDto> GetEmployeeByTeamIdAndUserId(int teamId, int userId)
+        {
+            var sql = "SELECT * FROM [dbo].[Employee] WHERE [TeamId] = @TeamId AND [UserId] = @UserId;";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QuerySingleOrDefaultAsync<EmployeeDto>(sql, new { TeamId = teamId, UserId = userId });
+            }
+        }
     }
 }

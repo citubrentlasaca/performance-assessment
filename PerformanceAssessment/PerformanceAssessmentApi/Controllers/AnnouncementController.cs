@@ -10,11 +10,15 @@ namespace PerformanceAssessmentApi.Controllers
     public class AnnouncementController : ControllerBase
     {
         private readonly IAnnouncementService _announcementService;
+        private readonly IEmployeeService _employeeService;
+        private readonly IEmployeeAnnouncementNotificationService _employeeAnnouncementNotificationService;
         private readonly ILogger<AnnouncementController> _logger;
 
-        public AnnouncementController(IAnnouncementService announcementService, ILogger<AnnouncementController> logger)
+        public AnnouncementController(IAnnouncementService announcementService, IEmployeeService employeeService, IEmployeeAnnouncementNotificationService employeeAnnouncementNotificationService, ILogger<AnnouncementController> logger)
         {
             _announcementService = announcementService;
+            _employeeService = employeeService;
+            _employeeAnnouncementNotificationService = employeeAnnouncementNotificationService;
             _logger = logger;
         }
 
@@ -28,6 +32,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     POST /api/announcements
         ///     {
+        ///         "teamId": 1,
         ///         "content": "Dear users, we will be performing scheduled maintenance on our system on October 17, 2023. During this time, the system will be temporarily unavailable. We apologize for any inconvenience this may cause and appreciate your understanding. Thank you for being a valued part of our community!"
         ///     }
         ///
@@ -47,6 +52,16 @@ namespace PerformanceAssessmentApi.Controllers
             {
                 // Create a new announcement
                 var newAnnouncement = await _announcementService.CreateAnnouncement(announcement);
+                var employees = await _employeeService.GetEmployeeByTeamId(announcement.TeamId);
+                foreach (var employee in employees)
+                {
+                    var employeeNotification = new EmployeeAnnouncementNotificationCreationDto
+                    {
+                        EmployeeId = employee.Id,
+                        AnnouncementId = newAnnouncement.Id
+                    };
+                    await _employeeAnnouncementNotificationService.CreateEmployeeAnnouncementNotification(employeeNotification);
+                }
 
                 return CreatedAtRoute("GetAnnouncementById", new { id = newAnnouncement.Id }, newAnnouncement);
             }

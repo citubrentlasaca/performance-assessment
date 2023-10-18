@@ -18,6 +18,7 @@ import UpdateAssessment from './Create Assessment/UpdateAssessment';
 import OrganizationDetails from './OrganizationsPage/OrganizationDetails';
 import Employees from './Employees/Employees';
 import CreateReport from './Create Assessment/CreateReport';
+import Notifications from './Notifications/Notifications';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
           <Route path="/organizations/:teamId" element={<OrganizationDetails />} />
           <Route path="/organizations/employees" element={<Employees />} />
           <Route path="/home" element={<PrivateRoute redirectTo="/login" component={Home} />}/>
+          <Route path='/notifications/:id' element={<Notifications />} />
         </Routes>
       </Router>
     </div>

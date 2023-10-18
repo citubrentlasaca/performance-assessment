@@ -126,15 +126,16 @@ function SideBar() {
                                     </svg>
                                 </a>
                             </li>
-                            <li className="nav-item w-100"
+                            <li className={`nav-item w-100 ${isActive('/notifications') ? 'active' : ''}`}
                                 style={{
                                     height: '96px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
+                                    backgroundColor: isActive('/notifications') ? '#055c9d' : '#abe9f0',
                                 }}
                             >
-                                <a className="nav-link" href="#"
+                                <a className="nav-link" href="/notifications/1"
                                     style={{
                                         color: 'black'
                                     }}
@@ -218,12 +219,13 @@ function SideBar() {
                                     </Stack>
                                 </a>
                             </li>
-                            <li className="nav-item w-100"
+                            <li className={`nav-item w-100 ${isActive('/notifications') ? 'active' : ''}`}
                                 style={{
                                     height: '96px',
+                                    backgroundColor: isActive('/notifications') ? '#055c9d' : '#abe9f0',
                                 }}
                             >
-                                <a className="nav-link" href="#"
+                                <a className="nav-link" href="/notifications/1"
                                     style={{
                                         color: 'black'
                                     }}
