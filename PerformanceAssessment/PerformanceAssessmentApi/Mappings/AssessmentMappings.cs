@@ -10,6 +10,7 @@ namespace PerformanceAssessmentApi.Mappings
         public AssessmentMappings()
         {
             CreateMap<AssessmentCreationDto, Assessment>(MemberList.None)
+                .ForMember(dto => dto.EmployeeId, opt => opt.MapFrom(st => (st.EmployeeId!)))
                 .ForMember(dto => dto.Title, opt => opt.MapFrom(st => (st.Title!)))
                 .ForMember(dto => dto.Description, opt => opt.MapFrom(st => (st.Description!)))
                 .ForMember(dto => dto.DateTimeCreated, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()))
