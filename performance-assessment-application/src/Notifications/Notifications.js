@@ -12,7 +12,6 @@ function Notifications() {
     const [activeTab, setActiveTab] = useState('Admin');
 
     useEffect(() => {
-        // Define a function to fetch assessments for a given employee
         const fetchAssessmentsForEmployee = async (employeeId) => {
             try {
                 const response = await axios.get(`https://localhost:7236/api/employee-assignscheduler-notifications/employees/${employeeId}`);
@@ -43,7 +42,6 @@ function Notifications() {
             }
         };
 
-        // Define a function to fetch announcements for a given employee
         const fetchAnnouncementsForEmployee = async (employeeId) => {
             try {
                 const response = await axios.get(`https://localhost:7236/api/employee-announcement-notifications/employees/${employeeId}`);
@@ -61,14 +59,13 @@ function Notifications() {
                         hour12: true,
                     });
 
-                    // Fetch team information based on announcementResponse.data.teamId
                     const teamResponse = await axios.get(`https://localhost:7236/api/teams/${announcementResponse.data.teamId}`);
                     const organization = teamResponse.data.organization;
 
                     return {
                         announcementData: announcementResponse.data,
                         dateTimeCreated: formattedDateTime,
-                        organization, // Add the organization to the returned object
+                        organization,
                     };
                 });
 
@@ -80,25 +77,53 @@ function Notifications() {
             }
         };
 
-        // Fetch data for the selected employee based on the 'id' from useParams
+        const fetchAdminNotificationsForEmployee = async (employeeId) => {
+            try {
+                const response = await axios.get(`https://localhost:7236/api/admin-notifications/employees/${employeeId}`);
+                const reversedData = response.data.reverse();
+
+                const formattedAdminNotifications = reversedData.map(item => {
+                    const dateTimeCreated = new Date(item.dateTimeCreated);
+                    const formattedDateTime = dateTimeCreated.toLocaleString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true,
+                    });
+
+                    return {
+                        ...item,
+                        dateTimeCreated: formattedDateTime,
+                    };
+                });
+
+                return formattedAdminNotifications;
+            } catch (error) {
+                console.error('Error fetching admin notifications:', error);
+            }
+        };
+
         axios.get(`https://localhost:7236/api/employees/users/${id}`)
             .then((response) => {
                 const employeeData = response.data;
 
-                // Create arrays to store assessments and announcements
+                const adminData = [];
                 const assessmentsData = [];
                 const announcementsData = [];
 
-                // Loop through each employee object and fetch assessments and announcements
                 Promise.all(
                     employeeData.map(async (employee) => {
+                        const admin = await fetchAdminNotificationsForEmployee(employee.id);
+                        adminData.push(...admin);
                         const assessments = await fetchAssessmentsForEmployee(employee.id);
                         assessmentsData.push(...assessments);
                         const announcements = await fetchAnnouncementsForEmployee(employee.id);
                         announcementsData.push(...announcements);
                     })
                 ).then(() => {
-                    // Set the state variables after all data has been fetched
+                    setAdmin(adminData);
                     setAssessments(assessmentsData);
                     setAnnouncements(announcementsData);
                 });
@@ -120,7 +145,37 @@ function Notifications() {
                 padding: '10px',
             }}
         >
-            <p>Admin</p>
+            {admin.map((admin, index) => (
+                <Stack key={index}
+                    direction="column"
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
+                    spacing={2}
+                    sx={{
+                        width: '100%',
+                        height: '100%',
+                        padding: '10px',
+                    }}
+                >
+                    <p className='mb-0'>{admin.dateTimeCreated}</p>
+                    <Box className='gap-2'
+                        sx={{
+                            width: '100%',
+                            height: 'fit-content',
+                            backgroundColor: 'white',
+                            borderRadius: '10px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                            padding: '30px',
+                        }}
+                    >
+                        <b>{admin.employeeName} failed to answer {admin.assessmentTitle} within the due date</b>
+                        <p className='mb-0'>{admin.teamName}</p>
+                    </Box>
+                </Stack>
+            ))}
         </Stack>
     );
 
