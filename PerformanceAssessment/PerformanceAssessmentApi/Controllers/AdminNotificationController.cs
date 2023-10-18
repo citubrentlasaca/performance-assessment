@@ -93,8 +93,8 @@ namespace PerformanceAssessmentApi.Controllers
         /// <summary>
         /// Gets the admin notification by id
         /// </summary>
-        /// <param name="id">Admin notification id</param>
-        /// <returns>Returns the details of an admin notification with id <paramref name="id"/></returns>
+        /// <param name="employeeId">Admin notification id</param>
+        /// <returns>Returns the details of an admin notification with id <paramref name="employeeId"/></returns>
         /// <response code="200">Admin notification found</response>
         /// <response code="404">Admin notification not found</response>
         /// <response code="500">Internal server error</response>
@@ -103,12 +103,46 @@ namespace PerformanceAssessmentApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAdminNotificationById(int id)
+        public async Task<IActionResult> GetAdminNotificationById(int employeeId)
         {
             try
             {
                 // Check if admin notification exists
-                var foundAdminNotification = await _adminNotificationService.GetAdminNotificationById(id);
+                var foundAdminNotification = await _adminNotificationService.GetAdminNotificationById(employeeId);
+
+                if (foundAdminNotification == null)
+                {
+                    return StatusCode(404, "Admin notification not found");
+                }
+
+                return Ok(foundAdminNotification);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
+
+        /// <summary>
+        /// Gets the admin notification by employee id
+        /// </summary>
+        /// <param name="employeeId">Admin notification id</param>
+        /// <returns>Returns the details of an admin notification with id <paramref name="employeeId"/></returns>
+        /// <response code="200">Admin notification found</response>
+        /// <response code="404">Admin notification not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet("employees/{employeeId}", Name = "GetAdminNotificationByEmployeeId")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAdminNotificationByEmployeeId(int employeeId)
+        {
+            try
+            {
+                // Check if admin notification exists
+                var foundAdminNotification = await _adminNotificationService.GetAdminNotificationById(employeeId);
 
                 if (foundAdminNotification == null)
                 {

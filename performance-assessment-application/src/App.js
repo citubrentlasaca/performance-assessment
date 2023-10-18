@@ -36,21 +36,21 @@ function App() {
           <Route path="/createassessment" element={<CreateAssessment />} />
           <Route path="/createreport" element={<CreateReport />} />
           <Route path="/adminassessments/:id" element={<UpdateAssessment />} />
-          <Route path="/organizations/adminassessments" element={<Templates />} />
+          <Route path="/organizations/:teamId/admin-assessments" element={<Templates />} />
           <Route path="/answerassessment/:id" element={<AnswerAssessment />} />
           <Route path="/login" element={<Login />} />
           <Route path="/success" element={<SuccessPage />} />
           <Route path="/teamcreation" element={<TeamCreation />} />
           <Route path="/register" element={<UserRegistration />} />
-          <Route path="/employeeanalytics" element={<EmployeeAnalytics />} />
+          <Route path="/organizations/:teamId/employee-analytics" element={<EmployeeAnalytics />} />
           <Route path="/join-team" element={<InvitationPage />} />
           <Route path="/success/:data" element={<SuccessPage />} />
           <Route path="/create-team" element={<TeamCreation />} />
           <Route path="/organizations" element={<PrivateRoute redirectTo="/login" component={Organizations} />}/>
-          <Route path="/organizations/performance" element={<Performance />} />
-          <Route path="/organizations/userassessments" element={<UserAssessment />} />
+          <Route path="/organizations/:teamId/performance" element={<Performance />} />
+          <Route path="/organizations/:teamId/employee-assessments" element={<UserAssessment />} />
           <Route path="/organizations/:teamId" element={<OrganizationDetails />} />
-          <Route path="/organizations/employees" element={<Employees />} />
+          <Route path="/organizations/:teamId/employees" element={<Employees />} />
           <Route path="/home" element={<PrivateRoute redirectTo="/login" component={Home} />}/>
           <Route path='/notifications/:id' element={<Notifications />} />
         </Routes>

@@ -1,12 +1,15 @@
 import { Box, Stack } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function TopBarThree() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const organizationId = location.pathname.split('/')[2];
 
     const navigateToOrganizations = () => {
+        localStorage.removeItem('employeeData');
         navigate('/organizations');
     };
 
@@ -33,7 +36,8 @@ function TopBarThree() {
             >
                 <ul className="nav h-100 w-100 d-flex justify-content-center align-items-center">
                     <li className="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <a className="nav-link h-100 w-100 p-0" href="#"
+                        <a className="nav-link h-100 w-100 p-0" 
+                            href={`/organizations/${organizationId}`}
                             style={{
                                 color: '#055c9d',
                             }}
@@ -58,13 +62,14 @@ function TopBarThree() {
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" className="bi bi-people-fill" viewBox="0 0 16 16">
                                         <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                                     </svg>
-                                    <b>Company A</b>
+                                    <b>General</b>
                                 </Stack>
                             </Box>
                         </a>
                     </li>
                     <li className="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <Link className="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" to="/organizations/performance"
+                        <Link className="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center"
+                            to={`/organizations/${organizationId}/performance`}
                             style={{
                                 color: 'white',
                             }}
@@ -73,7 +78,8 @@ function TopBarThree() {
                         </Link>
                     </li>
                     <li className="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <Link className="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" to="/organizations/userassessments"
+                        <Link className="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" 
+                            to={`/organizations/${organizationId}/employee-assessments`}
                             style={{
                                 color: 'white',
                             }}
@@ -82,7 +88,8 @@ function TopBarThree() {
                         </Link>
                     </li>
                     <li className="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <a className="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" href="#"
+                        <a className="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" 
+                            href={`/organizations/${organizationId}/employee-analytics`}
                             style={{
                                 color: 'white',
                             }}
