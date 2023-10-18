@@ -10,5 +10,7 @@ namespace PerformanceAssessmentApi.Repositories
         Task<IEnumerable<AdminNotificationDto>> GetAllAdminNotifications();
 
         Task<AdminNotificationDto> GetAdminNotificationById(int id);
+
+        Task<IEnumerable<AdminNotificationDto>> GetAdminNotificationByEmployeeId(int employeeId);
     }
 }

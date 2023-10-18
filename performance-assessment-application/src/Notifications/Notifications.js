@@ -5,26 +5,22 @@ import { Link, useParams } from 'react-router-dom'
 import axios from 'axios';
 
 function Notifications() {
+    const [admin, setAdmin] = useState([])
     const [announcements, setAnnouncements] = useState([])
     const [assessments, setAssessments] = useState([])
     const { id } = useParams();
-    const [activeTab, setActiveTab] = useState('Assessments');
+    const [activeTab, setActiveTab] = useState('Admin');
 
     useEffect(() => {
-        const fetchData = async () => {
+        // Define a function to fetch assessments for a given employee
+        const fetchAssessmentsForEmployee = async (employeeId) => {
             try {
-                // Step 1: Fetch employee-announcement-notifications and employee-assignscheduler-notifications
-                const [announcementsResponse, assessmentsResponse] = await Promise.all([
-                    axios.get(`https://localhost:7236/api/employee-announcement-notifications/employees/${id}`),
-                    axios.get(`https://localhost:7236/api/employee-assignscheduler-notifications/employees/${id}`),
-                ]);
+                const response = await axios.get(`https://localhost:7236/api/employee-assignscheduler-notifications/employees/${employeeId}`);
+                const reversedData = response.data.reverse();
 
-                // Step 2: Process announcementsResponse
-                const announcementsData = announcementsResponse.data.reverse(); // Reverse the data
-                const announcementsWithDetails = await Promise.all(announcementsData.map(async (announcement) => {
-                    const announcementDetailsResponse = await axios.get(`https://localhost:7236/api/announcements/${announcement.announcementId}`);
-
-                    const dateTimeCreated = new Date(announcement.dateTimeCreated);
+                const assessmentPromises = reversedData.map(async (item) => {
+                    const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${item.assessmentId}`);
+                    const dateTimeCreated = new Date(item.dateTimeCreated);
                     const formattedDateTime = dateTimeCreated.toLocaleString('en-US', {
                         month: 'long',
                         day: 'numeric',
@@ -33,44 +29,100 @@ function Notifications() {
                         minute: '2-digit',
                         hour12: true,
                     });
-
                     return {
-                        details: announcementDetailsResponse.data,
+                        assessmentData: assessmentResponse.data,
                         dateTimeCreated: formattedDateTime,
                     };
-                }));
+                });
 
-                setAnnouncements(announcementsWithDetails);
-
-                // Step 3: Process assessmentsResponse
-                const assessmentsData = assessmentsResponse.data.reverse(); // Reverse the data
-                const assessmentsWithDetails = await Promise.all(assessmentsData.map(async (assessment) => {
-                    const assessmentDetailsResponse = await axios.get(`https://localhost:7236/api/assessments/${assessment.assessmentId}`);
-
-                    const dateTimeCreated = new Date(assessment.dateTimeCreated);
-                    const formattedDateTime = dateTimeCreated.toLocaleString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                    });
-
-                    return {
-                        details: assessmentDetailsResponse.data,
-                        dateTimeCreated: formattedDateTime,
-                    };
-                }));
-
-                setAssessments(assessmentsWithDetails);
+                const assessmentData = await Promise.all(assessmentPromises);
+                return assessmentData;
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error('Error fetching assessments:', error);
+                return [];
             }
         };
 
-        fetchData();
+        // Define a function to fetch announcements for a given employee
+        const fetchAnnouncementsForEmployee = async (employeeId) => {
+            try {
+                const response = await axios.get(`https://localhost:7236/api/employee-announcement-notifications/employees/${employeeId}`);
+                const reversedData = response.data.reverse();
+
+                const announcementPromises = reversedData.map(async (item) => {
+                    const announcementResponse = await axios.get(`https://localhost:7236/api/announcements/${item.announcementId}`);
+                    const dateTimeCreated = new Date(item.dateTimeCreated);
+                    const formattedDateTime = dateTimeCreated.toLocaleString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true,
+                    });
+
+                    // Fetch team information based on announcementResponse.data.teamId
+                    const teamResponse = await axios.get(`https://localhost:7236/api/teams/${announcementResponse.data.teamId}`);
+                    const organization = teamResponse.data.organization;
+
+                    return {
+                        announcementData: announcementResponse.data,
+                        dateTimeCreated: formattedDateTime,
+                        organization, // Add the organization to the returned object
+                    };
+                });
+
+                const announcementData = await Promise.all(announcementPromises);
+                return announcementData;
+            } catch (error) {
+                console.error('Error fetching announcements:', error);
+                return [];
+            }
+        };
+
+        // Fetch data for the selected employee based on the 'id' from useParams
+        axios.get(`https://localhost:7236/api/employees/users/${id}`)
+            .then((response) => {
+                const employeeData = response.data;
+
+                // Create arrays to store assessments and announcements
+                const assessmentsData = [];
+                const announcementsData = [];
+
+                // Loop through each employee object and fetch assessments and announcements
+                Promise.all(
+                    employeeData.map(async (employee) => {
+                        const assessments = await fetchAssessmentsForEmployee(employee.id);
+                        assessmentsData.push(...assessments);
+                        const announcements = await fetchAnnouncementsForEmployee(employee.id);
+                        announcementsData.push(...announcements);
+                    })
+                ).then(() => {
+                    // Set the state variables after all data has been fetched
+                    setAssessments(assessmentsData);
+                    setAnnouncements(announcementsData);
+                });
+            })
+            .catch((error) => {
+                console.error('Error fetching employee data:', error);
+            });
     }, [id]);
+
+    const renderAdminTab = () => (
+        <Stack
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            spacing={2}
+            sx={{
+                width: '100%',
+                height: '100%',
+                padding: '10px',
+            }}
+        >
+            <p>Admin</p>
+        </Stack>
+    );
 
     const renderAnnouncementsTab = () => (
         <Stack
@@ -83,7 +135,6 @@ function Notifications() {
                 height: '100%',
             }}
         >
-
             {announcements.map((announcement, index) => (
                 <Stack key={index}
                     direction="column"
@@ -97,19 +148,21 @@ function Notifications() {
                     }}
                 >
                     <p className='mb-0'>{announcement.dateTimeCreated}</p>
-                    <Box
+                    <Box className='gap-2'
                         sx={{
                             width: '100%',
                             height: 'fit-content',
                             backgroundColor: 'white',
                             borderRadius: '10px',
                             display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
                             padding: '30px',
                         }}
                     >
-                        <b>{announcement.details.content}</b>
+                        <p className='mb-0'>{announcement.organization} posted an announcement</p>
+                        <b>{announcement.announcementData.content}</b>
                     </Box>
                 </Stack>
             ))}
@@ -141,7 +194,7 @@ function Notifications() {
                     }}
                 >
                     <p className='mb-0'>{assessment.dateTimeCreated}</p>
-                    <Link to={`/answerassessment/${assessment.details.id}`}
+                    <Link to={`/answerassessment/${assessment.assessmentData.id}`}
                         style={{
                             textDecoration: 'none',
                             color: 'black',
@@ -162,7 +215,7 @@ function Notifications() {
                             }}
                         >
                             <b>You have been assigned an assessment</b>
-                            <p className='mb-0'>{assessment.details.title}</p>
+                            <p className='mb-0'>{assessment.assessmentData.title}</p>
                         </Box>
                     </Link>
                 </Stack>
@@ -208,6 +261,18 @@ function Notifications() {
                         }}
                     >
                         <ul className="nav">
+                            <li className={`nav-item ${activeTab === 'Admin' ? 'active' : ''}`}>
+                                <b
+                                    className="nav-link"
+                                    style={{
+                                        color: activeTab === 'Admin' ? '#055c9d' : 'black',
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={() => handleTabChange('Admin')}
+                                >
+                                    <b>Admin</b>
+                                </b>
+                            </li>
                             <li className={`nav-item ${activeTab === 'Assessments' ? 'active' : ''}`}>
                                 <b
                                     className="nav-link"
@@ -234,6 +299,7 @@ function Notifications() {
                             </li>
                         </ul>
                     </Stack>
+                    {activeTab === 'Admin' ? renderAdminTab() : null}
                     {activeTab === 'Announcements' ? renderAnnouncementsTab() : null}
                     {activeTab === 'Assessments' ? renderAssessmentsTab() : null}
                 </Stack>

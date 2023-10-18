@@ -45,5 +45,15 @@ namespace PerformanceAssessmentApi.Repositories
                 return await con.QuerySingleOrDefaultAsync<AdminNotificationDto>(sql, new { Id = id });
             }
         }
+
+        public async Task<IEnumerable<AdminNotificationDto>> GetAdminNotificationByEmployeeId(int employeeId)
+        {
+            var sql = "SELECT * FROM [dbo].[AdminNotification] WHERE [EmployeeId] = @EmployeeId;";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QueryAsync<AdminNotificationDto>(sql, new { EmployeeId = employeeId });
+            }
+        }
     }
 }

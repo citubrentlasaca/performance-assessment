@@ -63,6 +63,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
 
         const allUserIds = filteredUsers.map((user) => user.id);
         setSelectedUserIds(selectAllChecked ? [] : allUserIds);
+        console.log(selectedUserIds);
     };
 
 
@@ -77,6 +78,17 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
         }
 
         setSelectedUserIds(newSelectedUserIds);
+        console.log(selectedUserIds);
+    };
+
+    const handleClear = () => {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = false;
+        });
+
+        setSelectedUserIds([]);
+        console.log(selectedUserIds);
     };
 
     const handlePublishClick = async () => {
@@ -84,20 +96,25 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
             try {
                 const employeeResponse = await axios.get(`https://localhost:7236/api/employees/users/${userId}`);
                 const employeeData = employeeResponse.data;
-                if (employeeData) {
-                    const employeeId = employeeData.id;
-                    const schedulerData = {
-                        employeeIds: [employeeId],
-                        scheduler: {
-                            assessmentId: assessmentId,
-                            dueDate: date,
-                            time: time,
-                            isAnswered: false,
-                        },
-                    };
 
-                    await axios.post('https://localhost:7236/api/schedulers', schedulerData);
-                    console.log(`Scheduler created for employee with ID: ${employeeId}`);
+                if (Array.isArray(employeeData)) {
+                    for (const employee of employeeData) {
+                        if (employee.teamId === 1) {
+                            const employeeId = employee.id;
+                            const schedulerData = {
+                                employeeIds: [employeeId],
+                                scheduler: {
+                                    assessmentId: assessmentId,
+                                    dueDate: date,
+                                    time: time,
+                                    isAnswered: false,
+                                },
+                            };
+
+                            await axios.post('https://localhost:7236/api/schedulers', schedulerData);
+                            console.log(`Scheduler created for employee with ID: ${employeeId}`);
+                        }
+                    }
                 } else {
                     console.error(`Employee not found for user with ID: ${userId}`);
                 }
@@ -282,7 +299,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                                     Select all
                                                 </label>
                                             </div>
-                                            <button type="button" class="btn"
+                                            <button type="button" class="btn" onClick={handleClear}
                                                 style={{
                                                     color: 'red'
                                                 }}
