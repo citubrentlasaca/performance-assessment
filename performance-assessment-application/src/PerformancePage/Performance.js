@@ -10,11 +10,12 @@ function Performance() {
     const [completedAssessments, setCompletedAssessments] = useState([]);
     const [activeTab, setActiveTab] = useState('Performance Report');
     const navigate = useNavigate();
+    const employee = JSON.parse(localStorage.getItem("employeeData"));
 
     useEffect(() => {
         const fetchAssessments = async () => {
             try {
-                const employeeId = 1;
+                const employeeId = employee.id;
                 const schedulersResponse = await axios.get(`https://localhost:7236/api/schedulers/employees/${employeeId}`);
 
                 if (schedulersResponse.data) {
