@@ -29,7 +29,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///     POST /api/employee-announcement-notifications
         ///     {
         ///         "employeeId": 1,
-        ///         "announcementId": 1,
+        ///         "announcementId": 1
         ///     }
         ///
         /// </remarks>

@@ -16,5 +16,6 @@ namespace PerformanceAssessmentApi.Services
         Task<int> UpdateEmployee(int id, EmployeeUpdationDto employee);
         Task<int> DeleteEmployee(int id);
         Task<EmployeeDetailsDto> GetEmployeeDetailsById(int id);
+        Task<EmployeeDto> GetEmployeeByTeamIdAndUserId(int teamId, int userId);
     }
 }

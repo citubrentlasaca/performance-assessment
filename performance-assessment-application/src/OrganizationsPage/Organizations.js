@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../Shared/NavBar"
-import TopBarThree from "../Shared/TopBarThree"
 import TeamCard from "./TeamCard";
 import axios from "axios";
-import { Stack } from '@mui/material'
+import { Stack, Grid } from '@mui/material'
+import { useNavigate } from "react-router-dom";
 
 function Organizations() {
     const [userTeams, setUserTeams] = useState([]);
-    const userId = 1;
+    const userId = localStorage.getItem('userId');
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios
@@ -19,6 +20,18 @@ function Organizations() {
             console.error("Error fetching user teams:", error);
           });
     }, [userId]);
+
+    async function fetchEmployeeDetails(teamId, userId) {
+        try {
+          const response = await axios.get(
+            `https://localhost:7236/api/employees?teamId=${teamId}&userId=${userId}`
+          );
+          return response.data;
+        } catch (error) {
+          console.error("Error fetching employee details:", error);
+          return "";
+        }
+    }
 
     return (
         <NavBar>
@@ -32,39 +45,27 @@ function Organizations() {
                     Your teams
                 </b>
             </Stack>
-            <Stack direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={4}
+            <Grid container
+                spacing={3}
                 style={{
                     paddingLeft: "70px",
                 }}
             >
-                {chunkArray(userTeams, 4).map((teamRow, rowIndex) => (
-                    <div
-                        key={rowIndex}
-                        style={{
-                            display: "flex",
-                            gap: "30px",
-                        }}
-                    >
-                        {teamRow.map((team) => (
+                {userTeams.map((team) => (
+                    <Grid item key={team.id} xs={12} sm={6} md={4} lg={3}>
                         <TeamCard
-                            key={team.id}
-                            organization={team.organization}
-                            onClick={`/organizations/${team.id}`}
+                        organization={team.organization}
+                        onClick={async () => {
+                            const employeeData = await fetchEmployeeDetails(team.id, userId);
+                            localStorage.setItem("employeeData", JSON.stringify(employeeData));
+                            navigate(`/organizations/${team.id}`);
+                        }}
                         />
-                        ))}
-                    </div>
+                    </Grid>
                 ))}
-            </Stack>
+            </Grid>
         </NavBar>
     )
 }
 
 export default Organizations
-
-function chunkArray(array, chunkSize) {
-    const chunkedArray = [];
-    for (let i = 0; i < array.length; i += chunkSize) {
-      chunkedArray.push(array.slice(i, i + chunkSize));
-    }
-    return chunkedArray;
-}

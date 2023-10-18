@@ -87,6 +87,7 @@ namespace PerformanceAssessmentApi.Controllers
         /// <response code="201">Successfully created a new employee</response>
         /// <response code="400">Employee details are invalid</response>
         /// <response code="404">Team not found</response>
+        /// <response code="409">Conflict/response>
         /// <response code="500">Internal server error</response>
         [HttpPost("withteamcode", Name = "CreateEmployeeWithTeamCode")]
         [Consumes("application/json")]
@@ -94,6 +95,7 @@ namespace PerformanceAssessmentApi.Controllers
         [ProducesResponseType(typeof(EmployeeTeamInfoDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateEmployeeWithTeamCode([FromBody] EmployeeTeamInfoDto employee)
         {
@@ -112,7 +114,7 @@ namespace PerformanceAssessmentApi.Controllers
 
                 if (existingEmployee != null)
                 {
-                    return StatusCode(400, "User is already in the specified team");
+                    return StatusCode(409, "User is already in the specified team");
                 }
 
                 // Create a new employee
@@ -370,6 +372,41 @@ namespace PerformanceAssessmentApi.Controllers
                 }
 
                 return Ok(employeeDetails);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
+
+        /// <summary>
+        /// Gets the employee by team ID and user ID
+        /// </summary>
+        /// <param name="teamId">Team ID</param>
+        /// <param name="userId">User ID</param>
+        /// <returns>Returns the details of the employee with the specified team ID and user ID</returns>
+        /// <response code="200">Employee found</response>
+        /// <response code="404">Employee not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet("get-by-team-and-user", Name = "GetEmployeeByTeamIdAndUserId")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetEmployeeByTeamIdAndUserId([FromQuery(Name = "teamId")] int teamId, [FromQuery(Name = "userId")] int userId)
+        {
+            try
+            {
+                // Check if the employee exists
+                var foundEmployee = await _employeeService.GetEmployeeByTeamIdAndUserId(teamId, userId);
+
+                if (foundEmployee == null)
+                {
+                    return StatusCode(404, "Employee not found");
+                }
+
+                return Ok(foundEmployee);
             }
             catch (Exception e)
             {

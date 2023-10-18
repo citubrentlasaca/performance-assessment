@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Templates from './Create Assessment/Templates';
 import UserAssessment from './Answer Assessment/UserAssessment';
 import AnswerAssessment from './Answer Assessment/AnswerAssessment';
@@ -46,12 +46,12 @@ function App() {
           <Route path="/join-team" element={<InvitationPage />} />
           <Route path="/success/:data" element={<SuccessPage />} />
           <Route path="/create-team" element={<TeamCreation />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/organizations" element={<Organizations />} />
+          <Route path="/organizations" element={<PrivateRoute redirectTo="/login" component={Organizations} />}/>
           <Route path="/organizations/performance" element={<Performance />} />
           <Route path="/organizations/userassessments" element={<UserAssessment />} />
           <Route path="/organizations/:teamId" element={<OrganizationDetails />} />
           <Route path="/organizations/employees" element={<Employees />} />
+          <Route path="/home" element={<PrivateRoute redirectTo="/login" component={Home} />}/>
           <Route path='/notifications/:id' element={<Notifications />} />
         </Routes>
       </Router>
@@ -60,3 +60,8 @@ function App() {
 }
 
 export default App;
+
+const PrivateRoute = ({ component: Component, redirectTo }) => {
+  const token = localStorage.getItem('token');
+  return token ? <Component /> : <Navigate to={redirectTo} />;
+};

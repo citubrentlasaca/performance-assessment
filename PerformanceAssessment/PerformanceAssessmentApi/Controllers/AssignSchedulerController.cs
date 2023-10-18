@@ -70,7 +70,7 @@ namespace PerformanceAssessmentApi.Controllers
                     EmployeeId = scheduler.EmployeeId,
                     AssessmentId = assessment.Id,
                 };
-                await _employeeAssignSchedulerNotificationService.CreateEmployeeNotification(employeeNotification);
+                await _employeeAssignSchedulerNotificationService.CreateEmployeeAssignSchedulerNotification(employeeNotification);
 
                 var dueDateTime = DateTime.ParseExact($"{scheduler.DueDate} {scheduler.Time}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
                 var delay = dueDateTime - DateTime.Now;
