@@ -12,5 +12,6 @@ namespace PerformanceAssessmentApi.Repositories
         Task<IEnumerable<AssignSchedulerDto>> GetAssignSchedulerByEmployeeId(int employeeId);
         Task<int> UpdateAssignScheduler(AssignScheduler assignScheduler);
         Task<int> DeleteAssignScheduler(int id);
+        Task<AssignSchedulerDto> GetAssignSchedulerByEmployeeIdAndAssessmentId(int employeeId, int assessmentId);
     }
 }
