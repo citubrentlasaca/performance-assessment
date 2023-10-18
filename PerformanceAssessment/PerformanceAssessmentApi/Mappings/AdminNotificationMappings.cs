@@ -11,7 +11,9 @@ namespace PerformanceAssessmentApi.Mappings
         {
             CreateMap<AdminNotificationCreationDto, AdminNotification>(MemberList.None)
                 .ForMember(dto => dto.EmployeeId, opt => opt.MapFrom(st => (st.EmployeeId!)))
-                .ForMember(dto => dto.AssessmentId, opt => opt.MapFrom(st => (st.AssessmentId!)))
+                .ForMember(dto => dto.EmployeeName, opt => opt.MapFrom(st => (st.EmployeeName!)))
+                .ForMember(dto => dto.AssessmentTitle, opt => opt.MapFrom(st => (st.AssessmentTitle!)))
+                .ForMember(dto => dto.TeamName, opt => opt.MapFrom(st => (st.TeamName!)))
                 .ForMember(dto => dto.DateTimeCreated, opt => opt.MapFrom(st => StringUtil.GetCurrentDateTime()));
         }
     }

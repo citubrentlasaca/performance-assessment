@@ -29,7 +29,9 @@ namespace PerformanceAssessmentApi.Controllers
         ///     POST /api/admin-notifications
         ///     {
         ///         "employeeId": 1,
-        ///         "assessmentId": 1
+        ///         "employeeName": "John Doe",
+        ///         "assessmentTitle": "Team Evaluation",
+        ///         "teamName": "Team WorkPA"
         ///     }
         ///
         /// </remarks>
@@ -93,8 +95,8 @@ namespace PerformanceAssessmentApi.Controllers
         /// <summary>
         /// Gets the admin notification by id
         /// </summary>
-        /// <param name="employeeId">Admin notification id</param>
-        /// <returns>Returns the details of an admin notification with id <paramref name="employeeId"/></returns>
+        /// <param name="id">Admin notification id</param>
+        /// <returns>Returns the details of an admin notification with id <paramref name="id"/></returns>
         /// <response code="200">Admin notification found</response>
         /// <response code="404">Admin notification not found</response>
         /// <response code="500">Internal server error</response>
@@ -103,12 +105,12 @@ namespace PerformanceAssessmentApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAdminNotificationById(int employeeId)
+        public async Task<IActionResult> GetAdminNotificationById(int id)
         {
             try
             {
                 // Check if admin notification exists
-                var foundAdminNotification = await _adminNotificationService.GetAdminNotificationById(employeeId);
+                var foundAdminNotification = await _adminNotificationService.GetAdminNotificationById(id);
 
                 if (foundAdminNotification == null)
                 {
@@ -127,8 +129,8 @@ namespace PerformanceAssessmentApi.Controllers
         /// <summary>
         /// Gets the admin notification by employee id
         /// </summary>
-        /// <param name="employeeId">Admin notification id</param>
-        /// <returns>Returns the details of an admin notification with id <paramref name="employeeId"/></returns>
+        /// <param name="employeeId">Employee id</param>
+        /// <returns>Returns the details of an admin notification with employee id <paramref name="employeeId"/></returns>
         /// <response code="200">Admin notification found</response>
         /// <response code="404">Admin notification not found</response>
         /// <response code="500">Internal server error</response>
