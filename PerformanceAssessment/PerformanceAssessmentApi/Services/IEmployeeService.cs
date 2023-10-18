@@ -11,7 +11,7 @@ namespace PerformanceAssessmentApi.Services
         Task<Employee> CreateEmployeeWithTeamCode(EmployeeTeamInfoDto employee);
         Task<IEnumerable<EmployeeDto>> GetAllEmployees();
         Task<EmployeeDto> GetEmployeeById(int id);
-        Task<EmployeeDto> GetEmployeeByUserId(int userId);
+        Task<IEnumerable<EmployeeDto>> GetEmployeeByUserId(int userId);
         Task<IEnumerable<EmployeeDto>> GetEmployeeByTeamId(int teamId);
         Task<int> UpdateEmployee(int id, EmployeeUpdationDto employee);
         Task<int> DeleteEmployee(int id);
