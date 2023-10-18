@@ -3,11 +3,16 @@ import './Login.css';
 import loginpic from "../Images/loginpic.png";
 import logo from "../Images/WorkPA-logo.png";
 import { Stack } from '@mui/material';
-import axios from 'axios'; 
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 function Login() {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -20,8 +25,6 @@ function Login() {
       [name]: value,
     });
   };
-
-  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,13 +50,19 @@ function Login() {
 
         navigate('/home');
       } else {
-        setErrorMessage('Invalid email or password'); 
+        setErrorMessage('Invalid email or password');
         console.error('API request failed:', response.status);
       }
     } catch (error) {
       console.error('An error occurred:', error);
     }
   };
+
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
 
   return (
     <div className="login-container">
@@ -93,34 +102,37 @@ function Login() {
               style={{
                 width: '100%'
               }}
-              name="email" 
-              value={formData.email} 
-              onChange={handleChange} 
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               required
             />
             <b>Password</b>
-            <input
-              type='password'
-              className='form-control'
-              style={{
-                width: '100%'
-              }}
-              name="password"
-              value={formData.password} 
-              onChange={handleChange} 
-              required
-            />
+            <div className="login-password-input">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className='form-control'
+                style={{
+                  width: '100%'
+                }}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="button"
+                className="login-password-toggle"
+                onClick={togglePasswordVisibility}
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </button>
+            </div>
+
           </Stack>
           <button
             type='button'
-            style={{
-              width: '100px',
-              height: '38px',
-              backgroundImage: 'linear-gradient(to right, #0273ff , #00c6ff)',
-              border: 'none',
-              borderRadius: '6px',
-              color: 'white'
-            }}
+            className="login-button"
             onClick={handleSubmit}
           >
             Login
@@ -128,7 +140,7 @@ function Login() {
         </Stack>
       </div>
       {errorMessage && (
-        <div className="error-message" style={{padding: '10px'}}>
+        <div className="error-message" style={{ padding: '10px' }}>
           <span style={{ color: 'red' }}>{errorMessage}</span>
         </div>
       )}
