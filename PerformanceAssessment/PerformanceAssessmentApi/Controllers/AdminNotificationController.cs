@@ -142,7 +142,7 @@ namespace PerformanceAssessmentApi.Controllers
             try
             {
                 // Check if admin notification exists
-                var foundAdminNotification = await _adminNotificationService.GetAdminNotificationById(employeeId);
+                var foundAdminNotification = await _adminNotificationService.GetAdminNotificationByEmployeeId(employeeId);
 
                 if (foundAdminNotification == null)
                 {
