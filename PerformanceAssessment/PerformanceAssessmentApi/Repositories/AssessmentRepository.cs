@@ -17,8 +17,8 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<int> CreateAssessment(Assessment assessment)
         {
-            var sql = "INSERT INTO [dbo].[Assessment] ([Title], [Description], [DateTimeCreated], [DateTimeUpdated]) " +
-                      "VALUES (@Title, @Description, @DateTimeCreated, @DateTimeUpdated); " +
+            var sql = "INSERT INTO [dbo].[Assessment] ([EmployeeId], [Title], [Description], [DateTimeCreated], [DateTimeUpdated]) " +
+                      "VALUES (@EmployeeId, @Title, @Description, @DateTimeCreated, @DateTimeUpdated); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
@@ -104,6 +104,16 @@ namespace PerformanceAssessmentApi.Repositories
                     }
                     return assessment;
                 }
+            }
+        }
+
+        public async Task<IEnumerable<AssessmentDto>> GetAssessmentsByEmployeeId(int employeeId)
+        {
+            var sql = "SELECT * FROM [dbo].[Assessment] WHERE [EmployeeId] = @EmployeeId;";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QueryAsync<AssessmentDto>(sql, new { EmployeeId = employeeId });
             }
         }
     }
