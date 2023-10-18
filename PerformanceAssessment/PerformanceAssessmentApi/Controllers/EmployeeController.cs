@@ -87,7 +87,7 @@ namespace PerformanceAssessmentApi.Controllers
         /// <response code="201">Successfully created a new employee</response>
         /// <response code="400">Employee details are invalid</response>
         /// <response code="404">Team not found</response>
-        /// <response code="409">Conflict/response>
+        /// <response code="409">Conflict</response>
         /// <response code="500">Internal server error</response>
         [HttpPost("withteamcode", Name = "CreateEmployeeWithTeamCode")]
         [Consumes("application/json")]
