@@ -16,27 +16,27 @@ namespace PerformanceAssessmentApi.Services
             _mapper = mapper;
         }
 
-        public async Task<EmployeeAssignSchedulerNotification> CreateEmployeeNotification(EmployeeAssignSchedulerNotificationCreationDto employeeNotification)
+        public async Task<EmployeeAssignSchedulerNotification> CreateEmployeeAssignSchedulerNotification(EmployeeAssignSchedulerNotificationCreationDto employeeNotification)
         {
             var model = _mapper.Map<EmployeeAssignSchedulerNotification>(employeeNotification);
-            model.Id = await _repository.CreateEmployeeNotification(model);
+            model.Id = await _repository.CreateEmployeeAssignSchedulerNotification(model);
 
             return model;
         }
 
-        public Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeNotifications()
+        public Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeAssignSchedulerNotifications()
         {
-            return _repository.GetAllEmployeeNotifications();
+            return _repository.GetAllEmployeeAssignSchedulerNotifications();
         }
 
-        public Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeNotificationsByEmployeeId(int employeeId)
+        public Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeAssignSchedulerNotificationsByEmployeeId(int employeeId)
         {
-            return _repository.GetAllEmployeeNotificationsByEmployeeId(employeeId);
+            return _repository.GetAllEmployeeAssignSchedulerNotificationsByEmployeeId(employeeId);
         }
 
-        public Task<EmployeeAssignSchedulerNotificationDto> GetEmployeeNotificationById(int id)
+        public Task<EmployeeAssignSchedulerNotificationDto> GetEmployeeAssignSchedulerNotificationById(int id)
         {
-            return _repository.GetEmployeeNotificationById(id);
+            return _repository.GetEmployeeAssignSchedulerNotificationById(id);
         }
     }
 }

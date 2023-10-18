@@ -5,12 +5,12 @@ namespace PerformanceAssessmentApi.Services
 {
     public interface IEmployeeAssignSchedulerNotificationService
     {
-        Task<EmployeeAssignSchedulerNotification> CreateEmployeeNotification(EmployeeAssignSchedulerNotificationCreationDto employeeNotification);
+        Task<EmployeeAssignSchedulerNotification> CreateEmployeeAssignSchedulerNotification(EmployeeAssignSchedulerNotificationCreationDto employeeNotification);
 
-        Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeNotifications();
+        Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeAssignSchedulerNotifications();
 
-        Task<EmployeeAssignSchedulerNotificationDto> GetEmployeeNotificationById(int id);
+        Task<EmployeeAssignSchedulerNotificationDto> GetEmployeeAssignSchedulerNotificationById(int id);
 
-        Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeNotificationsByEmployeeId(int employeeId);
+        Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeAssignSchedulerNotificationsByEmployeeId(int employeeId);
     }
 }
