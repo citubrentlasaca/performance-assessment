@@ -12,5 +12,6 @@ namespace PerformanceAssessmentApi.Services
         Task<int> UpdateAssignScheduler(int id, AssignSchedulerUpdationDto schedule);
         Task<int> DeleteAssignScheduler(int id);
         Task SetIsAnsweredToFalse(int id);
+        Task<AssignSchedulerDto> GetAssignSchedulerByEmployeeIdAndAssessmentId(int employeeId, int assessmentId);
     }
 }

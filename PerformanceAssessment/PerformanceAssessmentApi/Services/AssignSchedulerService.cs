@@ -70,5 +70,9 @@ namespace PerformanceAssessmentApi.Services
             }
         }
 
+        public async Task<AssignSchedulerDto> GetAssignSchedulerByEmployeeIdAndAssessmentId(int employeeId, int assessmentId)
+        {
+            return await _repository.GetAssignSchedulerByEmployeeIdAndAssessmentId(employeeId, assessmentId);
+        }
     }
 }
