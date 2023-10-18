@@ -11,6 +11,7 @@ function Templates() {
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
+    const employee = JSON.parse(localStorage.getItem("employeeData"));
 
     const handleOpen = (assessmentId) => {
         setSelectedAssessmentId(assessmentId);
@@ -21,7 +22,7 @@ function Templates() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const assessmentResponse = await fetch(`https://localhost:7236/api/assessments`);
+                const assessmentResponse = await fetch(`https://localhost:7236/api/assessments/employee/${employee.id}`);
                 const assessmentData = await assessmentResponse.json();
                 setAssessments(assessmentData);
                 setLoading(false);
