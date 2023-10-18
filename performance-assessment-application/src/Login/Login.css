@@ -70,3 +70,48 @@ body {
 .darkblue-text {
   color: #055C9D;
 }
+
+.login-password-input {
+  position: relative;
+  width: 100%;
+}
+
+.login-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.login-button {
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  width: 140px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(39, 198, 217, 0.90);
+  background: linear-gradient(254deg, #0273FF 40.22%, #00C0FE 76.98%, #00C0FE 88.25%);
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+
+  &:hover {
+    background: linear-gradient(254deg, #00C0FE 40.22%, #0273FF 76.98%, #0273FF 88.25%);
+    border-color: rgba(39, 198, 217, 1);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    background: linear-gradient(254deg, #00C0FE 40.22%, #00C0FE 76.98%, #0273FF 88.25%);
+    border-color: rgba(39, 198, 217, 1);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  }
+}
