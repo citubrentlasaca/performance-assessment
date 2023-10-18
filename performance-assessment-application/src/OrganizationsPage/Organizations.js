@@ -24,7 +24,7 @@ function Organizations() {
     async function fetchEmployeeDetails(teamId, userId) {
         try {
           const response = await axios.get(
-            `https://localhost:7236/api/employees?teamId=${teamId}&userId=${userId}`
+            `https://localhost:7236/api/employees/get-by-team-and-user?teamId=${teamId}&userId=${userId}`
           );
           return response.data;
         } catch (error) {
@@ -32,6 +32,13 @@ function Organizations() {
           return "";
         }
     }
+
+    const handleCardClick = async (team) => {
+        console.log(team.id);
+        const employeeData = await fetchEmployeeDetails(team.id, userId);
+        localStorage.setItem("employeeData", JSON.stringify(employeeData));
+        navigate(`/organizations/${team.id}`);
+    };
 
     return (
         <NavBar>
@@ -55,11 +62,7 @@ function Organizations() {
                     <Grid item key={team.id} xs={12} sm={6} md={4} lg={3}>
                         <TeamCard
                         organization={team.organization}
-                        onClick={async () => {
-                            const employeeData = await fetchEmployeeDetails(team.id, userId);
-                            localStorage.setItem("employeeData", JSON.stringify(employeeData));
-                            navigate(`/organizations/${team.id}`);
-                        }}
+                        onClick={() => handleCardClick(team)}
                         />
                     </Grid>
                 ))}
