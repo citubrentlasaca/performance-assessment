@@ -7,6 +7,7 @@ function TopBarThree() {
     const navigate = useNavigate();
 
     const navigateToOrganizations = () => {
+        localStorage.removeItem('employeeData');
         navigate('/organizations');
     };
 

@@ -1,10 +1,21 @@
 import React from "react";
 import { Box, Stack } from "@mui/material";
 import groupPhoto from './Images/group.png';
+import { useNavigate } from "react-router-dom";
 
 const TeamCard = ({ organization, onClick }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
-    <a href={onClick} style={{ textDecoration: "none" }}>
+    <div onClick={handleCardClick} style={{ textDecoration: "none", cursor: "pointer" }}>
       <Box
         sx={{
           width: "230px",
@@ -33,7 +44,7 @@ const TeamCard = ({ organization, onClick }) => {
           <b style={{ color: "black" }}>{organization}</b>
         </Stack>
       </Box>
-    </a>
+    </div>
   );
 };
 
