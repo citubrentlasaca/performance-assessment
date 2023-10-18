@@ -30,6 +30,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     POST /api/assessments
         ///     {
+        ///         "employeeId": 1,
         ///         "title": "Software Engineering 1",
         ///         "description": "SPMP"
         ///     }
@@ -242,6 +243,39 @@ namespace PerformanceAssessmentApi.Controllers
                 }
 
                 return Ok(foundAssessmentItems);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
+
+        /// <summary>
+        /// Gets all assessments for a specific employee
+        /// </summary>
+        /// <param name="employeeId">Employee ID</param>
+        /// <returns>Returns all assessments for the specified employee</returns>
+        /// <response code="200">Assessments found</response>
+        /// <response code="204">No assessments found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet("employee/{employeeId}", Name = "GetAssessmentsByEmployeeId")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAssessmentsByEmployeeId(int employeeId)
+        {
+            try
+            {
+                var assessments = await _assessmentService.GetAssessmentsByEmployeeId(employeeId);
+
+                if (assessments.IsNullOrEmpty())
+                {
+                    return NoContent();
+                }
+
+                return Ok(assessments);
             }
             catch (Exception e)
             {
