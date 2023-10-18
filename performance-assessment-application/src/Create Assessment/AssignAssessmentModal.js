@@ -10,6 +10,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
     const [selectedUserIds, setSelectedUserIds] = useState([]);
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
+    const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
 
     const handleTimeChange = (event) => {
         setTime(event.target.value);
@@ -31,7 +32,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const employeesResponse = await fetch(`https://localhost:7236/api/employees/teams/${1}`);
+                const employeesResponse = await fetch(`https://localhost:7236/api/employees/teams/${employeeStorage.teamId}`);
                 const employeesData = await employeesResponse.json();
 
                 const usersData = await Promise.all(
@@ -63,7 +64,6 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
 
         const allUserIds = filteredUsers.map((user) => user.id);
         setSelectedUserIds(selectAllChecked ? [] : allUserIds);
-        console.log(selectedUserIds);
     };
 
 
@@ -78,7 +78,6 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
         }
 
         setSelectedUserIds(newSelectedUserIds);
-        console.log(selectedUserIds);
     };
 
     const handleClear = () => {
@@ -88,7 +87,6 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
         });
 
         setSelectedUserIds([]);
-        console.log(selectedUserIds);
     };
 
     const handlePublishClick = async () => {
@@ -99,7 +97,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
 
                 if (Array.isArray(employeeData)) {
                     for (const employee of employeeData) {
-                        if (employee.teamId === 1) {
+                        if (employee.teamId === employeeStorage.teamId) {
                             const employeeId = employee.id;
                             const schedulerData = {
                                 employeeIds: [employeeId],

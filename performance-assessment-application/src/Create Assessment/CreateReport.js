@@ -11,6 +11,7 @@ function CreateReport() {
     const [showAlert, setShowAlert] = useState(false);
     const [showPublishSuccessAlert, setShowPublishSuccessAlert] = useState(false);
     const [deletedChoiceIds, setDeletedChoiceIds] = useState([]);
+    const employee = JSON.parse(localStorage.getItem("employeeData"));
     const [questions, setQuestions] = useState([
         {
             id: 1,
@@ -59,6 +60,7 @@ function CreateReport() {
             }
 
             const assessmentResponse = await axios.post('https://localhost:7236/api/assessments', {
+                employeeId: employee.id,
                 title,
                 description,
             });
@@ -93,7 +95,7 @@ function CreateReport() {
             console.log('Assessment has been posted successfully');
             setShowPublishSuccessAlert(true);
             setTimeout(() => {
-                navigate('/organizations/adminassessments');
+                navigate(`/organizations/${employee.teamId}/admin-assessments`);
             }, 3000);
         } catch (error) {
             console.error('Error while posting assessment:', error);
@@ -101,7 +103,7 @@ function CreateReport() {
     }
 
     const discardAssessment = () => {
-        navigate('/organizations/adminassessments');
+        navigate(`/organizations/${employee.teamId}/admin-assessments`);
     }
 
     return (

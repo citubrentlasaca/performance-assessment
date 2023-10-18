@@ -77,7 +77,7 @@ function TopBarTwo() {
                         </a>
                     </li>
                     <li class="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <a class="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" 
+                        <a class="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center"
                             href={`/organizations/${organizationId}/admin-assessments`}
                             style={{
                                 color: 'white',
@@ -87,7 +87,7 @@ function TopBarTwo() {
                         </a>
                     </li>
                     <li class="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <a class="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" 
+                        <a class="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center"
                             href={`/organizations/${organizationId}/admin-analytics`}
                             style={{
                                 color: 'white',
@@ -98,8 +98,8 @@ function TopBarTwo() {
                     </li>
                     <li class="nav-item h-100 col d-flex justify-content-center align-items-center">
                         <button type="button" class="btn" onClick={navigateToOrganizations}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z" />
                             </svg>
                         </button>
                     </li>

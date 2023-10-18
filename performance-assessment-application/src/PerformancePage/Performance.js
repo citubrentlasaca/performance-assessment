@@ -10,13 +10,12 @@ function Performance() {
     const [completedAssessments, setCompletedAssessments] = useState([]);
     const [activeTab, setActiveTab] = useState('Performance Report');
     const navigate = useNavigate();
-    const employee = JSON.parse(localStorage.getItem("employeeData"));
+    const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
 
     useEffect(() => {
         const fetchAssessments = async () => {
             try {
-                const employeeId = employee.id;
-                const schedulersResponse = await axios.get(`https://localhost:7236/api/schedulers/employees/${employeeId}`);
+                const schedulersResponse = await axios.get(`https://localhost:7236/api/schedulers/employees/${employeeStorage.id}`);
 
                 if (schedulersResponse.data) {
                     const schedulers = schedulersResponse.data;
@@ -85,7 +84,7 @@ function Performance() {
                     }}
                 >
                     <ul className="nav">
-                        <li className={`nav-item ${activeTab === 'Upcoming' ? 'active' : ''}`}>
+                        <li className={`nav-item ${activeTab === 'Performance Report' ? 'active' : ''}`}>
                             <b
                                 className="nav-link"
                                 href="#"

@@ -36,7 +36,7 @@ function TopBarThree() {
             >
                 <ul className="nav h-100 w-100 d-flex justify-content-center align-items-center">
                     <li className="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <a className="nav-link h-100 w-100 p-0" 
+                        <a className="nav-link h-100 w-100 p-0"
                             href={`/organizations/${organizationId}`}
                             style={{
                                 color: '#055c9d',
@@ -78,7 +78,7 @@ function TopBarThree() {
                         </Link>
                     </li>
                     <li className="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <Link className="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" 
+                        <Link className="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center"
                             to={`/organizations/${organizationId}/employee-assessments`}
                             style={{
                                 color: 'white',
@@ -88,7 +88,7 @@ function TopBarThree() {
                         </Link>
                     </li>
                     <li className="nav-item h-100 col d-flex justify-content-center align-items-center">
-                        <a className="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center" 
+                        <a className="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center"
                             href={`/organizations/${organizationId}/employee-analytics`}
                             style={{
                                 color: 'white',
@@ -99,8 +99,8 @@ function TopBarThree() {
                     </li>
                     <li className="nav-item h-100 col d-flex justify-content-center align-items-center">
                         <button type="button" className="btn" onClick={navigateToOrganizations}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" className="bi bi-three-dots" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z" />
                             </svg>
                         </button>
                     </li>
