@@ -14,7 +14,7 @@ namespace PerformanceAssessmentApi.Repositories
             _context = context;
         }
 
-        public async Task<int> CreateEmployeeNotification(EmployeeAssignSchedulerNotification employeeNotification)
+        public async Task<int> CreateEmployeeAssignSchedulerNotification(EmployeeAssignSchedulerNotification employeeNotification)
         {
             var sql = "INSERT INTO [dbo].[EmployeeAssignSchedulerNotification] ([EmployeeId], [AssessmentId], [DateTimeCreated]) " +
                       "VALUES (@EmployeeId, @AssessmentId, @DateTimeCreated); " +
@@ -26,7 +26,7 @@ namespace PerformanceAssessmentApi.Repositories
             }
         }
 
-        public async Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeNotifications()
+        public async Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeAssignSchedulerNotifications()
         {
             var sql = "SELECT * FROM [dbo].[EmployeeAssignSchedulerNotification];";
 
@@ -36,7 +36,7 @@ namespace PerformanceAssessmentApi.Repositories
             }
         }
 
-        public async Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeNotificationsByEmployeeId(int employeeId)
+        public async Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeAssignSchedulerNotificationsByEmployeeId(int employeeId)
         {
             var sql = "SELECT * FROM [dbo].[EmployeeAssignSchedulerNotification] WHERE [EmployeeId] = @EmployeeId;";
 
@@ -46,7 +46,7 @@ namespace PerformanceAssessmentApi.Repositories
             }
         }
 
-        public async Task<EmployeeAssignSchedulerNotificationDto> GetEmployeeNotificationById(int id)
+        public async Task<EmployeeAssignSchedulerNotificationDto> GetEmployeeAssignSchedulerNotificationById(int id)
         {
             var sql = "SELECT * FROM [dbo].[EmployeeAssignSchedulerNotification] WHERE [Id] = @Id;";
 
