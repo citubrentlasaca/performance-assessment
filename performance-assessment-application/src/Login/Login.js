@@ -36,6 +36,15 @@ function Login() {
       console.log(response);
       if (response.status === 200) {
         console.log('Successfully logged in!');
+
+        const token = response.data.token;
+        const userData = response.data.userData;
+
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', userData.id);
+        localStorage.setItem('firstName', userData.firstName);
+        localStorage.setItem('lastName', userData.lastName);
+
         navigate('/home');
       } else {
         setErrorMessage('Invalid email or password'); 
