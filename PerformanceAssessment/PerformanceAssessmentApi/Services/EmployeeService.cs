@@ -86,5 +86,10 @@ namespace PerformanceAssessmentApi.Services
         {
             return await _repository.GetEmployeeDetailsById(id);
         }
+
+        public async Task<EmployeeDto> GetEmployeeByTeamIdAndUserId(int teamId, int userId)
+        {
+            return await _repository.GetEmployeeByTeamIdAndUserId(teamId, userId);
+        }
     }
 }

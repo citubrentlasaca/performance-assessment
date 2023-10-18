@@ -5,12 +5,12 @@ namespace PerformanceAssessmentApi.Repositories
 {
     public interface IEmployeeAssignSchedulerNotificationRepository
     {
-        Task<int> CreateEmployeeNotification(EmployeeAssignSchedulerNotification employeeNotification);
+        Task<int> CreateEmployeeAssignSchedulerNotification(EmployeeAssignSchedulerNotification employeeNotification);
 
-        Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeNotifications();
+        Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeAssignSchedulerNotifications();
 
-        Task<EmployeeAssignSchedulerNotificationDto> GetEmployeeNotificationById(int id);
+        Task<EmployeeAssignSchedulerNotificationDto> GetEmployeeAssignSchedulerNotificationById(int id);
 
-        Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeNotificationsByEmployeeId(int employeeId);
+        Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeAssignSchedulerNotificationsByEmployeeId(int employeeId);
     }
 }

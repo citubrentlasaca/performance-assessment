@@ -29,7 +29,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///     POST /api/employee-assignscheduler-notifications
         ///     {
         ///         "employeeId": 1,
-        ///         "assessmentId": 1,
+        ///         "assessmentId": 1
         ///     }
         ///
         /// </remarks>
@@ -42,14 +42,14 @@ namespace PerformanceAssessmentApi.Controllers
         [ProducesResponseType(typeof(EmployeeAssignSchedulerNotificationCreationDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateEmployeeNotification([FromBody] EmployeeAssignSchedulerNotificationCreationDto employeeNotification)
+        public async Task<IActionResult> CreateEmployeeAssignSchedulerNotification([FromBody] EmployeeAssignSchedulerNotificationCreationDto employeeNotification)
         {
             try
             {
                 // Create a new employee notification
-                var newEmployeeNotification = await _employeeNotificationService.CreateEmployeeNotification(employeeNotification);
+                var newEmployeeNotification = await _employeeNotificationService.CreateEmployeeAssignSchedulerNotification(employeeNotification);
 
-                return CreatedAtRoute("GetEmployeeNotificationById", new { id = newEmployeeNotification.Id }, newEmployeeNotification);
+                return CreatedAtRoute("GetEmployeeAssignSchedulerNotificationById", new { id = newEmployeeNotification.Id }, newEmployeeNotification);
             }
             catch (Exception e)
             {
@@ -70,11 +70,11 @@ namespace PerformanceAssessmentApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllEmployeeNotifications()
+        public async Task<IActionResult> GetAllEmployeeAssignSchedulerNotifications()
         {
             try
             {
-                var employeeNotifications = await _employeeNotificationService.GetAllEmployeeNotifications();
+                var employeeNotifications = await _employeeNotificationService.GetAllEmployeeAssignSchedulerNotifications();
 
                 if (employeeNotifications.IsNullOrEmpty())
                 {
@@ -103,12 +103,12 @@ namespace PerformanceAssessmentApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetEmployeeNotificationById(int id)
+        public async Task<IActionResult> GetEmployeeAssignSchedulerNotificationById(int id)
         {
             try
             {
                 // Check if employee notification exists
-                var foundEmployeeNotification = await _employeeNotificationService.GetEmployeeNotificationById(id);
+                var foundEmployeeNotification = await _employeeNotificationService.GetEmployeeAssignSchedulerNotificationById(id);
 
                 if (foundEmployeeNotification == null)
                 {
@@ -132,17 +132,17 @@ namespace PerformanceAssessmentApi.Controllers
         /// <response code="200">Employee notification found</response>
         /// <response code="404">Employee notification not found</response>
         /// <response code="500">Internal server error</response>
-        [HttpGet("employees/{employeeId}", Name = "GetEmployeeAssignSchedulerNotificationByEmployeeId")]
+        [HttpGet("employees/{employeeId}", Name = "GetEmployeeAssignSchedulerNotificationsByEmployeeId")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetEmployeeNotificationByEmployeeId(int employeeId)
+        public async Task<IActionResult> GetEmployeeAssignSchedulerNotificationsByEmployeeId(int employeeId)
         {
             try
             {
                 // Check if employee notification exists
-                var foundEmployeeNotification = await _employeeNotificationService.GetAllEmployeeNotificationsByEmployeeId(employeeId);
+                var foundEmployeeNotification = await _employeeNotificationService.GetAllEmployeeAssignSchedulerNotificationsByEmployeeId(employeeId);
 
                 if (foundEmployeeNotification == null)
                 {
