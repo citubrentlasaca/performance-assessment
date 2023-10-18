@@ -114,5 +114,15 @@ namespace PerformanceAssessmentApi.Repositories
                 return await con.ExecuteScalarAsync<int>(sql, new { Id = id });
             }
         }
+
+        public async Task<AssignSchedulerDto> GetAssignSchedulerByEmployeeIdAndAssessmentId(int employeeId, int assessmentId)
+        {
+            var sql = "SELECT * FROM [dbo].[AssignScheduler] WHERE [EmployeeId] = @EmployeeId AND [AssessmentId] = @AssessmentId;";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QuerySingleOrDefaultAsync<AssignSchedulerDto>(sql, new { EmployeeId = employeeId, AssessmentId = assessmentId });
+            }
+        }
     }
 }
