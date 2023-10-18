@@ -115,7 +115,7 @@ function Employees() {
                                 <tr>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Position</th>
+                                    <th>Status</th>
                                     <th>Date Created</th>
                                 </tr>
                             </thead>
@@ -124,7 +124,7 @@ function Employees() {
                                 <tr key={index}>
                                     <td>{employee.firstName} {employee.lastName}</td>
                                     <td>{employee.emailAddress}</td>
-                                    <td>{employee.role}</td>
+                                    <td>{employee.status}</td>
                                     <td>{employee.dateTimeCreated}</td>
                                 </tr>
                             ))}
