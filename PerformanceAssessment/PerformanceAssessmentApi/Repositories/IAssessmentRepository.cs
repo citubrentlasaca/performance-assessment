@@ -16,5 +16,7 @@ namespace PerformanceAssessmentApi.Repositories
         Task<int> DeleteAssessment(int id);
 
         Task<AssessmentItemDto?> GetAssessmentItemsById(int id);
+
+        Task<IEnumerable<AssessmentDto>> GetAssessmentsByEmployeeId(int employeeId);
     }
 }

@@ -51,5 +51,10 @@ namespace PerformanceAssessmentApi.Services
         {
             return _repository.GetAssessmentItemsById(id);
         }
+
+        public Task<IEnumerable<AssessmentDto>> GetAssessmentsByEmployeeId(int employeeId)
+        {
+            return _repository.GetAssessmentsByEmployeeId(employeeId);
+        }
     }
 }
