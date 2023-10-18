@@ -13,6 +13,7 @@ function UpdateAssessment() {
     const [showAlert, setShowAlert] = useState(false);
     const [showUpdateSuccessAlert, setShowUpdateSuccessAlert] = useState(false);
     const [deletedChoiceIds, setDeletedChoiceIds] = useState([]);
+    const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
     const [questions, setQuestions] = useState([
         {
             id: 1,
@@ -234,7 +235,7 @@ function UpdateAssessment() {
 
             setShowUpdateSuccessAlert(true);
             setTimeout(() => {
-                navigate('/organizations/adminassessments');
+                navigate(`/organizations/${employeeStorage.teamId}/admin-assessments`);
             }, 3000);
             console.log('Assessment has been updated successfully');
         } catch (error) {
@@ -243,7 +244,7 @@ function UpdateAssessment() {
     };
 
     const discardChanges = () => {
-        navigate('/organizations/adminassessments');
+        navigate(`/organizations/${employeeStorage.teamId}/admin-assessments`);
     }
 
     return (

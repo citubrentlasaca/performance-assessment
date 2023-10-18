@@ -15,13 +15,28 @@ namespace PerformanceAssessmentApi.Controllers
         private readonly IAssignSchedulerService _assignSchedulerService;
         private readonly IAssessmentService _assessmentService;
         private readonly IEmployeeAssignSchedulerNotificationService _employeeAssignSchedulerNotificationService;
+        private readonly IAdminNotificationService _adminNotificationService;
+        private readonly IEmployeeService _employeeService;
+        private readonly IUserService _userService;
+        private readonly ITeamService _teamService;
         private readonly ILogger<AssignSchedulerController> _logger;
 
-        public AssignSchedulerController(IAssignSchedulerService assignSchedulerService, IAssessmentService assessmentService, IEmployeeAssignSchedulerNotificationService employeeAssignSchedulerNotificationService, ILogger<AssignSchedulerController> logger)
+        public AssignSchedulerController(IAssignSchedulerService assignSchedulerService,
+                                         IAssessmentService assessmentService,
+                                         IEmployeeAssignSchedulerNotificationService employeeAssignSchedulerNotificationService,
+                                         IAdminNotificationService adminNotificationService,
+                                         IEmployeeService employeeService,
+                                         IUserService userService,
+                                         ITeamService teamService,
+                                         ILogger<AssignSchedulerController> logger)
         {
             _assignSchedulerService = assignSchedulerService;
             _assessmentService = assessmentService;
             _employeeAssignSchedulerNotificationService = employeeAssignSchedulerNotificationService;
+            _adminNotificationService = adminNotificationService;
+            _employeeService = employeeService;
+            _userService = userService;
+            _teamService = teamService;
             _logger = logger;
         }
 
@@ -65,24 +80,38 @@ namespace PerformanceAssessmentApi.Controllers
                 var insertedIds = await _assignSchedulerService.CreateAssignSchedulers(assignScheduler.EmployeeIds, assignScheduler.Scheduler);
                 var scheduler = await _assignSchedulerService.GetAssignSchedulerById(insertedIds.First());
                 var assessment = await _assessmentService.GetAssessmentById(scheduler.AssessmentId);
+                var employee = await _employeeService.GetEmployeeById(scheduler.EmployeeId);
+                var user = await _userService.GetUserById(employee.UserId);
+                var team = await _teamService.GetTeamById(employee.TeamId);
                 var employeeNotification = new EmployeeAssignSchedulerNotificationCreationDto
                 {
                     EmployeeId = scheduler.EmployeeId,
                     AssessmentId = assessment.Id,
                 };
                 await _employeeAssignSchedulerNotificationService.CreateEmployeeAssignSchedulerNotification(employeeNotification);
+                var adminNotification = new AdminNotificationCreationDto
+                {
+                    EmployeeId = assessment.EmployeeId,
+                    EmployeeName = user.FirstName + " " + user.LastName,
+                    AssessmentTitle = assessment.Title,
+                    TeamName = team.Organization
+                };
 
                 var dueDateTime = DateTime.ParseExact($"{scheduler.DueDate} {scheduler.Time}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
                 var delay = dueDateTime - DateTime.Now;
+                var notificationDelay = TimeSpan.FromSeconds(5);
+                var notificationScheduledTime = dueDateTime - notificationDelay;
+                BackgroundJob.Schedule(() => _adminNotificationService.ExecuteAdminNotificationAsync(insertedIds.First(), adminNotification), notificationScheduledTime);
                 BackgroundJob.Schedule(() => DeleteAssignScheduler(scheduler.Id), delay);
-                if(assessment.Title == "Daily Performance Report")
+
+                if (assessment.Title == "Daily Performance Report")
                 {
                     RecurringJob.AddOrUpdate($"SetIsAnsweredToFalse_{scheduler.Id}", () => _assignSchedulerService.SetIsAnsweredToFalse(scheduler.Id), Cron.Daily, new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
                     });
-                }
-
+                }       
+                
                 return CreatedAtRoute("GetAssignSchedulerById", new { id = insertedIds }, insertedIds);
             }
             catch (Exception e)
