@@ -122,13 +122,13 @@ namespace PerformanceAssessmentApi.Repositories
             }
         }
 
-        public async Task<EmployeeDto> GetEmployeeByUserId(int userId)
+        public async Task<IEnumerable<EmployeeDto>> GetEmployeeByUserId(int userId)
         {
             var sql = "SELECT * FROM [dbo].[Employee] WHERE [UserId] = @UserId;";
 
             using (var con = _context.CreateConnection())
             {
-                return await con.QuerySingleOrDefaultAsync<EmployeeDto>(sql, new { UserId = userId });
+                return await con.QueryAsync<EmployeeDto>(sql, new { UserId = userId });
             }
         }
 
