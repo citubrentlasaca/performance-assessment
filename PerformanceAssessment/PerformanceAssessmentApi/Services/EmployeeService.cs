@@ -8,11 +8,13 @@ namespace PerformanceAssessmentApi.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _repository;
+        private readonly ITeamRepository _teamRepository;
         private readonly IMapper _mapper;
 
-        public EmployeeService(IEmployeeRepository repository, IMapper mapper)
+        public EmployeeService(IEmployeeRepository repository, ITeamRepository teamRepository, IMapper mapper)
         {
             _repository = repository;
+            _teamRepository = teamRepository;
             _mapper = mapper;
         }
 
@@ -40,7 +42,8 @@ namespace PerformanceAssessmentApi.Services
             {
                 var model = _mapper.Map<Employee>(employee);
                 model.Id = await _repository.CreateEmployeeWithTeamCode(employee);
-
+                var team = await _teamRepository.GetTeamByCode(employee.TeamCode);
+                model.TeamId = team.Id;
                 return model;
             }
             catch (Exception ex)
