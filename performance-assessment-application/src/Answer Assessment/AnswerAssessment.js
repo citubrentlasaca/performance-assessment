@@ -16,7 +16,7 @@ function AnswerAssessment() {
     const separator = ',';
     const [submissionComplete, setSubmissionComplete] = useState(false);
     const navigate = useNavigate();
-    const [employeeId, setEmployeeId] = useState(30);
+    const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
 
     const handleIncrement = (itemId) => {
         setCounterValues((prevValues) => ({
@@ -55,7 +55,6 @@ function AnswerAssessment() {
                     choicesByItemId[itemId] = choicesForItem;
                 });
                 setChoiceData(choicesByItemId);
-
                 setLoading(false);
             } catch (error) {
                 console.error(`Error fetching data:`, error);
@@ -70,7 +69,7 @@ function AnswerAssessment() {
         try {
             for (const item of itemData) {
                 const postData = {
-                    employeeId: employeeId,
+                    employeeId: employeeStorage.id,
                     itemId: item.id,
                     answerText: answerData[item.id]?.answerText || '',
                     selectedChoices: (answerData[item.id]?.selectedChoices || ['']).join(separator),
@@ -176,13 +175,15 @@ function AnswerAssessment() {
                     alignItems="center"
                     spacing={2}
                     sx={{
+                        width: '100%',
+                        height: '100%',
                         padding: '40px'
                     }}
                 >
                     <div
                         style={{
-                            height: "200px",
-                            width: "700px",
+                            height: "fit-content",
+                            width: "75%",
                             backgroundColor: "white",
                             borderRadius: "10px",
                             borderTop: "10px solid #27c6d9",
@@ -214,12 +215,16 @@ function AnswerAssessment() {
                         </Stack>
                     </div>
                     {itemData.map((item, index) => (
-                        <div key={index}>
+                        <div key={index}
+                            style={{
+                                width: '75%',
+                            }}
+                        >
                             {item.questionType === "Short answer" && (
                                 <div
                                     style={{
                                         height: "fit-content",
-                                        width: "700px",
+                                        width: "100%",
                                         backgroundColor: "white",
                                         borderRadius: "10px",
                                         display: 'flex',
@@ -263,7 +268,7 @@ function AnswerAssessment() {
                                 <div
                                     style={{
                                         height: "fit-content",
-                                        width: "700px",
+                                        width: "100%",
                                         backgroundColor: "white",
                                         borderRadius: "10px",
                                         display: 'flex',
@@ -305,7 +310,7 @@ function AnswerAssessment() {
                                 <div
                                     style={{
                                         height: "fit-content",
-                                        width: "700px",
+                                        width: "100%",
                                         backgroundColor: "white",
                                         borderRadius: "10px",
                                         display: 'flex',
@@ -357,7 +362,7 @@ function AnswerAssessment() {
                                 <div
                                     style={{
                                         height: "fit-content",
-                                        width: "700px",
+                                        width: "100%",
                                         backgroundColor: "white",
                                         borderRadius: "10px",
                                         display: 'flex',
@@ -403,7 +408,7 @@ function AnswerAssessment() {
                                 <div
                                     style={{
                                         height: "fit-content",
-                                        width: "700px",
+                                        width: "100%",
                                         backgroundColor: "white",
                                         borderRadius: "10px",
                                         display: 'flex',
