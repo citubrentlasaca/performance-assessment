@@ -19,6 +19,7 @@ function Notifications() {
 
                 const assessmentPromises = reversedData.map(async (item) => {
                     const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${item.assessmentId}`);
+                    const schedulerCheck = await axios.get(`https://localhost:7236/api/schedulers/assessments/${item.assessmentId}`);
                     const dateTimeCreated = new Date(item.dateTimeCreated);
                     const formattedDateTime = dateTimeCreated.toLocaleString('en-US', {
                         month: 'long',
@@ -28,10 +29,20 @@ function Notifications() {
                         minute: '2-digit',
                         hour12: true,
                     });
-                    return {
-                        assessmentData: assessmentResponse.data,
-                        dateTimeCreated: formattedDateTime,
-                    };
+
+                    if (schedulerCheck.data.length === 0) {
+                        return {
+                            hasAssessment: false,
+                            assessmentData: assessmentResponse.data,
+                            dateTimeCreated: formattedDateTime,
+                        };
+                    } else {
+                        return {
+                            hasAssessment: true,
+                            assessmentData: assessmentResponse.data,
+                            dateTimeCreated: formattedDateTime,
+                        };
+                    }
                 });
 
                 const assessmentData = await Promise.all(assessmentPromises);
@@ -249,18 +260,37 @@ function Notifications() {
                     }}
                 >
                     <p className='mb-0'>{assessment.dateTimeCreated}</p>
-                    <Link to={`/answerassessment/${assessment.assessmentData.id}`}
-                        style={{
-                            textDecoration: 'none',
-                            color: 'black',
-                            width: '100%',
-                        }}
-                    >
+                    {assessment.hasAssessment ? (
+                        <Link to={`/answerassessment/${assessment.assessmentData.id}`}
+                            style={{
+                                textDecoration: 'none',
+                                color: 'black',
+                                width: '100%',
+                            }}
+                        >
+                            <Box className='gap-2'
+                                sx={{
+                                    width: '100%',
+                                    height: 'fit-content',
+                                    backgroundColor: 'white',
+                                    borderRadius: '10px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'flex-start',
+                                    padding: '30px',
+                                }}
+                            >
+                                <b>You have been assigned an assessment</b>
+                                <p className='mb-0'>{assessment.assessmentData.title}</p>
+                            </Box>
+                        </Link>
+                    ) : (
                         <Box className='gap-2'
                             sx={{
                                 width: '100%',
                                 height: 'fit-content',
-                                backgroundColor: 'white',
+                                backgroundColor: '#a0cce0',
                                 borderRadius: '10px',
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -272,7 +302,8 @@ function Notifications() {
                             <b>You have been assigned an assessment</b>
                             <p className='mb-0'>{assessment.assessmentData.title}</p>
                         </Box>
-                    </Link>
+                    )}
+
                 </Stack>
             ))
             }

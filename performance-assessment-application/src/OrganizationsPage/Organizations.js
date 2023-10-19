@@ -13,27 +13,27 @@ function Organizations() {
 
     useEffect(() => {
         axios
-          .get(`https://localhost:7236/api/users/${userId}/teams`)
-          .then((response) => {
-            setUserTeams(response.data);
-          })
-          .catch((error) => {
-            console.error("Error fetching user teams:", error);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+            .get(`https://localhost:7236/api/users/${userId}/teams`)
+            .then((response) => {
+                setUserTeams(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching user teams:", error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }, [userId]);
-    
+
     async function fetchEmployeeDetails(teamId, userId) {
         try {
-          const response = await axios.get(
-            `https://localhost:7236/api/employees/get-by-team-and-user?teamId=${teamId}&userId=${userId}`
-          );
-          return response.data;
+            const response = await axios.get(
+                `https://localhost:7236/api/employees/get-by-team-and-user?teamId=${teamId}&userId=${userId}`
+            );
+            return response.data;
         } catch (error) {
-          console.error("Error fetching employee details:", error);
-          return "";
+            console.error("Error fetching employee details:", error);
+            return "";
         }
     }
 
@@ -75,7 +75,7 @@ function Organizations() {
                         minHeight: "60vh", // Adjust the height as needed
                     }}
                 >
-                    <Typography>No teams created or joined yet.</Typography>
+                    <p className="mb-0">No teams created or joined yet.</p>
                 </Stack>
             ) : (
                 <Grid container
@@ -87,8 +87,8 @@ function Organizations() {
                     {userTeams.map((team) => (
                         <Grid item key={team.id} xs={12} sm={6} md={4} lg={3}>
                             <TeamCard
-                            organization={team.organization}
-                            onClick={() => handleCardClick(team)}
+                                organization={team.organization}
+                                onClick={() => handleCardClick(team)}
                             />
                         </Grid>
                     ))}

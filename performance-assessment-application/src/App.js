@@ -19,6 +19,7 @@ import OrganizationDetails from './OrganizationsPage/OrganizationDetails';
 import Employees from './Employees/Employees';
 import CreateReport from './Create Assessment/CreateReport';
 import Notifications from './Notifications/Notifications';
+import ViewAnswers from './View Answers/ViewAnswers';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/createreport" element={<CreateReport />} />
           <Route path="/adminassessments/:id" element={<UpdateAssessment />} />
           <Route path="/organizations/:teamId/admin-assessments" element={<Templates />} />
+          <Route path="/organizations/:teamId/admin-assessments/:assessmentId" element={<ViewAnswers />} />
           <Route path="/answerassessment/:id" element={<AnswerAssessment />} />
           <Route path="/login" element={<Login />} />
           <Route path="/success" element={<SuccessPage />} />
@@ -46,12 +48,12 @@ function App() {
           <Route path="/join-team" element={<InvitationPage />} />
           <Route path="/success/:data" element={<SuccessPage />} />
           <Route path="/create-team" element={<TeamCreation />} />
-          <Route path="/organizations" element={<PrivateRoute redirectTo="/login" component={Organizations} />}/>
+          <Route path="/organizations" element={<PrivateRoute redirectTo="/login" component={Organizations} />} />
           <Route path="/organizations/:teamId/performance" element={<Performance />} />
           <Route path="/organizations/:teamId/employee-assessments" element={<UserAssessment />} />
           <Route path="/organizations/:teamId" element={<OrganizationDetails />} />
           <Route path="/organizations/:teamId/employees" element={<Employees />} />
-          <Route path="/home" element={<PrivateRoute redirectTo="/login" component={Home} />}/>
+          <Route path="/home" element={<PrivateRoute redirectTo="/login" component={Home} />} />
           <Route path='/notifications/:id' element={<Notifications />} />
         </Routes>
       </Router>
