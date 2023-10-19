@@ -80,6 +80,7 @@
 
 .employee-details {
     color: black;
+    margin-bottom: 20px;
 }
 
 .employee-details h5 {
@@ -125,3 +126,14 @@
 .styled-table tr:nth-child(even) {
     background-color: #ffffff;
 }
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; 
+  }
+
+  .custom-icon {
+    color: #055C9D; 
+  }
+  
