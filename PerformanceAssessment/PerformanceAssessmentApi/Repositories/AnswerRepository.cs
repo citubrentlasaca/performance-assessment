@@ -72,7 +72,7 @@ namespace PerformanceAssessmentApi.Repositories
             }
         }
 
-        public async Task<AssessmentAnswersDto?> GetAssessmentAnswersByEmployeeAndAssessmentId(int employeeId, int assessmentId)
+        public async Task<AssessmentAnswersDto?> GetAssessmentAnswersByEmployeeIdAndAssessmentId(int employeeId, int assessmentId)
         {
             var assessmentSql = "SELECT * FROM [dbo].[Assessment] WHERE [Id] = @AssessmentId AND [EmployeeId] = @EmployeeId;";
             var itemsSql = "SELECT * FROM [dbo].[Item] WHERE [AssessmentId] = @AssessmentId;";
