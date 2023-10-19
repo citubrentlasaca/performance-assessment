@@ -69,7 +69,7 @@ function SideBar() {
                             padding: '20px'
                         }}
                     >
-                        <img src={logo} alt='Work PA Logo' />
+                        <img src={logo} alt='Work PA Logo' style={{ width: '100%' }} />
                     </div>
                 )}
 
