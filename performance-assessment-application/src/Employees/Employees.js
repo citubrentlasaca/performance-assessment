@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from "../Shared/NavBar";
 import TopBarTwo from "../Shared/TopBarTwo";
 import "./Employees.css";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 function Employees() {
     const [employees, setEmployees] = useState([]);
@@ -87,26 +88,33 @@ function Employees() {
                     <hr className="employee-divider" />
                 </div>
                 {listView ? (
-                <div className="employee-department">
-                    <h4>Manufacturing</h4>
-                    {employees.map((employee, index) => {
-                        const fullName = `${employee.firstName} ${employee.lastName}`;
-                        const match = fullName.toLowerCase().includes(searchQuery.toLowerCase());
+                    <div className="employee-department">
+                        <h4>Manufacturing</h4>
+                        {employees.map((employee, index) => {
+                            const fullName = `${employee.firstName} ${employee.lastName}`;
+                            const match = fullName.toLowerCase().includes(searchQuery.toLowerCase());
 
-                        if (searchQuery && !match) {
-                            return null; // Skip this employee if searchQuery is provided but there's no match
-                        }
+                            if (searchQuery && !match) {
+                                return null; // Skip this employee if searchQuery is provided but there's no match
+                            }
 
-                        return (
-                            <div className="employee-details" key={index}>
-                                <h5>{employee.firstName} {employee.lastName}</h5>
-                                <div>
-                                    {employee.dateTimeCreated}
+                            return (
+                                <div className="employee-details" key={index}>
+                                    <div className="employee-info">
+                                        <div className="icon-container">
+                                            <AccountCircleIcon className="custom-icon" fontSize="large" />
+                                        </div>
+                                        <div>
+                                            <h5>{employee.firstName} {employee.lastName}</h5>
+                                            <div>
+                                                {employee.dateTimeCreated}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        );
-                    })}
-                </div>
+                            );
+                        })}
+                    </div>
                 ) : (
                     <div className="employee-table">
                         {/* Render employees in table format */}
@@ -120,14 +128,14 @@ function Employees() {
                                 </tr>
                             </thead>
                             <tbody>
-                            {filterEmployees(employees, searchQuery).map((employee, index) => (
-                                <tr key={index}>
-                                    <td>{employee.firstName} {employee.lastName}</td>
-                                    <td>{employee.emailAddress}</td>
-                                    <td>{employee.status}</td>
-                                    <td>{employee.dateTimeCreated}</td>
-                                </tr>
-                            ))}
+                                {filterEmployees(employees, searchQuery).map((employee, index) => (
+                                    <tr key={index}>
+                                        <td>{employee.firstName} {employee.lastName}</td>
+                                        <td>{employee.emailAddress}</td>
+                                        <td>{employee.status}</td>
+                                        <td>{employee.dateTimeCreated}</td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
