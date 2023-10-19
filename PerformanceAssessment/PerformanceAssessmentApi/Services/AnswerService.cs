@@ -46,5 +46,10 @@ namespace PerformanceAssessmentApi.Services
         {
             return await _repository.DeleteAnswers(id);
         }
+
+        public async Task<AssessmentAnswersDto?> GetAssessmentAnswersByEmployeeAndAssessmentId(int employeeId, int assessmentId)
+        {
+            return await _repository.GetAssessmentAnswersByEmployeeAndAssessmentId(employeeId, assessmentId);
+        }
     }
 }
