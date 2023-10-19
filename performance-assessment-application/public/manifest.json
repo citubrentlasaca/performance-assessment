@@ -1,0 +1,9 @@
+{
+    "name": "WorkPA Employee Performance Assessment",
+    "short_name": "WorkPA",
+    "start_url": "/",
+    "display": "browser",
+    "background_color": "#d6f4f8",
+    "scope": "/",
+    "description": "Assess and track employee performance with ease."
+}

@@ -67,7 +67,7 @@ function LandingPage() {
                     padding: "20px"
                 }}
             >
-                <img src={logo} alt="Work PA Logo" />
+                <img src={logo} alt="Work PA Logo" style={{ maxHeight: '100%' }} />
                 <Link to="/login">
                     <button style={signInHover ? { ...normalStyle, ...hoverStyle } : normalStyle}
                         onMouseEnter={handleSignInHover}

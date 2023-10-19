@@ -148,8 +148,8 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                             width: "100%"
                         }}
                     >
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     </Stack>
                 ) : (
@@ -172,8 +172,8 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                 justifyContent: 'flex-end',
                             }}
                         >
-                            <button type='button' class='btn' onClick={handleClose}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <button type='button' className='btn' onClick={handleClose}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
                                     <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
                                 </svg>
                             </button>
@@ -223,9 +223,9 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                             padding: '10px',
                                         }}
                                     >
-                                        <p class='mb-0'>All employees</p>
-                                        <button type="button" class="btn" onClick={handleSelectAll}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
+                                        <p className='mb-0'>All employees</p>
+                                        <button type="button" className="btn" onClick={handleSelectAll}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">
                                                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
                                                 <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z" />
                                             </svg>
@@ -260,14 +260,14 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                             }}
                                         >
 
-                                            <input type="text" class="form-control" placeholder="Type a name" value={searchQuery} onChange={handleSearchChange}
+                                            <input type="text" className="form-control" placeholder="Type a name" value={searchQuery} onChange={handleSearchChange}
                                                 style={{
                                                     border: 'none',
                                                     backgroundColor: 'transparent'
                                                 }}
                                             />
-                                            <button type="button" class="btn">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <button type="button" className="btn">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
                                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                                                 </svg>
                                             </button>
@@ -280,7 +280,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                                 width: '100%'
                                             }}
                                         >
-                                            <p class='mb-0'>Choose employees</p>
+                                            <p className='mb-0'>Choose employees</p>
                                         </Stack>
                                         <Stack
                                             direction="row"
@@ -291,13 +291,13 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                                 width: '100%'
                                             }}
                                         >
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onClick={handleSelectAll} />
-                                                <label class="form-check-label" htmlFor="flexCheckDefault">
+                                            <div className="form-check">
+                                                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" onClick={handleSelectAll} />
+                                                <label className="form-check-label" htmlFor="flexCheckDefault">
                                                     Select all
                                                 </label>
                                             </div>
-                                            <button type="button" class="btn" onClick={handleClear}
+                                            <button type="button" className="btn" onClick={handleClear}
                                                 style={{
                                                     color: 'red'
                                                 }}
@@ -338,14 +338,14 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                                             alignItems="center"
                                                             spacing={2}
                                                         >
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
                                                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                                                                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
                                                             </svg>
                                                             <p className='mb-0'>{user.firstName} {user.lastName}</p>
                                                         </Stack>
-                                                        <div class="form-check" style={{ marginRight: '17px' }}>
-                                                            <input class="form-check-input" type="checkbox" value="" id={`flexCheckDefault${user.id}`} onClick={() => handleCheckboxClick(user.id)} />
+                                                        <div className="form-check" style={{ marginRight: '17px' }}>
+                                                            <input className="form-check-input" type="checkbox" value="" id={`flexCheckDefault${user.id}`} onClick={() => handleCheckboxClick(user.id)} />
                                                         </div>
                                                     </Stack>
                                                 ))}
@@ -377,9 +377,9 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                     }}
                                 >
                                     <p className='mb-0'>Due Date</p>
-                                    <input type="date" class="form-control" value={date} onChange={handleDateChange} ></input>
+                                    <input type="date" className="form-control" value={date} onChange={handleDateChange} ></input>
                                     <p className='mb-0'>Time</p>
-                                    <input type="time" class="form-control" value={time} onChange={handleTimeChange} ></input>
+                                    <input type="time" className="form-control" value={time} onChange={handleTimeChange} ></input>
                                 </Stack>
                                 <Stack
                                     direction="row"
@@ -390,7 +390,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                         width: '100%'
                                     }}
                                 >
-                                    <button type="button" class="btn" onClick={handlePublishClick}
+                                    <button type="button" className="btn" onClick={handlePublishClick}
                                         style={{
                                             backgroundColor: '#27c6d9',
                                             color: 'white'
