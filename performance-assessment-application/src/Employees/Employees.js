@@ -8,8 +8,11 @@ function Employees() {
     const [employees, setEmployees] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [listView, setListView] = useState(true);
+    const [teamNamePlaceholder, setTeamNamePlaceholder] = useState('');
+    const [teamId, setTeamId] = useState(1);
 
     useEffect(() => {
+        // Fetch employees
         fetch('https://localhost:7236/api/employees')
             .then(response => response.json())
             .then(data => {
@@ -21,7 +24,16 @@ function Employees() {
                 ))
                     .then(employeesWithUserDetails => setEmployees(employeesWithUserDetails));
             });
-    }, []);
+    
+        // Fetch team data
+        fetch(`https://localhost:7236/api/teams/${teamId}`) 
+        .then(response => response.json())
+        .then(data => {
+            const businessType = data.businessType;
+            setTeamNamePlaceholder(businessType);
+        });
+    
+    }, [teamId]);
 
     const sortEmployees = (order) => {
         const sortedEmployees = [...employees];
@@ -89,7 +101,7 @@ function Employees() {
                 </div>
                 {listView ? (
                     <div className="employee-department">
-                        <h4>Manufacturing</h4>
+                        <h4>{teamNamePlaceholder}</h4>
                         {employees.map((employee, index) => {
                             const fullName = `${employee.firstName} ${employee.lastName}`;
                             const match = fullName.toLowerCase().includes(searchQuery.toLowerCase());
