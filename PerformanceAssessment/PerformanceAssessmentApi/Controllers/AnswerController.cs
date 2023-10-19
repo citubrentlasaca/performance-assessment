@@ -9,13 +9,11 @@ namespace PerformanceAssessmentApi.Controllers
     public class AnswerController : ControllerBase
     {
         private readonly IAnswerService _answerService;
-        private readonly IAssessmentService _assessmentService;
         private readonly ILogger<AnswerController> _logger;
 
         public AnswerController(IAnswerService answerService, IAssessmentService assessmentService, ILogger<AnswerController> logger)
         {
             _answerService = answerService;
-            _assessmentService = assessmentService;
             _logger = logger;
         }
 
@@ -224,16 +222,16 @@ namespace PerformanceAssessmentApi.Controllers
         /// <response code="200">Answers found</response>
         /// <response code="404">Answers or assessment not found</response>
         /// <response code="500">Internal server error</response>
-        [HttpGet("get-by-employee-and-assessment", Name = "GetAssessmentAnswersByEmployeeAndAssessmentId")]
+        [HttpGet("get-by-employee-and-assessment", Name = "GetAssessmentAnswersByEmployeeIdAndAssessmentId")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAssessmentAnswersByEmployeeAndAssessmentId([FromQuery(Name = "employeeId")] int employeeId, [FromQuery(Name = "assessmentId")] int assessmentId)
+        public async Task<IActionResult> GetAssessmentAnswersByEmployeeIdAndAssessmentId([FromQuery(Name = "employeeId")] int employeeId, [FromQuery(Name = "assessmentId")] int assessmentId)
         {
             try
             {
-                var assessmentAnswers = await _answerService.GetAssessmentAnswersByEmployeeAndAssessmentId(employeeId, assessmentId);
+                var assessmentAnswers = await _answerService.GetAssessmentAnswersByEmployeeIdAndAssessmentId(employeeId, assessmentId);
 
                 if (assessmentAnswers == null)
                 {
