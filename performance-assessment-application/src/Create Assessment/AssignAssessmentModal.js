@@ -2,16 +2,21 @@ import React, { useState, useEffect } from 'react'
 import { Box, Modal, Stack } from '@mui/material'
 import axios from 'axios';
 
-function AssignAssessmentModal({ open, handleClose, assessmentId }) {
+function AssignAssessmentModal({ open, handleClose, assessmentId, assessmentTitle }) {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectAllChecked, setSelectAllChecked] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUserIds, setSelectedUserIds] = useState([]);
+    const [occurrence, setOccurence] = useState('Daily');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [showPublishSuccessAlert, setShowPublishSuccessAlert] = useState(false);
     const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
+
+    const handleOccurrenceChange = (event) => {
+        setOccurence(event.target.value);
+    };
 
     const handleTimeChange = (event) => {
         setTime(event.target.value);
@@ -54,7 +59,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
         };
 
         fetchData();
-    }, []);
+    }, [employeeStorage.teamId]);
 
     const handleSelectAll = () => {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -104,6 +109,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                 employeeIds: [employeeId],
                                 scheduler: {
                                     assessmentId: assessmentId,
+                                    occurrence: occurrence,
                                     dueDate: date,
                                     time: time,
                                     isAnswered: false,
@@ -123,6 +129,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                     setShowPublishSuccessAlert(false);
                 }, 3000);
                 handleClear();
+                setOccurence('Daily');
                 setDate('');
                 setTime('');
             } catch (error) {
@@ -130,6 +137,20 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
             }
         }
     };
+
+    useEffect(() => {
+        if (open) {
+            handleClear();
+            setOccurence('Daily');
+            setDate('');
+            setTime('');
+        } else {
+            handleClear();
+            setOccurence('Daily');
+            setDate('');
+            setTime('');
+        }
+    }, [open]);
 
     return (
         <Modal
@@ -177,10 +198,16 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                 height: '40px',
                                 backgroundColor: '#27c6d9',
                                 display: 'flex',
+                                flexDirection: 'row',
                                 alignItems: 'center',
-                                justifyContent: 'flex-end',
+                                justifyContent: 'space-between',
                             }}
                         >
+                            <h4 className='mb-0'
+                                style={{
+                                    padding: '6px 12px'
+                                }}
+                            >{assessmentTitle}</h4>
                             <button type='button' className='btn' onClick={handleClose}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
                                     <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
@@ -349,7 +376,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                                         >
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
                                                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                                                                <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
                                                             </svg>
                                                             <p className='mb-0'>{user.firstName} {user.lastName}</p>
                                                         </Stack>
@@ -385,6 +412,24 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                         height: '100%',
                                     }}
                                 >
+                                    {assessmentTitle === 'Daily Performance Report' ? (
+                                        <>
+                                            <p className='mb-0'>Occurence</p>
+                                            <select className="form-select" value={occurrence} onChange={handleOccurrenceChange}>
+                                                <option value="Daily">Daily</option>
+                                            </select>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className='mb-0'>Occurence</p>
+                                            <select className="form-select" value={occurrence} onChange={handleOccurrenceChange}>
+                                                <option value="Once">Once</option>
+                                                <option value="Daily">Daily</option>
+                                                <option value="Weekly">Weekly</option>
+                                                <option value="Monthly">Monthly</option>
+                                            </select>
+                                        </>
+                                    )}
                                     <p className='mb-0'>Due Date</p>
                                     <input type="date" className="form-control" value={date} onChange={handleDateChange} ></input>
                                     <p className='mb-0'>Time</p>
