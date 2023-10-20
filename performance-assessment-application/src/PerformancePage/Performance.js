@@ -11,6 +11,7 @@ function Performance() {
     const [activeTab, setActiveTab] = useState('Performance Report');
     const navigate = useNavigate();
     const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
+    const [performanceScores, setPerformanceScores] = useState({});
 
     useEffect(() => {
         const fetchAssessments = async () => {
@@ -43,6 +44,19 @@ function Performance() {
                                 const assessment = assessmentResponse.data;
 
                                 if (assessment.title === "Daily Performance Report") {
+                                    const scoreResponse = await axios.get(`https://localhost:7236/api/results/assessments/${assessment.id}`);
+
+                                    if (scoreResponse.data) {
+                                        const employeeScore = scoreResponse.data.find(score => score.employeeId === employeeStorage.id);
+                                        
+                                        if (employeeScore) {
+                                            setPerformanceScores((prevScores) => ({
+                                                ...prevScores,
+                                                [assessment.id]: employeeScore,
+                                            }));
+                                        }
+                                    }
+
                                     completedAssessmentsArray.push(assessment);
                                 }
                             }
@@ -64,6 +78,20 @@ function Performance() {
         setActiveTab(tabName);
     };
 
+    const calculateScorePercentage = (score) => {
+        return score * 100;
+    };
+
+    const getScoreColor = (percentage) => {
+        if (percentage >= 80) {
+            return 'green';
+        } else if (percentage >= 75) {
+            return 'yellow';
+        } else {
+            return 'red';
+        }
+    };
+    
     return (
         <NavBar>
             <TopBarThree />
@@ -142,6 +170,9 @@ function Performance() {
                                     }}
                                 >
                                     <b>{assessment.title}</b>
+                                    <div style={{ color: getScoreColor(calculateScorePercentage(performanceScores[assessment.id].score || 0)) }}>
+                                        {calculateScorePercentage(performanceScores[assessment.id].score || 0)}%
+                                    </div>
                                 </Stack>
                             </Box>
                         ))}

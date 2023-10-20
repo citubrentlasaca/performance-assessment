@@ -17,11 +17,21 @@ function AnswerAssessment() {
     const [submissionComplete, setSubmissionComplete] = useState(false);
     const navigate = useNavigate();
     const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
+    const [answers, setAnswers] = useState({});
 
     const handleIncrement = (itemId) => {
         setCounterValues((prevValues) => ({
             ...prevValues,
             [itemId]: (prevValues[itemId] || 0) + 1,
+        }));
+
+        setAnswers((prevAnswers) => ({
+            ...prevAnswers,
+            [itemId]: {
+                answerText: '',
+                selectedChoices: [],
+                counterValue: (prevAnswers[itemId]?.counterValue || 0) + 1,
+            },
         }));
     };
 
@@ -30,6 +40,15 @@ function AnswerAssessment() {
             setCounterValues((prevValues) => ({
                 ...prevValues,
                 [itemId]: (prevValues[itemId] || 0) - 1,
+            }));
+
+            setAnswers((prevAnswers) => ({
+                ...prevAnswers,
+                [itemId]: {
+                    answerText: '',
+                    selectedChoices: [],
+                    counterValue: (prevAnswers[itemId]?.counterValue || 0) - 1,
+                },
             }));
         }
     };
@@ -65,6 +84,39 @@ function AnswerAssessment() {
         fetchData();
     }, [id]);
 
+    const computeScore = () => {
+        let score = 0;
+    
+        for (const item of itemData) {
+            const answer = answers[item.id];
+            if (!answer) {
+                continue;
+            }
+    
+            if (item.questionType === 'Short answer' || item.questionType === 'Paragraph' || item.questionType === 'Checkboxes') {
+                score += (item.weight / 100);
+            } else if (item.questionType === 'Multiple choice') {
+                const selectedChoice = choiceData[item.id].find(
+                    (choice) => choice.choiceValue === answer.selectedChoices[0]
+                );
+                console.log(selectedChoice);
+                score += (selectedChoice.weight / 100) * (item.weight / 100);
+            } else if (item.questionType === 'Counter') {
+                if (item.target === 0) {
+                    if (answer.counterValue >= 10) {
+                        score += (1 * item.weight / 100);
+                    } else {
+                        score += (0.75 * item.weight / 100);
+                    }
+                } else {
+                    score += (answer.counterValue / item.target) * (item.weight / 100);
+                }
+            }
+        }
+    
+        return score;
+    };
+
     const handleSubmit = async () => {
         try {
             for (const item of itemData) {
@@ -86,6 +138,10 @@ function AnswerAssessment() {
 
                 if (response.ok) {
                     console.log(`Answer for item ${item.id} submitted successfully`);
+                    setAnswers((prevAnswers) => ({
+                        ...prevAnswers,
+                        [item.id]: postData,
+                    }));
                 } else {
                     console.error(`Failed to submit answer for item ${item.id}`);
                 }
@@ -116,6 +172,28 @@ function AnswerAssessment() {
                 console.log(`Assign scheduler has been updated`);
             } else {
                 console.error(`Failed to update the assign scheduler`);
+            }
+
+            const score = computeScore();
+            const resultData = {
+                assessmentId: id,
+                employeeId: employeeStorage.id,
+                score: score,
+                dateTimeDue:  `${schedulerData.dueDate}, ${schedulerData.time}`,
+            };
+
+            const resultResponse = await fetch('https://localhost:7236/api/results', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(resultData),
+            });
+
+            if (resultResponse.ok) {
+                console.log('Result submitted successfully');
+            } else {
+                console.error('Failed to submit the result');
             }
 
             setSubmissionComplete(true);
@@ -278,13 +356,15 @@ function AnswerAssessment() {
                                                 borderBottom: "1px solid black",
                                             }}
                                             onChange={(e) => {
-                                                setAnswerData({
+                                                const updatedAnswerData = {
                                                     ...answerData,
                                                     [item.id]: {
                                                         answerText: e.target.value,
                                                         selectedChoices: [],
                                                     },
-                                                });
+                                                };
+                                                setAnswerData(updatedAnswerData);
+                                                setAnswers(updatedAnswerData);
                                             }}
                                         />
                                     </Stack>
@@ -320,13 +400,15 @@ function AnswerAssessment() {
                                                 height: "100px"
                                             }}
                                             onChange={(e) => {
-                                                setAnswerData({
+                                                const updatedAnswerData = {
                                                     ...answerData,
                                                     [item.id]: {
                                                         answerText: e.target.value,
                                                         selectedChoices: [],
                                                     },
-                                                });
+                                                };
+                                                setAnswerData(updatedAnswerData);
+                                                setAnswers(updatedAnswerData);
                                             }}
                                         />
                                     </Stack>
@@ -371,6 +453,24 @@ function AnswerAssessment() {
                                                 </svg>
                                             </button>
                                             <input type='number' value={counterValues[item.id] || 0}
+                                                onChange={(e) => {
+                                                    const newValue = parseInt(e.target.value, 10);
+                                                    if (!isNaN(newValue) && newValue >= 0) {
+                                                        setCounterValues((prevValues) => ({
+                                                            ...prevValues,
+                                                            [item.id]: newValue,
+                                                        }));
+                        
+                                                        setAnswers((prevAnswers) => ({
+                                                            ...prevAnswers,
+                                                            [item.id]: {
+                                                                answerText: '',
+                                                                selectedChoices: [],
+                                                                counterValue: newValue,
+                                                            },
+                                                        }));
+                                                    }
+                                                }}
                                                 style={{
                                                     textAlign: 'center',
                                                 }}
@@ -413,13 +513,15 @@ function AnswerAssessment() {
                                                 <div key={choiceIndex} className="form-check">
                                                     <input className="form-check-input" type="radio" name={`flexRadioDefault${item.id}`} id={`flexRadioDefault${item.id}${choiceIndex}`}
                                                         onChange={() => {
-                                                            setAnswerData({
+                                                            const updatedAnswerData = {
                                                                 ...answerData,
                                                                 [item.id]: {
                                                                     answerText: '',
                                                                     selectedChoices: [choice.choiceValue],
                                                                 },
-                                                            });
+                                                            };
+                                                            setAnswerData(updatedAnswerData);
+                                                            setAnswers(updatedAnswerData);
                                                         }}
                                                     />
                                                     <label className="form-check-label" htmlFor={`flexRadioDefault${item.id}${choiceIndex}`}>
@@ -474,14 +576,16 @@ function AnswerAssessment() {
                                                                     selectedChoices.splice(index, 1);
                                                                 }
                                                             }
-
-                                                            setAnswerData({
+                                                            
+                                                            const updatedAnswerData = {
                                                                 ...answerData,
                                                                 [item.id]: {
                                                                     answerText: '',
                                                                     selectedChoices: selectedChoices,
                                                                 },
-                                                            });
+                                                            };
+                                                            setAnswerData(updatedAnswerData);
+                                                            setAnswers(updatedAnswerData);
                                                         }}
                                                     />
                                                     <label className="form-check-label" htmlFor={`flexCheckDefault${item.id}${choiceIndex}`}>
