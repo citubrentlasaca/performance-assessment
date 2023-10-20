@@ -16,8 +16,8 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<IEnumerable<int>> CreateAssignSchedulers(IEnumerable<int> employeeIds, AssignScheduler assignScheduler)
         {
-            var sql = "INSERT INTO [dbo].[AssignScheduler] ([AssessmentId], [EmployeeId], [IsAnswered], [DueDate], [Time], [DateTimeCreated], [DateTimeUpdated]) " +
-                      "VALUES (@AssessmentId, @EmployeeId, @IsAnswered, @DueDate, @Time, @DateTimeCreated, @DateTimeUpdated); " +
+            var sql = "INSERT INTO [dbo].[AssignScheduler] ([AssessmentId], [EmployeeId], [IsAnswered], [Occurrence], [DueDate], [Time], [DateTimeCreated], [DateTimeUpdated]) " +
+                      "VALUES (@AssessmentId, @EmployeeId, @IsAnswered, @Occurrence, @DueDate, @Time, @DateTimeCreated, @DateTimeUpdated); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
@@ -82,6 +82,7 @@ namespace PerformanceAssessmentApi.Repositories
                       "[AssessmentId] = @AssessmentId, " +
                       "[EmployeeId] = @EmployeeId, " +
                       "[IsAnswered] = @IsAnswered, " +
+                      "[Occurrence] = @Occurrence, " +
                       "[DueDate] = @DueDate, " +
                       "[Time] = @Time, " +
                       "[DateTimeUpdated] = @DateTimeUpdated " +
@@ -97,6 +98,7 @@ namespace PerformanceAssessmentApi.Repositories
                         AssessmentId = assignScheduler.AssessmentId,
                         EmployeeId = assignScheduler.EmployeeId,
                         IsAnswered = assignScheduler.IsAnswered,
+                        Occurrence = assignScheduler.Occurrence,
                         DueDate = assignScheduler.DueDate,
                         Time = assignScheduler.Time,
                         DateTimeUpdated = assignScheduler.DateTimeUpdated
