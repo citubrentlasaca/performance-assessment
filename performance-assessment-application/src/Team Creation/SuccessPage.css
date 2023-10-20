@@ -1,10 +1,10 @@
 .success-page {
     background: #D6F4F8;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin-top: 5%;
 }
 
 .container {
@@ -17,7 +17,7 @@
 .message {
     text-align: center;
     margin-bottom: 20px;
-    margin-top: 70px;
+    margin-top: 40px;
     margin-top: 40px;
     font-family: Montserrat;
     font-size: 30px;
