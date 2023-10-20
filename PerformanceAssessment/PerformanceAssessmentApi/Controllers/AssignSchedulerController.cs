@@ -53,6 +53,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///         "employeeIds": [1, 2, 3, 4, 5],
         ///         "scheduler": {
         ///             "assessmentId": 1,
+        ///             "occurrence": "Daily",
         ///             "dueDate": "2023-10-16",
         ///             "time": "14:30"
         ///         }
@@ -268,7 +269,8 @@ namespace PerformanceAssessmentApi.Controllers
         ///     {
         ///         "assessmentId": 2,
         ///         "employeeId": 2,
-        ///         "isAnswered": "true",
+        ///         "isAnswered": true,
+        ///         "occurrence": "Once",
         ///         "dueDate": "2023-10-17",
         ///         "time": "15:00"
         ///     }
