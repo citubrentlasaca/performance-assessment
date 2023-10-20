@@ -11,7 +11,7 @@ namespace PerformanceAssessmentApi.Controllers
         private readonly IAnswerService _answerService;
         private readonly ILogger<AnswerController> _logger;
 
-        public AnswerController(IAnswerService answerService, ILogger<AnswerController> logger)
+        public AnswerController(IAnswerService answerService, IAssessmentService assessmentService, ILogger<AnswerController> logger)
         {
             _answerService = answerService;
             _logger = logger;
@@ -205,6 +205,40 @@ namespace PerformanceAssessmentApi.Controllers
 
                 await _answerService.DeleteAnswers(id);
                 return Ok("Answers deleted successfully");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
+
+        /// <summary>
+        /// Gets answers by employee ID and assessment ID
+        /// </summary>
+        /// <param name="employeeId">The ID of the employee</param>
+        /// <param name="assessmentId">The ID of the assessment</param>
+        /// <returns>Returns the details of answers aligned with the employee ID and assessment ID</returns>
+        /// <response code="200">Answers found</response>
+        /// <response code="404">Answers or assessment not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet("get-by-employee-and-assessment", Name = "GetAssessmentAnswersByEmployeeIdAndAssessmentId")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAssessmentAnswersByEmployeeIdAndAssessmentId([FromQuery(Name = "employeeId")] int employeeId, [FromQuery(Name = "assessmentId")] int assessmentId)
+        {
+            try
+            {
+                var assessmentAnswers = await _answerService.GetAssessmentAnswersByEmployeeIdAndAssessmentId(employeeId, assessmentId);
+
+                if (assessmentAnswers == null)
+                {
+                    return StatusCode(404, "Answers or assessment not found");
+                }
+
+                return Ok(assessmentAnswers);
             }
             catch (Exception e)
             {

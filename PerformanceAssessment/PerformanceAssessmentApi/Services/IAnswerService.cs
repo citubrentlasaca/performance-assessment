@@ -10,5 +10,6 @@ namespace PerformanceAssessmentApi.Services
         Task<AnswerDto> GetAnswersById(int id);
         Task<int> UpdateAnswers(int id, AnswerUpdationDto answer);
         Task<int> DeleteAnswers(int id);
+        Task<AssessmentAnswersDto?> GetAssessmentAnswersByEmployeeIdAndAssessmentId(int employeeId, int assessmentId);
     }
 }
