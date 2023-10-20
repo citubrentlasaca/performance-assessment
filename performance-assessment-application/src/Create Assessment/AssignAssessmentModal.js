@@ -10,6 +10,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
     const [selectedUserIds, setSelectedUserIds] = useState([]);
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
+    const [showPublishSuccessAlert, setShowPublishSuccessAlert] = useState(false);
     const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
 
     const handleTimeChange = (event) => {
@@ -113,9 +114,17 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                             console.log(`Scheduler created for employee with ID: ${employeeId}`);
                         }
                     }
-                } else {
+                }
+                else {
                     console.error(`Employee not found for user with ID: ${userId}`);
                 }
+                setShowPublishSuccessAlert(true);
+                setTimeout(() => {
+                    setShowPublishSuccessAlert(false);
+                }, 3000);
+                handleClear();
+                setDate('');
+                setTime('');
             } catch (error) {
                 console.error('Error creating scheduler:', error);
             }
@@ -381,6 +390,12 @@ function AssignAssessmentModal({ open, handleClose, assessmentId }) {
                                     <p className='mb-0'>Time</p>
                                     <input type="time" className="form-control" value={time} onChange={handleTimeChange} ></input>
                                 </Stack>
+                                {showPublishSuccessAlert && (
+                                    <div className="alert alert-success alert-dismissible fade show w-100" role="alert">
+                                        Assessment assigned successfully.
+                                        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={() => setShowPublishSuccessAlert(false)}></button>
+                                    </div>
+                                )}
                                 <Stack
                                     direction="row"
                                     justifyContent="flex-end"

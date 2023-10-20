@@ -10,6 +10,7 @@ function ViewAnswers() {
     const [employees, setEmployees] = useState([]);
     const [selectedName, setSelectedName] = useState('');
     const [assessment, setAssessment] = useState(null);
+    const [score, setScore] = useState([]);
     const [answers, setAnswers] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -47,17 +48,13 @@ function ViewAnswers() {
         const selectedName = event.target.value;
         setSelectedName(selectedName);
 
-        // Extract employee.firstName from the selected name
         const firstName = selectedName.split(' ')[0];
 
-        // Find the employee with the matching firstName
         const employee = employees.find(emp => emp.firstName === firstName);
 
         if (employee) {
-            // Make a GET request to fetch the employee data
             const employeeResponse = await axios.get(`https://localhost:7236/api/employees/users/${employee.id}`);
 
-            // Filter the response based on teamId
             let employeeId = 0;
             employeeResponse.data.forEach(employee => {
                 if (employee.teamId === Number(teamId)) {
@@ -68,12 +65,21 @@ function ViewAnswers() {
             if (employeeId !== 0) {
                 const employeeIdTemp = employeeId;
                 const assessmentItems = assessment.items;
+                let score = 0;
                 let answersArray = [];
+
+
+                const resultResponse = await axios.get(`https://localhost:7236/api/results/employees/${employeeIdTemp}`);
+                for (const result of resultResponse.data) {
+                    if (result.assessmentId === Number(assessmentId)) {
+                        score = result.score * 100;
+                    }
+                }
 
                 for (const item of assessmentItems) {
                     const itemResponse = await axios.get(`https://localhost:7236/api/answers/items/${item.id}`);
                     itemResponse.data.forEach(answer => {
-                        if (answer.employeeId === employeeIdTemp) {
+                        if (answer.employeeId === employeeIdTemp && answer.isDeleted === false) {
                             if (item.questionType === 'Short answer' || item.questionType === 'Paragraph') {
                                 answersArray.push(answer.answerText);
                             } else if (item.questionType === 'Multiple choice' || item.questionType === 'Checkboxes') {
@@ -84,6 +90,8 @@ function ViewAnswers() {
                         }
                     });
                 }
+
+                setScore(score.toString() + '%');
                 setAnswers(answersArray);
             }
         }
@@ -147,7 +155,7 @@ function ViewAnswers() {
                             width: '75%',
                         }}
                     >
-                        <select className="form-select" onChange={handleSelectChange}>
+                        <select className="form-select w-75" onChange={handleSelectChange}>
                             <option selected disabled>Select an employee</option>
                             {[...new Set(employees.map(employee => employee.firstName + ' ' + employee.lastName))].map((name, index) => (
                                 <option key={index} value={name}>
@@ -155,6 +163,15 @@ function ViewAnswers() {
                                 </option>
                             ))}
                         </select>
+                        <Stack className='w-25'
+                            direction="row"
+                            justifyContent="center"
+                            alignItems="center"
+                            spacing={2}
+                        >
+                            <p className='mb-0'>Score:</p>
+                            <input type='text' className='form-control' value={score} disabled />
+                        </Stack>
                     </Stack>
                     {assessment.items.map((item, index) => (
                         <div key={index}
@@ -178,19 +195,19 @@ function ViewAnswers() {
                             >
                                 <p className='mb-0'>Answer:</p>
                                 {item.questionType === 'Short answer' && (
-                                    <input type='text' className='form-control' value={answers[index]} readOnly />
+                                    <input type='text' className='form-control' value={answers[index]} disabled />
                                 )}
                                 {item.questionType === 'Paragraph' && (
-                                    <input type='text' className='form-control' value={answers[index]} readOnly />
+                                    <input type='text' className='form-control' value={answers[index]} disabled />
                                 )}
                                 {item.questionType === 'Multiple choice' && (
-                                    <input type='text' className='form-control' value={answers[index]} readOnly />
+                                    <input type='text' className='form-control' value={answers[index]} disabled />
                                 )}
                                 {item.questionType === 'Checkboxes' && (
-                                    <input type='text' className='form-control' value={answers[index]} readOnly />
+                                    <input type='text' className='form-control' value={answers[index]} disabled />
                                 )}
                                 {item.questionType === 'Counter' && (
-                                    <input type='text' className='form-control' value={answers[index]} readOnly />
+                                    <input type='text' className='form-control' value={answers[index]} disabled />
                                 )}
                             </Stack>
                         </div>
