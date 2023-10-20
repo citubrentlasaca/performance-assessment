@@ -86,13 +86,13 @@ function AnswerAssessment() {
 
     const computeScore = () => {
         let score = 0;
-    
+
         for (const item of itemData) {
             const answer = answers[item.id];
             if (!answer) {
                 continue;
             }
-    
+
             if (item.questionType === 'Short answer' || item.questionType === 'Paragraph' || item.questionType === 'Checkboxes') {
                 score += (item.weight / 100);
             } else if (item.questionType === 'Multiple choice') {
@@ -113,7 +113,7 @@ function AnswerAssessment() {
                 }
             }
         }
-    
+
         return score;
     };
 
@@ -156,6 +156,7 @@ function AnswerAssessment() {
                 assessmentId: schedulerData.assessmentId,
                 employeeId: schedulerData.employeeId,
                 isAnswered: true,
+                occurrence: schedulerData.occurrence,
                 dueDate: schedulerData.dueDate,
                 time: schedulerData.time,
             };
@@ -179,7 +180,7 @@ function AnswerAssessment() {
                 assessmentId: id,
                 employeeId: employeeStorage.id,
                 score: score,
-                dateTimeDue:  `${schedulerData.dueDate}, ${schedulerData.time}`,
+                dateTimeDue: `${schedulerData.dueDate}, ${schedulerData.time}`,
             };
 
             const resultResponse = await fetch('https://localhost:7236/api/results', {
@@ -460,7 +461,7 @@ function AnswerAssessment() {
                                                             ...prevValues,
                                                             [item.id]: newValue,
                                                         }));
-                        
+
                                                         setAnswers((prevAnswers) => ({
                                                             ...prevAnswers,
                                                             [item.id]: {
@@ -576,7 +577,7 @@ function AnswerAssessment() {
                                                                     selectedChoices.splice(index, 1);
                                                                 }
                                                             }
-                                                            
+
                                                             const updatedAnswerData = {
                                                                 ...answerData,
                                                                 [item.id]: {

@@ -7,11 +7,10 @@ import axios from 'axios';
 
 function Performance() {
     const [assessments, setAssessments] = useState([]);
-    const [completedAssessments, setCompletedAssessments] = useState([]);
+    const [completedAssessments, setCompletedAssessments] = useState(null)
     const [activeTab, setActiveTab] = useState('Performance Report');
     const navigate = useNavigate();
     const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
-    const [performanceScores, setPerformanceScores] = useState({});
 
     useEffect(() => {
         const fetchAssessments = async () => {
@@ -24,10 +23,9 @@ function Performance() {
                     const completedAssessmentsArray = [];
 
                     for (const scheduler of schedulers) {
+                        const assessmentId = scheduler.assessmentId;
+                        const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${assessmentId}`);
                         if (scheduler.isAnswered === false) {
-                            const assessmentId = scheduler.assessmentId;
-                            const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${assessmentId}`);
-
                             if (assessmentResponse.data) {
                                 const assessment = assessmentResponse.data;
 
@@ -36,29 +34,31 @@ function Performance() {
                                 }
                             }
                         }
-                        else if (scheduler.isAnswered === true) {
-                            const assessmentId = scheduler.assessmentId;
-                            const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${assessmentId}`);
 
-                            if (assessmentResponse.data) {
-                                const assessment = assessmentResponse.data;
+                        if (assessmentResponse.data.title === "Daily Performance Report") {
+                            // Implement here
+                            const assessmentData = assessmentResponse.data;
+                            const responseArray = await axios.get(`https://localhost:7236/api/results/assessments/${assessmentData.id}`);
 
-                                if (assessment.title === "Daily Performance Report") {
-                                    const scoreResponse = await axios.get(`https://localhost:7236/api/results/assessments/${assessment.id}`);
+                            if (responseArray.data) {
+                                responseArray.data.reverse().forEach((response) => {
+                                    if (response.employeeId === employeeStorage.id) {
+                                        const formattedDate = new Date(response.dateTimeCreated).toLocaleString('en-US', {
+                                            month: 'long',
+                                            day: 'numeric',
+                                            year: 'numeric',
+                                            hour: 'numeric',
+                                            minute: 'numeric',
+                                            hour12: true,
+                                        });
 
-                                    if (scoreResponse.data) {
-                                        const employeeScore = scoreResponse.data.find(score => score.employeeId === employeeStorage.id);
-                                        
-                                        if (employeeScore) {
-                                            setPerformanceScores((prevScores) => ({
-                                                ...prevScores,
-                                                [assessment.id]: employeeScore,
-                                            }));
-                                        }
+                                        completedAssessmentsArray.push({
+                                            title: assessmentData.title,
+                                            date: formattedDate,
+                                            score: response.score * 100,
+                                        });
                                     }
-
-                                    completedAssessmentsArray.push(assessment);
-                                }
+                                });
                             }
                         }
                     }
@@ -72,25 +72,23 @@ function Performance() {
         };
 
         fetchAssessments();
-    }, []);
+    }, [employeeStorage.id]);
 
     const handleTabClick = (tabName) => {
         setActiveTab(tabName);
     };
 
-    const calculateScorePercentage = (score) => {
-        return score * 100;
-    };
-
-    const getScoreColor = (percentage) => {
-        if (percentage >= 80) {
-            return 'green';
-        } else if (percentage >= 75) {
-            return '#FFD700';
-        } else {
+    function getScoreColor(score) {
+        if (score >= 0 && score < 60) {
             return 'red';
+        } else if (score >= 60 && score < 75) {
+            return 'orange';
+        } else if (score >= 75 && score <= 100) {
+            return 'green';
         }
-    };
+
+        return 'black';
+    }
 
     return (
         <NavBar>
@@ -155,25 +153,24 @@ function Performance() {
                                     backgroundColor: "white",
                                     borderRadius: "10px",
                                     display: 'flex',
+                                    flexDirection: 'row',
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     padding: '30px',
                                 }}
                             >
                                 <Stack
-                                    direction="row"
-                                    justifyContent="space-between"
-                                    alignItems="center"
-                                    spacing={2}
+                                    direction="column"
+                                    justifyContent="center"
+                                    alignItems="flex-start"
                                     sx={{
                                         width: "100%"
                                     }}
                                 >
                                     <b>{assessment.title}</b>
-                                    <div style={{ color: getScoreColor(calculateScorePercentage(performanceScores[assessment.id].score || 0)) }}>
-                                        {calculateScorePercentage(performanceScores[assessment.id].score || 0)}%
-                                    </div>
+                                    <p className='mb-0'>{assessment.date}</p>
                                 </Stack>
+                                <p className='mb-0' style={{ color: getScoreColor(assessment.score) }}>{assessment.score}%</p>
                             </Box>
                         ))}
                     </Stack>
