@@ -1,18 +1,10 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from "react";
-=======
 import React, { useEffect, useState } from "react";
->>>>>>> 8be0b4f113687c5406d2374c01f083bc721b2328
 import NavBar from "../Shared/NavBar";
 import TopBarThree from "../Shared/TopBarThree";
 import TopBarTwo from "../Shared/TopBarTwo";
 import announcementPhoto from './Images/announcement.png';
-<<<<<<< HEAD
-import { Stack } from '@mui/material';
-=======
 import axios from 'axios';
 import { Box, Stack, Modal } from "@mui/material";
->>>>>>> 8be0b4f113687c5406d2374c01f083bc721b2328
 
 function OrganizationDetails() {
     const [teamName, setTeamName] = useState('');
