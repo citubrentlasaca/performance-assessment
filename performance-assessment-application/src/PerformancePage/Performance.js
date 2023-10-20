@@ -69,7 +69,7 @@ function Performance() {
             <TopBarThree />
             <Stack
                 direction="column"
-                justifyContent="center"
+                justifyContent="flex-start"
                 alignItems="flex-start"
                 spacing={2}
                 sx={{
