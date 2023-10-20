@@ -23,7 +23,6 @@ function TopBarTwo() {
                 backgroundColor: '#055c9d'
             }}
         >
-
             <Stack
                 direction="row"
                 justifyContent="center"
