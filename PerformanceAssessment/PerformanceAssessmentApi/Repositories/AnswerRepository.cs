@@ -72,33 +72,48 @@ namespace PerformanceAssessmentApi.Repositories
             }
         }
 
-        public async Task<AssessmentAnswersDto?> GetAssessmentAnswersByEmployeeIdAndAssessmentId(int employeeId, int assessmentId)
+        public async Task<AssessmentAnswersDto> GetAssessmentAnswersByEmployeeIdAndAssessmentId(int employeeId, int assessmentId)
         {
-            var assessmentSql = "SELECT * FROM [dbo].[Assessment] WHERE [Id] = @AssessmentId AND [EmployeeId] = @EmployeeId;";
-            var itemsSql = "SELECT * FROM [dbo].[Item] WHERE [AssessmentId] = @AssessmentId;";
-            var answersSql = "SELECT * FROM [dbo].[Answer] WHERE [EmployeeId] = @EmployeeId;";
+            var sql = @"SELECT a.*, i.*, an.* FROM [dbo].[Assessment] AS a JOIN [dbo].[Item] AS i ON a.Id = i.AssessmentId
+                        LEFT JOIN [dbo].[Answer] AS an ON i.Id = an.ItemId AND (an.EmployeeId = @EmployeeId OR an.EmployeeId IS NULL)
+                        WHERE a.Id = @AssessmentId;";
 
             using (var con = _context.CreateConnection())
             {
-                using (var multi = await con.QueryMultipleAsync($"{assessmentSql}{itemsSql}{answersSql}", new { AssessmentId = assessmentId, EmployeeId = employeeId }))
-                {
-                    var assessment = await multi.ReadSingleOrDefaultAsync<AssessmentAnswersDto>();
+                var assessmentDictionary = new Dictionary<int, AssessmentAnswersDto>();
 
-                    if (assessment != null)
+                var assessments = await con.QueryAsync<AssessmentAnswersDto, ItemAnswersDto, AnswerDto, AssessmentAnswersDto>(
+                    sql,
+                    (assessment, item, answer) =>
                     {
-                        var items = (await multi.ReadAsync<ItemAnswersDto>()).ToList();
-                        var answers = (await multi.ReadAsync<AnswerDto>()).ToList();
-
-                        foreach (var item in items)
+                        if (!assessmentDictionary.TryGetValue(assessment.Id, out var currentAssessment))
                         {
-                            item.Answers = answers.Where(answer => answer.ItemId == item.Id).ToList();
+                            currentAssessment = assessment;
+                            currentAssessment.Items = new List<ItemAnswersDto>();
+                            assessmentDictionary.Add(currentAssessment.Id, currentAssessment);
                         }
 
-                        assessment.Items = items;
-                    }
+                        if (item != null)
+                        {
+                            if (currentAssessment.Items.All(i => i.Id != item.Id))
+                            {
+                                currentAssessment.Items.Add(item);
+                                item.Answers = new List<AnswerDto>();
+                            }
 
-                    return assessment;
-                }
+                            if (answer != null)
+                            {
+                                item.Answers.Add(answer);
+                            }
+                        }
+
+                        return currentAssessment;
+                    },
+                    splitOn: "Id, Id, Id",
+                    param: new { EmployeeId = employeeId, AssessmentId = assessmentId }
+                );
+
+                return assessments.FirstOrDefault();
             }
         }
     }
