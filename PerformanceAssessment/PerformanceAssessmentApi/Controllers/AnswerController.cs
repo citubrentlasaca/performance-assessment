@@ -231,14 +231,14 @@ namespace PerformanceAssessmentApi.Controllers
         {
             try
             {
-                var assessmentAnswers = await _answerService.GetAssessmentAnswersByEmployeeIdAndAssessmentId(employeeId, assessmentId);
+                var assessmentsWithItemsAndAnswers = await _answerService.GetAssessmentAnswersByEmployeeIdAndAssessmentId(employeeId, assessmentId);
 
-                if (assessmentAnswers == null)
+                if (assessmentsWithItemsAndAnswers == null)
                 {
-                    return StatusCode(404, "Answers or assessment not found");
+                    return StatusCode(404, "Assessments not found");
                 }
 
-                return Ok(assessmentAnswers);
+                return Ok(assessmentsWithItemsAndAnswers);
             }
             catch (Exception e)
             {
