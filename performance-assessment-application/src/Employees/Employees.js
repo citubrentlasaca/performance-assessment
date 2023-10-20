@@ -9,7 +9,7 @@ function Employees() {
     const [searchQuery, setSearchQuery] = useState('');
     const [listView, setListView] = useState(true);
     const [teamNamePlaceholder, setTeamNamePlaceholder] = useState('');
-    const [teamId, setTeamId] = useState(1);
+    const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
 
     useEffect(() => {
         // Fetch employees
@@ -24,16 +24,16 @@ function Employees() {
                 ))
                     .then(employeesWithUserDetails => setEmployees(employeesWithUserDetails));
             });
-    
+
         // Fetch team data
-        fetch(`https://localhost:7236/api/teams/${teamId}`) 
-        .then(response => response.json())
-        .then(data => {
-            const businessType = data.businessType;
-            setTeamNamePlaceholder(businessType);
-        });
-    
-    }, [teamId]);
+        fetch(`https://localhost:7236/api/teams/${employeeStorage.teamId}`)
+            .then(response => response.json())
+            .then(data => {
+                const businessType = data.businessType;
+                setTeamNamePlaceholder(businessType);
+            });
+
+    }, [employeeStorage.teamId]);
 
     const sortEmployees = (order) => {
         const sortedEmployees = [...employees];
