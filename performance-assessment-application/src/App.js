@@ -51,7 +51,7 @@ function App() {
           <Route path="/organizations" element={<PrivateRoute redirectTo="/login" component={Organizations} />} />
           <Route path="/organizations/:teamId/performance" element={<Performance />} />
           <Route path="/organizations/:teamId/employee-assessments" element={<UserAssessment />} />
-          <Route path="/organizations/:teamId" element={<OrganizationDetails />} />
+          <Route path="/organizations/:teamId/announcements" element={<OrganizationDetails />} />
           <Route path="/organizations/:teamId/employees" element={<Employees />} />
           <Route path="/home" element={<PrivateRoute redirectTo="/login" component={Home} />} />
           <Route path='/notifications/:id' element={<Notifications />} />
