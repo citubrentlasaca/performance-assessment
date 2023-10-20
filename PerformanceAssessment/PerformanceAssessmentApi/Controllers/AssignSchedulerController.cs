@@ -105,13 +105,34 @@ namespace PerformanceAssessmentApi.Controllers
                 BackgroundJob.Schedule(() => _adminNotificationService.ExecuteAdminNotificationAsync(insertedIds.First(), adminNotification), notificationScheduledTime);
                 BackgroundJob.Schedule(() => DeleteAssignScheduler(scheduler.Id), delay);
 
-                if (assessment.Title == "Daily Performance Report")
+                if (scheduler.Occurrence == "Daily")
                 {
                     RecurringJob.AddOrUpdate($"SetIsAnsweredToFalse_{scheduler.Id}", () => _assignSchedulerService.SetIsAnsweredToFalse(scheduler.Id), Cron.Daily, new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
                     });
                 }       
+                else if (scheduler.Occurrence == "Weekly")
+                {
+                    // Calculate the date one week from now
+                    var nextWeek = DateTime.Now.AddDays(7);
+
+                    // Construct the CRON expression for the same day of the week and the specific time
+                    var cronExpression = $"{nextWeek.Minute} {nextWeek.Hour} * * {(int)nextWeek.DayOfWeek}";
+
+                    RecurringJob.AddOrUpdate($"SetIsAnsweredToFalse_{scheduler.Id}", () => _assignSchedulerService.SetIsAnsweredToFalse(scheduler.Id), cronExpression, new RecurringJobOptions
+                    {
+                        TimeZone = TimeZoneInfo.Local
+                    });
+                }
+                else if (scheduler.Occurrence == "Monthly")
+                {
+                    var nextMonth = DateTime.Now.AddMonths(1); // Calculate the date one month from now
+                    RecurringJob.AddOrUpdate($"SetIsAnsweredToFalse_{scheduler.Id}", () => _assignSchedulerService.SetIsAnsweredToFalse(scheduler.Id), $"0 0 {nextMonth.Day} * *", new RecurringJobOptions
+                    {
+                        TimeZone = TimeZoneInfo.Local
+                    });
+                }
                 
                 return CreatedAtRoute("GetAssignSchedulerById", new { id = insertedIds }, insertedIds);
             }

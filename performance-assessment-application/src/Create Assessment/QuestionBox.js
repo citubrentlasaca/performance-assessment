@@ -352,7 +352,7 @@ function QuestionBox({ questions, setQuestions, deletedChoiceIds, setDeletedChoi
                             }}
                         >
                             <input type='text' className='form-control w-75' placeholder='Untitled Question' value={question.questionText} onChange={(e) => handleQuestionTextChange(e, question.id)} />
-                            <select class="form-select w-25" value={question.questionType} onChange={(e) => handleQuestionTypeChange(e, question.id)}>
+                            <select className="form-select w-25" value={question.questionType} onChange={(e) => handleQuestionTypeChange(e, question.id)}>
                                 <option value="Short answer">Short answer</option>
                                 <option value="Paragraph">Paragraph</option>
                                 <option value="Multiple choice">Multiple choice</option>
@@ -429,14 +429,14 @@ function QuestionBox({ questions, setQuestions, deletedChoiceIds, setDeletedChoi
                                                 }}
                                             />
                                             <button type='button' className='btn mt-0 p-0' onClick={() => deleteChoice(question.id, choice.id)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16">
                                                     <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                                                 </svg>
                                             </button>
                                         </div>
                                     ))}
                                     <button type='button' className='btn mt-0 p-0' onClick={() => addChoice(question.id)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
                                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                                         </svg>
                                     </button>
@@ -488,14 +488,14 @@ function QuestionBox({ questions, setQuestions, deletedChoiceIds, setDeletedChoi
                                                 }}
                                             />
                                             <button type='button' className='btn mt-0 p-0' onClick={() => deleteChoice(question.id, choice.id)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16">
                                                     <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                                                 </svg>
                                             </button>
                                         </div>
                                     ))}
                                     <button type='button' className='btn mt-0 p-0' onClick={() => addChoice(question.id)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
                                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                                         </svg>
                                     </button>
@@ -516,7 +516,7 @@ function QuestionBox({ questions, setQuestions, deletedChoiceIds, setDeletedChoi
                                             border: 'none'
                                         }}
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-dash-square" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-dash-square" viewBox="0 0 16 16">
                                             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
                                             <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z" />
                                         </svg>
@@ -527,7 +527,7 @@ function QuestionBox({ questions, setQuestions, deletedChoiceIds, setDeletedChoi
                                             border: 'none'
                                         }}
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-plus-square" viewBox="0 0 16 16">
                                             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
                                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                                         </svg>
@@ -597,7 +597,7 @@ function QuestionBox({ questions, setQuestions, deletedChoiceIds, setDeletedChoi
                                 spacing={2}
                             >
                                 <button type='button' className='btn' onClick={() => deleteQuestionBox(question.id)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-trash3" viewBox="0 0 16 16">
                                         <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                     </svg>
                                 </button>
@@ -618,8 +618,8 @@ function QuestionBox({ questions, setQuestions, deletedChoiceIds, setDeletedChoi
                                     }}
                                 >
                                     <p className='mb-0'>Required</p>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" checked={question.questionRequired} onChange={(e) => handleQuestionRequiredChange(e, question.id)}
+                                    <div className="form-check form-switch">
+                                        <input className="form-check-input" type="checkbox" role="switch" checked={question.questionRequired} onChange={(e) => handleQuestionRequiredChange(e, question.id)}
                                             style={{
                                                 border: '1px solid #27c6d9',
                                                 backgroundColor: '#27c6d9',
@@ -644,7 +644,7 @@ function QuestionBox({ questions, setQuestions, deletedChoiceIds, setDeletedChoi
                         }}
                     >
                         <button type='button' className='btn mt-0 p-0' onClick={duplicateQuestionBox}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-plus-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                             </svg>

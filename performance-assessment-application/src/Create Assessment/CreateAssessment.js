@@ -182,12 +182,12 @@ function CreateAssessment() {
                             width: '100%',
                         }}
                     >
-                        <button type="button" class="btn btn-success" onClick={postAssessment}
+                        <button type="button" className="btn btn-success" onClick={postAssessment}
                             style={{
                                 width: '200px'
                             }}
                         >Publish Assessment</button>
-                        <button type="button" class="btn btn-danger" onClick={discardAssessment}
+                        <button type="button" className="btn btn-danger" onClick={discardAssessment}
                             style={{
                                 width: '200px'
                             }}
