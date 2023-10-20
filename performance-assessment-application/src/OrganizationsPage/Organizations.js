@@ -40,7 +40,7 @@ function Organizations() {
     const handleCardClick = async (team) => {
         const employeeData = await fetchEmployeeDetails(team.id, userId);
         localStorage.setItem("employeeData", JSON.stringify(employeeData));
-        navigate(`/organizations/${team.id}`);
+        navigate(`/organizations/${team.id}/announcements`);
     };
 
     return (

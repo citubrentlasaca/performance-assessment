@@ -2,6 +2,7 @@ import React from 'react';
 import './EmployeeAnalytics.css';
 import sample from './sample.png';
 import NavBar from '../Shared/NavBar';
+import TopBarThree from '../Shared/TopBarThree';
 
 const analyticsData = [
   { id: 1, imageUrl: sample, title: 'Sales 1' },
@@ -17,15 +18,16 @@ const analyticsData = [
 const EmployeeAnalytics = () => {
   return (
     <NavBar>
-        <div className="emp-analytics-container">
-          {analyticsData.map((item) => (
-            <div key={item.id} className="emp-analytics-item">
-              <img src={item.imageUrl} alt={item.title} />
-              <h4>{item.title}</h4>
-              <h6>Click to view full details</h6>
-            </div>
-          ))}
-        </div>
+      <TopBarThree />
+      <div className="emp-analytics-container">
+        {analyticsData.map((item) => (
+          <div key={item.id} className="emp-analytics-item">
+            <img src={item.imageUrl} alt={item.title} />
+            <h4>{item.title}</h4>
+            <h6>Click to view full details</h6>
+          </div>
+        ))}
+      </div>
     </NavBar>
   );
 };
