@@ -12,6 +12,8 @@ namespace PerformanceAssessmentApi.Dtos
 
         public bool IsAnswered { get; set; }
 
+        public string? Occurrence { get; set; }
+
         [Required(ErrorMessage = "The dueDate is required.")]
         public string? DueDate { get; set; }
 

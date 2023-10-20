@@ -7,6 +7,8 @@ namespace PerformanceAssessmentApi.Dtos
         [Required(ErrorMessage = "The assessmentId is required.")]
         public int AssessmentId { get; set; }
 
+        public string? Occurrence { get; set; }
+
         [Required(ErrorMessage = "The dueDate is required.")]
         public string? DueDate { get; set; }
 
