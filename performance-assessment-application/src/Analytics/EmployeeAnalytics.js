@@ -18,16 +18,16 @@ const analyticsData = [
 const EmployeeAnalytics = () => {
   return (
     <NavBar>
-        <TopBarThree />
-        <div className="emp-analytics-container">
-          {analyticsData.map((item) => (
-            <div key={item.id} className="emp-analytics-item">
-              <img src={item.imageUrl} alt={item.title} />
-              <h4>{item.title}</h4>
-              <h6>Click to view full details</h6>
-            </div>
-          ))}
-        </div>
+      <TopBarThree />
+      <div className="emp-analytics-container">
+        {analyticsData.map((item) => (
+          <div key={item.id} className="emp-analytics-item">
+            <img src={item.imageUrl} alt={item.title} />
+            <h4>{item.title}</h4>
+            <h6>Click to view full details</h6>
+          </div>
+        ))}
+      </div>
     </NavBar>
   );
 };

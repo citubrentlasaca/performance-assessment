@@ -99,7 +99,7 @@ function OrganizationDetails() {
             .catch((error) => {
                 console.error('Error fetching announcements:', error);
             });
-    }, [announcement]);
+    }, [announcement, employee.teamId]);
 
 
     const handlePostClick = () => {
