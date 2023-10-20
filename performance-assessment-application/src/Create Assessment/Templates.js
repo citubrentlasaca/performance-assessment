@@ -11,7 +11,7 @@ function Templates() {
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
-    const [disabled, setDisabled] = useState(false);
+    const [disabledIds, setDisabledIds] = useState([]);
     const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
     const navigate = useNavigate();
 
@@ -24,9 +24,17 @@ function Templates() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const assessmentResponse = await fetch(`https://localhost:7236/api/assessments/employee/${employeeStorage.id}`);
-                const assessmentData = await assessmentResponse.json();
+                const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/employee/${employeeStorage.id}`);
+                const assessmentData = await assessmentResponse.data;
+                let disabledTemp = [];
+                for (const assessment of assessmentData) {
+                    const response = await axios.get(`https://localhost:7236/api/results/assessments/${assessment.id}`);
+                    for (const result of response.data) {
+                        disabledTemp.push(result.assessmentId);
+                    }
+                }
                 setAssessments(assessmentData);
+                setDisabledIds(disabledTemp);
                 setLoading(false);
             } catch (error) {
                 console.error(`Error fetching data:`, error);
@@ -53,18 +61,7 @@ function Templates() {
     };
 
     const handleUpdateClick = async (assessmentId) => {
-        try {
-            // Make the GET request using Axios.
-            const response = await axios.get(`https://localhost:7236/api/results/assessments/${assessmentId}`);
-
-            if (response.data.length === 0) {
-                navigate(`/adminassessments/${assessmentId}`)
-            } else {
-                setDisabled(true);
-            }
-        } catch (error) {
-            console.error("Error making GET request:", error);
-        }
+        navigate(`/adminassessments/${assessmentId}`)
     };
 
     return (
@@ -244,7 +241,7 @@ function Templates() {
                                                 </svg>
                                             </button>
                                         </Link>
-                                        {disabled ? (
+                                        {disabledIds.includes(assessment.id) ? (
                                             <button type="button" className="btn" disabled
                                                 style={{
                                                     border: 'none',
