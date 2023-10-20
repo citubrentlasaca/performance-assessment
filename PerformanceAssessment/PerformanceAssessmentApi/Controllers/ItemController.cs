@@ -32,7 +32,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///         "questionType": "Short Answer",
         ///         "weight": 100,
         ///         "target": 100,
-        ///         "required": "true",
+        ///         "required": true,
         ///         "assessmentId": 1
         ///     }
         ///
@@ -143,7 +143,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///         "questionType": "Paragraph",
         ///         "weight": 90,
         ///         "target": 50,
-        ///         "required": "false"
+        ///         "required": false
         ///     }
         ///
         /// </remarks>
