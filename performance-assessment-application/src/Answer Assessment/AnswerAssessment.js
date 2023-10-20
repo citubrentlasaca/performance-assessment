@@ -92,6 +92,32 @@ function AnswerAssessment() {
             }
 
             console.log('All answers submitted successfully');
+
+            const schedulerResponse = await fetch(`https://localhost:7236/api/schedulers/get-by-employee-and-assessment?employeeId=${employeeStorage.id}&assessmentId=${id}`);
+            const schedulerData = await schedulerResponse.json();
+
+            const updateData = {
+                assessmentId: schedulerData.assessmentId,
+                employeeId: schedulerData.employeeId,
+                isAnswered: true,
+                dueDate: schedulerData.dueDate,
+                time: schedulerData.time,
+            };
+
+            const schedulerUpdateResponse = await fetch(`https://localhost:7236/api/schedulers/${schedulerData.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updateData),
+            });
+
+            if (schedulerUpdateResponse.ok) {
+                console.log(`Assign scheduler has been updated`);
+            } else {
+                console.error(`Failed to update the assign scheduler`);
+            }
+
             setSubmissionComplete(true);
         } catch (error) {
             console.error('Network error:', error);
@@ -99,7 +125,7 @@ function AnswerAssessment() {
     };
 
     const handleCancelButtonClick = () => {
-        navigate('/organizations/performance');
+        navigate(`/organizations/${employeeStorage.teamId}/performance`);
     };
 
     return (

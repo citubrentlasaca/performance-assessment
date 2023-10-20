@@ -10,6 +10,9 @@ namespace PerformanceAssessmentApi.Dtos
         [Required(ErrorMessage = "The employeeId is required.")]
         public int EmployeeId { get; set; }
 
+        [Required(ErrorMessage = "The score is required.")]
+        public float Score { get; set; }
+
         [Required(ErrorMessage = "The dueDate is required.")]
         public string? DateTimeDue { get; set; }
     }

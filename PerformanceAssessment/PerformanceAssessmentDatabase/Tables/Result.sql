@@ -3,7 +3,7 @@
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
     [AssessmentId] INT NOT NULL,
     [EmployeeId] INT NOT NULL,
-    [Score] FLOAT NOT NULL DEFAULT 0,
+    [Score] FLOAT NOT NULL,
     [DateTimeDue] NVARCHAR(MAX) NOT NULL,
     [DateTimeCreated] DATETIME NOT NULL,
     [DateTimeUpdated] DATETIME NOT NULL,
