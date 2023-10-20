@@ -136,7 +136,7 @@ function Employees() {
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Status</th>
-                                    <th>Date Created</th>
+                                    <th>Date Joined</th>
                                 </tr>
                             </thead>
                             <tbody>
