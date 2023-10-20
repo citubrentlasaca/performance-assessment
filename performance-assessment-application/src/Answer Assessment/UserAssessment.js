@@ -84,7 +84,7 @@ function UserAssessment() {
         if (percentage >= 80) {
             return 'green';
         } else if (percentage >= 75) {
-            return 'yellow';
+            return '#FFD700';
         } else {
             return 'red';
         }
