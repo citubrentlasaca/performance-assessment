@@ -2,6 +2,7 @@ import React from 'react';
 import './EmployeeAnalytics.css';
 import sample from './sample.png';
 import NavBar from '../Shared/NavBar';
+import TopBarThree from '../Shared/TopBarThree';
 
 const analyticsData = [
   { id: 1, imageUrl: sample, title: 'Sales 1' },
@@ -17,6 +18,7 @@ const analyticsData = [
 const EmployeeAnalytics = () => {
   return (
     <NavBar>
+        <TopBarThree />
         <div className="emp-analytics-container">
           {analyticsData.map((item) => (
             <div key={item.id} className="emp-analytics-item">
