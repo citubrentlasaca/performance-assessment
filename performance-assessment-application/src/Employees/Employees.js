@@ -22,12 +22,20 @@ function Employees() {
             .then(response => response.json())
             .then(data => {
                 const filteredEmployees = data.filter(employee => employee.role !== "Admin");
+                console.log(filteredEmployees);
                 Promise.all(filteredEmployees.map(employee =>
-                    fetch(`https://localhost:7236/api/employees/users/${employee.userId}`)
+                    fetch(`https://localhost:7236/api/employees/${employee.id}/details`)
                         .then(response => response.json())
-                        .then(userData => ({ ...employee, ...userData }))
+                        .then(employeeDetails => {
+                            const user = employeeDetails.users[0];
+                            const { firstName, lastName, emailAddress } = user;
+                            return { ...employee, firstName, lastName, emailAddress };
+                        })
                 ))
-                    .then(employeesWithUserDetails => setEmployees(employeesWithUserDetails));
+                .then(employeesWithUserDetails => {
+                    console.log(employeesWithUserDetails);
+                    setEmployees(employeesWithUserDetails);
+                });
             });
 
         // Fetch team data
@@ -122,7 +130,7 @@ function Employees() {
                                         <div>
                                             <h5>{employee.firstName} {employee.lastName}</h5>
                                             <div>
-                                                {employee.dateTimeCreated}
+                                                {employee.dateTimeJoined}
                                             </div>
                                         </div>
                                     </div>
@@ -147,7 +155,7 @@ function Employees() {
                                         <td>{employee.firstName} {employee.lastName}</td>
                                         <td>{employee.emailAddress}</td>
                                         <td>{employee.status}</td>
-                                        <td>{employee.dateTimeCreated}</td>
+                                        <td>{employee.dateTimeJoined}</td>
                                     </tr>
                                 ))}
                             </tbody>
