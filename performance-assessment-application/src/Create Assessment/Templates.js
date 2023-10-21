@@ -2,7 +2,7 @@ import { Box, Stack } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import NavBar from '../Shared/NavBar'
 import TopBarTwo from '../Shared/TopBarTwo'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AssignAssessmentModal from './AssignAssessmentModal';
 import axios from 'axios';
 
@@ -14,7 +14,6 @@ function Templates() {
     const [selectedAssessmentTitle, setSelectedAssessmentTitle] = useState('');
     const [disabledIds, setDisabledIds] = useState([]);
     const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
-    const navigate = useNavigate();
 
     const handleOpen = (assessmentId, assessmentTitle) => {
         setSelectedAssessmentId(assessmentId);
@@ -62,10 +61,6 @@ function Templates() {
             });
     };
 
-    const handleUpdateClick = async (assessmentId) => {
-        navigate(`/adminassessments/${assessmentId}`)
-    };
-
     return (
         <NavBar>
             {loading ? (
@@ -83,27 +78,19 @@ function Templates() {
                     </div>
                 </Stack>
             ) : (
-                <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    sx={{
-                        height: "100%",
-                        width: "100%"
-                    }}
-                >
-
+                <>
                     <AssignAssessmentModal open={open} handleClose={handleClose} assessmentId={selectedAssessmentId} assessmentTitle={selectedAssessmentTitle} />
                     <TopBarTwo />
                     <Stack
                         direction="column"
-                        justifyContent="center"
+                        justifyContent="flex-start"
                         alignItems="center"
                         spacing={2}
                         sx={{
-                            height: "100%",
+                            height: "calc(100% - 100px)",
                             width: "100%",
-                            padding: '40px'
+                            padding: '40px',
+                            overflow: 'auto',
                         }}
                     >
 
@@ -256,7 +243,7 @@ function Templates() {
                                                     </svg>
                                                 </button>
                                             ) : (
-                                                <Link onClick={() => handleUpdateClick(assessment.id)} style={{ color: 'black' }}>
+                                                <Link to={`/adminassessments/${assessment.id}`} style={{ color: 'black' }}>
                                                     <button type="button" className="btn">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -277,8 +264,8 @@ function Templates() {
                                 </Box>
                             ))
                         ) : (null)}
-                    </Stack >
-                </Stack>
+                    </Stack>
+                </>
             )}
         </NavBar >
     )

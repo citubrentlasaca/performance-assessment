@@ -153,7 +153,6 @@ function Notifications() {
             sx={{
                 width: '100%',
                 height: '100%',
-                padding: '10px',
             }}
         >
             {admin.map((admin, index) => (
@@ -187,6 +186,15 @@ function Notifications() {
                     </Box>
                 </Stack>
             ))}
+            <div
+                style={{
+                    width: '100%',
+                    height: '40px',
+                    visibility: 'hidden',
+                }}
+            >
+                Hidden
+            </div>
         </Stack>
     );
 
@@ -232,6 +240,15 @@ function Notifications() {
                     </Box>
                 </Stack>
             ))}
+            <div
+                style={{
+                    width: '100%',
+                    height: '40px',
+                    visibility: 'hidden',
+                }}
+            >
+                Hidden
+            </div>
         </Stack>
     );
 
@@ -305,8 +322,16 @@ function Notifications() {
                     )}
 
                 </Stack>
-            ))
-            }
+            ))}
+            <div
+                style={{
+                    width: '100%',
+                    height: '40px',
+                    visibility: 'hidden',
+                }}
+            >
+                Hidden
+            </div>
         </Stack >
     );
 
@@ -319,76 +344,67 @@ function Notifications() {
         <NavBar>
             <Stack
                 direction="column"
-                justifyContent="center"
+                justifyContent="flex-start"
                 alignItems="center"
+                spacing={2}
                 sx={{
                     width: '100%',
                     height: '100%',
+                    padding: '40px',
+                    overflowY: 'auto',
                 }}
             >
                 <Stack
-                    direction="column"
-                    justifyContent="center"
+                    direction="row"
+                    justifyContent="flex-start"
                     alignItems="center"
                     spacing={2}
                     sx={{
                         width: '100%',
-                        height: '100%',
-                        padding: '40px',
                     }}
                 >
-                    <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={2}
-                        sx={{
-                            width: '100%',
-                        }}
-                    >
-                        <ul className="nav">
-                            <li className={`nav-item ${activeTab === 'Admin' ? 'active' : ''}`}>
-                                <b
-                                    className="nav-link"
-                                    style={{
-                                        color: activeTab === 'Admin' ? '#055c9d' : 'black',
-                                        cursor: 'pointer',
-                                    }}
-                                    onClick={() => handleTabChange('Admin')}
-                                >
-                                    <b>Admin</b>
-                                </b>
-                            </li>
-                            <li className={`nav-item ${activeTab === 'Assessments' ? 'active' : ''}`}>
-                                <b
-                                    className="nav-link"
-                                    style={{
-                                        color: activeTab === 'Assessments' ? '#055c9d' : 'black',
-                                        cursor: 'pointer',
-                                    }}
-                                    onClick={() => handleTabChange('Assessments')}
-                                >
-                                    <b>Assessments</b>
-                                </b>
-                            </li>
-                            <li className={`nav-item ${activeTab === 'Announcements' ? 'active' : ''}`}>
-                                <b
-                                    className="nav-link"
-                                    style={{
-                                        color: activeTab === 'Announcements' ? '#055c9d' : 'black',
-                                        cursor: 'pointer',
-                                    }}
-                                    onClick={() => handleTabChange('Announcements')}
-                                >
-                                    <b>Announcements</b>
-                                </b>
-                            </li>
-                        </ul>
-                    </Stack>
-                    {activeTab === 'Admin' ? renderAdminTab() : null}
-                    {activeTab === 'Announcements' ? renderAnnouncementsTab() : null}
-                    {activeTab === 'Assessments' ? renderAssessmentsTab() : null}
+                    <ul className="nav">
+                        <li className={`nav-item ${activeTab === 'Admin' ? 'active' : ''}`}>
+                            <b
+                                className="nav-link"
+                                style={{
+                                    color: activeTab === 'Admin' ? '#055c9d' : 'black',
+                                    cursor: 'pointer',
+                                }}
+                                onClick={() => handleTabChange('Admin')}
+                            >
+                                <b>Admin</b>
+                            </b>
+                        </li>
+                        <li className={`nav-item ${activeTab === 'Assessments' ? 'active' : ''}`}>
+                            <b
+                                className="nav-link"
+                                style={{
+                                    color: activeTab === 'Assessments' ? '#055c9d' : 'black',
+                                    cursor: 'pointer',
+                                }}
+                                onClick={() => handleTabChange('Assessments')}
+                            >
+                                <b>Assessments</b>
+                            </b>
+                        </li>
+                        <li className={`nav-item ${activeTab === 'Announcements' ? 'active' : ''}`}>
+                            <b
+                                className="nav-link"
+                                style={{
+                                    color: activeTab === 'Announcements' ? '#055c9d' : 'black',
+                                    cursor: 'pointer',
+                                }}
+                                onClick={() => handleTabChange('Announcements')}
+                            >
+                                <b>Announcements</b>
+                            </b>
+                        </li>
+                    </ul>
                 </Stack>
+                {activeTab === 'Admin' ? renderAdminTab() : null}
+                {activeTab === 'Announcements' ? renderAnnouncementsTab() : null}
+                {activeTab === 'Assessments' ? renderAssessmentsTab() : null}
             </Stack>
         </NavBar>
     )

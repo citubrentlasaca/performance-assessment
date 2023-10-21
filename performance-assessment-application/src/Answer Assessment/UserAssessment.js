@@ -99,8 +99,9 @@ function UserAssessment() {
                 spacing={2}
                 sx={{
                     width: "100%",
-                    height: '100%',
+                    height: 'calc(100% - 100px)',
                     padding: '40px',
+                    overflowY: 'auto',
                 }}
             >
                 <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={2}

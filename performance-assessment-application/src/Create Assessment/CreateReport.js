@@ -116,12 +116,13 @@ function CreateReport() {
                 sx={{
                     width: '100%',
                     height: '100%',
+                    overflowY: 'auto',
                     padding: '40px'
                 }}
             >
                 <Stack
                     direction="column"
-                    justifyContent="center"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={2}
                     sx={{
@@ -180,12 +181,14 @@ function CreateReport() {
                     >
                         <button type="button" className="btn btn-success" onClick={postAssessment}
                             style={{
-                                width: '200px'
+                                width: '200px',
+                                marginBottom: '40px'
                             }}
                         >Publish Assessment</button>
                         <button type="button" className="btn btn-danger" onClick={discardAssessment}
                             style={{
-                                width: '200px'
+                                width: '200px',
+                                marginBottom: '40px'
                             }}
                         >Discard Assessment</button>
                     </Stack>

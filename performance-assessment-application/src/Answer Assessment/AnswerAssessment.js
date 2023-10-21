@@ -220,14 +220,20 @@ function AnswerAssessment() {
                         width: "100%"
                     }}
                 >
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
                     </div>
                 </Stack>
             ) : submissionComplete ? (
-                <Stack direction="column" justifyContent="center" alignItems="center" spacing={7}
-                    style={{
-                        paddingTop: "100px"
+                <Stack
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={2}
+                    sx={{
+                        width: '100%',
+                        height: 'calc(100% - 100px)',
+
                     }}
                 >
                     <Box
@@ -250,8 +256,8 @@ function AnswerAssessment() {
                                 paddingBottom: "50px"
                             }}
                         >
-                            <button type="button" class="btn" onClick={handleCancelButtonClick}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                            <button type="button" className="btn" onClick={handleCancelButtonClick}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16">
                                     <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                                 </svg>
                             </button>
@@ -281,8 +287,9 @@ function AnswerAssessment() {
                     spacing={2}
                     sx={{
                         width: '100%',
-                        height: '100%',
-                        padding: '40px'
+                        height: 'calc(100% - 100px)',
+                        padding: '40px',
+                        overflowY: 'auto',
                     }}
                 >
                     <div
@@ -308,7 +315,7 @@ function AnswerAssessment() {
                                 height: "100%",
                             }}
                         >
-                            <h1 class='mb-0'>{assessmentData.title}</h1>
+                            <h1 className='mb-0'>{assessmentData.title}</h1>
                             <hr
                                 style={{
                                     width: "100%",
@@ -448,8 +455,8 @@ function AnswerAssessment() {
                                                 width: "100%",
                                             }}
                                         >
-                                            <button type='btn' class='btn' onClick={() => handleDecrement(item.id)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#27c6d9" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                            <button type='btn' className='btn' onClick={() => handleDecrement(item.id)}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#27c6d9" className="bi bi-dash-circle-fill" viewBox="0 0 16 16">
                                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z" />
                                                 </svg>
                                             </button>
@@ -476,8 +483,8 @@ function AnswerAssessment() {
                                                     textAlign: 'center',
                                                 }}
                                             />
-                                            <button type='btn' class='btn' onClick={() => handleIncrement(item.id)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#27c6d9" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                            <button type='btn' className='btn' onClick={() => handleIncrement(item.id)}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#27c6d9" className="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
                                                 </svg>
                                             </button>
@@ -599,7 +606,7 @@ function AnswerAssessment() {
                             )}
                         </div>
                     ))}
-                    <button type="button" class="btn btn-primary"
+                    <button type="button" className="btn btn-primary"
                         style={{
                             backgroundColor: "#27c6d9",
                             border: "#27c6d9",

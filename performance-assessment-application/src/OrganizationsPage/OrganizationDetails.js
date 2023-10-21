@@ -78,23 +78,25 @@ function OrganizationDetails() {
 
         axios.get(`https://localhost:7236/api/announcements`)
             .then((response) => {
-                const announcements = response.data.reverse();
-                let tempAnnouncementList = [];
-                announcements.map((announcement) => {
-                    if (announcement.teamId === employee.teamId) {
-                        const formattedDate = new Date(announcement.dateTimeCreated).toLocaleString('en-US', {
-                            month: 'long',
-                            day: 'numeric',
-                            year: 'numeric',
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            hour12: true,
-                        });
-                        announcement.dateTimeCreated = formattedDate;
-                        tempAnnouncementList.push(announcement);
-                    }
-                })
-                setAnnouncementList(tempAnnouncementList);
+                if (response.data.length !== 0) {
+                    const announcements = response.data.reverse();
+                    let tempAnnouncementList = [];
+                    announcements.map((announcement) => {
+                        if (announcement.teamId === employee.teamId) {
+                            const formattedDate = new Date(announcement.dateTimeCreated).toLocaleString('en-US', {
+                                month: 'long',
+                                day: 'numeric',
+                                year: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                hour12: true,
+                            });
+                            announcement.dateTimeCreated = formattedDate;
+                            tempAnnouncementList.push(announcement);
+                        }
+                    })
+                    setAnnouncementList(tempAnnouncementList);
+                }
             })
             .catch((error) => {
                 console.error('Error fetching announcements:', error);
@@ -166,17 +168,69 @@ function OrganizationDetails() {
                     </Stack>
                 </Box>
             </Modal>
-            <Stack
-                direction="column"
-                justifyContent="space-between"
-                alignItems="center"
-                spacing={2}
-                sx={{
-                    width: "100%",
-                    height: "100%",
-                    padding: '40px'
-                }}
-            >
+            {announcementList.length > 0 ? (
+                <Stack
+                    direction="column"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    spacing={2}
+                    sx={{
+                        width: "100%",
+                        height: "calc(100% - 100px)",
+                        padding: '40px',
+                        overflow: 'auto',
+                    }}
+                >
+                    <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={2}
+                        sx={{
+                            width: "100%",
+                        }}
+                    >
+                        {announcementList.map((announcement, index) => (
+                            <Stack key={index}
+                                direction="column"
+                                justifyContent="flex-start"
+                                alignItems="flex-start"
+                                spacing={2}
+                                sx={{
+                                    width: '100%',
+                                    height: '100%',
+                                    padding: '10px',
+                                }}
+                            >
+                                <p className="mb-0">{announcement.dateTimeCreated}</p>
+                                <Box className='gap-2'
+                                    sx={{
+                                        width: '100%',
+                                        height: 'fit-content',
+                                        backgroundColor: 'white',
+                                        borderRadius: '10px',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
+                                        alignItems: 'flex-start',
+                                        padding: '30px',
+                                    }}
+                                >
+                                    <p className="mb-0">{announcement.content}</p>
+                                </Box>
+                            </Stack>
+                        ))}
+                    </Stack>
+                    {employee.role === "Admin" ? (
+                        <button style={addAnnouncementHover ? { ...normalStyle, ...hoverStyle } : normalStyle} onClick={handleOpen}
+                            onMouseEnter={handleAddHover}
+                            onMouseLeave={handleAddLeave}
+                        >
+                            Add Announcement
+                        </button>
+                    ) : (null)}
+                </Stack>
+            ) : (
                 <Stack
                     direction="column"
                     justifyContent="center"
@@ -184,68 +238,42 @@ function OrganizationDetails() {
                     spacing={2}
                     sx={{
                         width: "100%",
+                        height: "calc(100% - 100px)",
+                        padding: '40px',
+                        overflow: 'auto',
                     }}
                 >
-
-                    {announcementList.length > 0 ? (
-                        <>
-                            {announcementList.map((announcement, index) => (
-                                <Stack key={index}
-                                    direction="column"
-                                    justifyContent="flex-start"
-                                    alignItems="flex-start"
-                                    spacing={2}
-                                    sx={{
-                                        width: '100%',
-                                        height: '100%',
-                                        padding: '10px',
-                                    }}
-                                >
-                                    <p className="mb-0">{announcement.dateTimeCreated}</p>
-                                    <Box className='gap-2'
-                                        sx={{
-                                            width: '100%',
-                                            height: 'fit-content',
-                                            backgroundColor: 'white',
-                                            borderRadius: '10px',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            justifyContent: 'center',
-                                            alignItems: 'flex-start',
-                                            padding: '30px',
-                                        }}
-                                    >
-                                        <p className="mb-0">{announcement.content}</p>
-                                    </Box>
-                                </Stack>
-                            ))}
-                        </>
-                    ) : (
-                        <>
-                            <h1
-                                style={{
-                                    color: '#055c9d',
-                                    fontWeight: 'bold'
-                                }}
-                            >
-                                Welcome to {teamName}
-                            </h1>
-                            <img src={announcementPhoto} alt="Announcement" style={{ width: '10%' }} />
-                            <p className="mb-0">No announcement yet</p>
-                        </>
-
-                    )}
-
-                </Stack>
-                {employee.role === "Admin" ? (
-                    <button style={addAnnouncementHover ? { ...normalStyle, ...hoverStyle } : normalStyle} onClick={handleOpen}
-                        onMouseEnter={handleAddHover}
-                        onMouseLeave={handleAddLeave}
+                    <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={2}
+                        sx={{
+                            width: "100%",
+                        }}
                     >
-                        Add Announcement
-                    </button>
-                ) : (null)}
-            </Stack>
+                        <h1
+                            style={{
+                                color: '#055c9d',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            Welcome to {teamName}
+                        </h1>
+                        <img src={announcementPhoto} alt="Announcement" style={{ width: '10%' }} />
+                        <p className="mb-0">No announcement yet</p>
+                        {employee.role === "Admin" ? (
+                            <button style={addAnnouncementHover ? { ...normalStyle, ...hoverStyle } : normalStyle} onClick={handleOpen}
+                                onMouseEnter={handleAddHover}
+                                onMouseLeave={handleAddLeave}
+                            >
+                                Add Announcement
+                            </button>
+                        ) : (null)}
+                    </Stack>
+                </Stack>
+            )}
+
         </NavBar>
     );
 }
