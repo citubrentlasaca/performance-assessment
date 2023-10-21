@@ -170,7 +170,7 @@ function UserAssessment() {
                                     <b>{assessment.title}</b>
                                     <p className='mb-0'>{assessment.date}</p>
                                 </Stack>
-                                <p className='mb-0' style={{ color: getScoreColor(assessment.score) }}>{assessment.score}%</p>
+                                <p className='mb-0' style={{ color: getScoreColor(assessment.score) }}>{assessment.score.toFixed(0)}%</p>
                             </Box>
                         ))}
                     </Stack>

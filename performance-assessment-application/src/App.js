@@ -1,4 +1,3 @@
-import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Templates from './Create Assessment/Templates';
 import UserAssessment from './Answer Assessment/UserAssessment';
