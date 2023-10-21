@@ -22,7 +22,6 @@ function Employees() {
             .then(response => response.json())
             .then(data => {
                 const filteredEmployees = data.filter(employee => employee.role !== "Admin");
-                console.log(filteredEmployees);
                 Promise.all(filteredEmployees.map(employee =>
                     fetch(`https://localhost:7236/api/employees/${employee.id}/details`)
                         .then(response => response.json())
@@ -33,7 +32,6 @@ function Employees() {
                         })
                 ))
                 .then(employeesWithUserDetails => {
-                    console.log(employeesWithUserDetails);
                     setEmployees(employeesWithUserDetails);
                 });
             });
