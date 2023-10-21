@@ -12,17 +12,28 @@ function Employees() {
     const employeeStorage = JSON.parse(localStorage.getItem("employeeData"));
 
     useEffect(() => {
-        // Fetch employees
-        fetch('https://localhost:7236/api/employees')
+        // Make sure employeeData is available
+        if (!employeeStorage || !employeeStorage.teamId) {
+            return;
+        }
+
+        // Fetch employees for the specific team
+        fetch(`https://localhost:7236/api/employees/teams/${employeeStorage.teamId}`)
             .then(response => response.json())
             .then(data => {
                 const filteredEmployees = data.filter(employee => employee.role !== "Admin");
                 Promise.all(filteredEmployees.map(employee =>
-                    fetch(`https://localhost:7236/api/users/${employee.userId}`)
+                    fetch(`https://localhost:7236/api/employees/${employee.id}/details`)
                         .then(response => response.json())
-                        .then(userData => ({ ...employee, ...userData }))
+                        .then(employeeDetails => {
+                            const user = employeeDetails.users[0];
+                            const { firstName, lastName, emailAddress } = user;
+                            return { ...employee, firstName, lastName, emailAddress };
+                        })
                 ))
-                    .then(employeesWithUserDetails => setEmployees(employeesWithUserDetails));
+                .then(employeesWithUserDetails => {
+                    setEmployees(employeesWithUserDetails);
+                });
             });
 
         // Fetch team data
@@ -32,7 +43,6 @@ function Employees() {
                 const businessType = data.businessType;
                 setTeamNamePlaceholder(businessType);
             });
-
     }, [employeeStorage.teamId]);
 
     const sortEmployees = (order) => {
@@ -55,7 +65,7 @@ function Employees() {
     };
 
     const handleChangeView = () => {
-        setListView(!listView); // Toggle the view
+        setListView(!listView);
     }
 
     const filterEmployees = (data, query) => {
@@ -86,7 +96,6 @@ function Employees() {
                                 value={searchQuery}
                                 onChange={(e) => {
                                     setSearchQuery(e.target.value);
-                                    console.log(e.target.value); // Add this line for debugging
                                 }}
                             />
                         </div>
@@ -119,7 +128,7 @@ function Employees() {
                                         <div>
                                             <h5>{employee.firstName} {employee.lastName}</h5>
                                             <div>
-                                                {employee.dateTimeCreated}
+                                                {employee.dateTimeJoined}
                                             </div>
                                         </div>
                                     </div>
@@ -129,7 +138,6 @@ function Employees() {
                     </div>
                 ) : (
                     <div className="employee-table">
-                        {/* Render employees in table format */}
                         <table className="styled-table">
                             <thead>
                                 <tr>
@@ -145,17 +153,14 @@ function Employees() {
                                         <td>{employee.firstName} {employee.lastName}</td>
                                         <td>{employee.emailAddress}</td>
                                         <td>{employee.status}</td>
-                                        <td>{employee.dateTimeCreated}</td>
+                                        <td>{employee.dateTimeJoined}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
                 )}
-
-
             </div>
-
         </NavBar>
     )
 }
