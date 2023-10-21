@@ -36,7 +36,6 @@ function Performance() {
                         }
 
                         if (assessmentResponse.data.title === "Daily Performance Report") {
-                            // Implement here
                             const assessmentData = assessmentResponse.data;
                             const responseArray = await axios.get(`https://localhost:7236/api/results/assessments/${assessmentData.id}`);
 
@@ -100,8 +99,9 @@ function Performance() {
                 spacing={2}
                 sx={{
                     width: "100%",
-                    height: '100%',
+                    height: 'calc(100% - 100px)',
                     padding: '40px',
+                    overflowY: 'auto',
                 }}
             >
                 <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={2}

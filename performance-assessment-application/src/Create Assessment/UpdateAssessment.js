@@ -112,7 +112,7 @@ function UpdateAssessment() {
         };
 
         fetchData();
-    }, []);
+    }, [id]);
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -121,10 +121,6 @@ function UpdateAssessment() {
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
     }
-
-    const updateDeletedChoiceIds = (newDeletedChoiceIds) => {
-        setDeletedChoiceIds(newDeletedChoiceIds);
-    };
 
     async function doesChoiceExistInDatabase(choiceId) {
         try {
@@ -260,8 +256,8 @@ function UpdateAssessment() {
                         padding: "40px",
                     }}
                 >
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
                     </div>
                 </Stack>
             ) : (
@@ -273,13 +269,14 @@ function UpdateAssessment() {
                     sx={{
                         width: '100%',
                         height: '100%',
-                        padding: '40px'
+                        padding: '40px',
+                        overflowY: 'auto',
                     }}
                 >
                     <Stack
                         direction="column"
-                        justifyContent="center"
-                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        alignItems="center"
                         spacing={2}
                         sx={{
                             width: '75%',
@@ -345,14 +342,16 @@ function UpdateAssessment() {
                                 width: '100%',
                             }}
                         >
-                            <button type="button" class="btn btn-success" onClick={updateAssessment}
+                            <button type="button" className="btn btn-success" onClick={updateAssessment}
                                 style={{
-                                    width: '200px'
+                                    width: '200px',
+                                    marginBottom: '40px'
                                 }}
                             >Update Assessment</button>
-                            <button type="button" class="btn btn-danger" onClick={discardChanges}
+                            <button type="button" className="btn btn-danger" onClick={discardChanges}
                                 style={{
-                                    width: '200px'
+                                    width: '200px',
+                                    marginBottom: '40px'
                                 }}
                             >Discard Changes</button>
                         </Stack>

@@ -117,13 +117,14 @@ function ViewAnswers() {
             ) : (
                 <Stack
                     direction="column"
-                    justifyContent="center"
+                    justifyContent="flex-start"
                     alignItems="center"
                     spacing={2}
                     sx={{
                         width: '100%',
-                        height: '100%',
-                        padding: '40px'
+                        height: 'calc(100% - 100px)',
+                        padding: '40px',
+                        overflowY: 'auto',
                     }}
                 >
                     <div
@@ -155,8 +156,8 @@ function ViewAnswers() {
                             width: '75%',
                         }}
                     >
-                        <select className="form-select w-75" onChange={handleSelectChange}>
-                            <option selected disabled>Select an employee</option>
+                        <select className="form-select w-75" defaultValue="" onChange={handleSelectChange}>
+                            <option value="" disabled>Select an employee</option>
                             {[...new Set(employees.map(employee => employee.firstName + ' ' + employee.lastName))].map((name, index) => (
                                 <option key={index} value={name}>
                                     {name}
@@ -195,19 +196,19 @@ function ViewAnswers() {
                             >
                                 <p className='mb-0'>Answer:</p>
                                 {item.questionType === 'Short answer' && (
-                                    <input type='text' className='form-control' value={answers[index]} disabled />
+                                    <input type='text' className='form-control' value={answers[index] || ''} disabled />
                                 )}
                                 {item.questionType === 'Paragraph' && (
-                                    <input type='text' className='form-control' value={answers[index]} disabled />
+                                    <input type='text' className='form-control' value={answers[index] || ''} disabled />
                                 )}
                                 {item.questionType === 'Multiple choice' && (
-                                    <input type='text' className='form-control' value={answers[index]} disabled />
+                                    <input type='text' className='form-control' value={answers[index] || ''} disabled />
                                 )}
                                 {item.questionType === 'Checkboxes' && (
-                                    <input type='text' className='form-control' value={answers[index]} disabled />
+                                    <input type='text' className='form-control' value={answers[index] || ''} disabled />
                                 )}
                                 {item.questionType === 'Counter' && (
-                                    <input type='text' className='form-control' value={answers[index]} disabled />
+                                    <input type='text' className='form-control' value={answers[index] || ''} disabled />
                                 )}
                             </Stack>
                         </div>

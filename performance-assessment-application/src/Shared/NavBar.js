@@ -34,20 +34,17 @@ function NavBar({ children }) {
           alignItems="center"
           sx={{
             height: "100%",
-            width: "100%"
+            width: "100%",
           }}
         >
-          <div
+          <main
             style={{
               height: '100%',
               width: '100%',
-              overflowY: 'auto',
             }}
           >
-            <main>
-              {children}
-            </main>
-          </div>
+            {children}
+          </main>
         </Stack>
       </Stack>
     </Stack>
