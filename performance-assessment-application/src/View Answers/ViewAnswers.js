@@ -7,34 +7,87 @@ import { Stack } from '@mui/material';
 
 function ViewAnswers() {
     const { teamId, assessmentId } = useParams();
-    const [employees, setEmployees] = useState([]);
-    const [selectedName, setSelectedName] = useState('');
     const [assessment, setAssessment] = useState(null);
-    const [score, setScore] = useState([]);
-    const [answers, setAnswers] = useState([]);
+    const [items, setItems] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [answers, setAnswers] = useState([]);
+    const [selectedEmployee, setSelectedEmployee] = useState("Choose employee");
+    const [selectedAnswers, setSelectedAnswers] = useState([]);
+    const [score, setScore] = useState(0);
+
+    const handleEmployeeSelect = (event) => {
+        setSelectedEmployee(event.target.value);
+        for (const answer of answers) {
+            if (answer.id === Number(event.target.value)) {
+                setSelectedAnswers(answer.answers);
+                setScore(answer.score * 100);
+            }
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const firstResponse = await axios.get(`https://localhost:7236/api/assessments/${assessmentId}/items`);
-                setAssessment(firstResponse.data);
-                const items = firstResponse.data.items;
-
-                const employeesData = [];
-                for (const item of items) {
-                    const secondResponse = await axios.get(`https://localhost:7236/api/answers/items/${item.id}`);
-                    const answers = secondResponse.data;
-
-                    for (const answer of answers) {
-                        const thirdResponse = await axios.get(`https://localhost:7236/api/employees/${answer.employeeId}`);
-                        const employeeId = thirdResponse.data.userId;
-
-                        const fourthResponse = await axios.get(`https://localhost:7236/api/users/${employeeId}`);
-                        employeesData.push(fourthResponse.data);
+                const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${assessmentId}`);
+                const itemsTemp = [];
+                const itemsResponse = await axios.get(`https://localhost:7236/api/items`);
+                for (const item of itemsResponse.data) {
+                    if (item.assessmentId === Number(assessmentId)) {
+                        itemsTemp.push(item);
                     }
                 }
-                setEmployees(employeesData);
+                const resultResponse = await axios.get(`https://localhost:7236/api/results/assessments/${assessmentResponse.data.id}`);
+                const answersTemp = [];
+
+                for (const result of resultResponse.data) {
+                    const employeeResponse = await axios.get(`https://localhost:7236/api/employees/${result.employeeId}`);
+                    const userResponse = await axios.get(`https://localhost:7236/api/users/${employeeResponse.data.userId}`);
+                    answersTemp.push({
+                        id: result.id,
+                        name: userResponse.data.firstName + ' ' + userResponse.data.lastName,
+                        date: result.dateTimeCreated,
+                        score: result.score,
+                        answers: [],
+                    });
+                }
+
+                for (const item of itemsTemp) {
+                    const answerResponse = await axios.get(`https://localhost:7236/api/answers/items/${item.id}`);
+                    for (const answer of answerResponse.data) {
+                        for (const answerTemp of answersTemp) {
+                            const answerDate = new Date(answer.dateTimeAnswered);
+                            const answerTempDate = new Date(answerTemp.date);
+
+                            const options = {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            };
+                            const timeOptions = {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                            };
+
+                            const formattedAnswerDate = answerDate.toLocaleDateString('en-US', options) + ' at ' + answerDate.toLocaleTimeString('en-US', timeOptions);
+                            const formattedAnswerTempDate = answerTempDate.toLocaleDateString('en-US', options) + ' at ' + answerTempDate.toLocaleTimeString('en-US', timeOptions);
+                            if (formattedAnswerDate === formattedAnswerTempDate) {
+                                if (item.questionType === 'Short answer' || item.questionType === 'Paragraph') {
+                                    answerTemp.answers.push(answer.answerText);
+                                }
+                                else if (item.questionType === 'Multiple choice' || item.questionType === 'Checkboxes') {
+                                    answerTemp.answers.push(answer.selectedChoices);
+                                }
+                                else if (item.questionType === 'Counter') {
+                                    answerTemp.answers.push(answer.counterValue);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                setAssessment(assessmentResponse.data);
+                setItems(itemsTemp);
+                setAnswers(answersTemp);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -44,58 +97,33 @@ function ViewAnswers() {
         fetchData();
     }, [assessmentId]);
 
-    const handleSelectChange = async (event) => {
-        const selectedName = event.target.value;
-        setSelectedName(selectedName);
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        };
+        const dateStr = date.toLocaleDateString('en-US', options);
+        const timeStr = date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+        });
+        return `${dateStr} at ${timeStr}`;
+    }
 
-        const firstName = selectedName.split(' ')[0];
-
-        const employee = employees.find(emp => emp.firstName === firstName);
-
-        if (employee) {
-            const employeeResponse = await axios.get(`https://localhost:7236/api/employees/users/${employee.id}`);
-
-            let employeeId = 0;
-            employeeResponse.data.forEach(employee => {
-                if (employee.teamId === Number(teamId)) {
-                    employeeId = employee.id;
-                }
-            });
-
-            if (employeeId !== 0) {
-                const employeeIdTemp = employeeId;
-                const assessmentItems = assessment.items;
-                let score = 0;
-                let answersArray = [];
-
-
-                const resultResponse = await axios.get(`https://localhost:7236/api/results/employees/${employeeIdTemp}`);
-                for (const result of resultResponse.data) {
-                    if (result.assessmentId === Number(assessmentId)) {
-                        score = result.score * 100;
-                    }
-                }
-
-                for (const item of assessmentItems) {
-                    const itemResponse = await axios.get(`https://localhost:7236/api/answers/items/${item.id}`);
-                    itemResponse.data.forEach(answer => {
-                        if (answer.employeeId === employeeIdTemp && answer.isDeleted === false) {
-                            if (item.questionType === 'Short answer' || item.questionType === 'Paragraph') {
-                                answersArray.push(answer.answerText);
-                            } else if (item.questionType === 'Multiple choice' || item.questionType === 'Checkboxes') {
-                                answersArray.push(answer.selectedChoices);
-                            } else if (item.questionType === 'Counter') {
-                                answersArray.push(answer.counterValue);
-                            }
-                        }
-                    });
-                }
-
-                setScore(score.toString() + '%');
-                setAnswers(answersArray);
-            }
+    function getScoreColor(score) {
+        if (score >= 0 && score < 60) {
+            return 'red';
+        } else if (score >= 60 && score < 75) {
+            return 'orange';
+        } else if (score >= 75 && score <= 100) {
+            return 'green';
         }
-    };
+
+        return 'black';
+    }
+
 
     return (
         <NavBar>
@@ -156,13 +184,14 @@ function ViewAnswers() {
                             width: '75%',
                         }}
                     >
-                        <select className="form-select w-75" defaultValue="" onChange={handleSelectChange}>
-                            <option value="" disabled>Select an employee</option>
-                            {[...new Set(employees.map(employee => employee.firstName + ' ' + employee.lastName))].map((name, index) => (
-                                <option key={index} value={name}>
-                                    {name}
+                        <select className="form-select" value={selectedEmployee} onChange={handleEmployeeSelect}>
+                            <option value="Choose employee" disabled>Choose employee</option>
+                            {answers.map((answer, index) => (
+                                <option key={index} value={answer.id}>
+                                    {answer.name} | {formatDate(answer.date)}
                                 </option>
-                            ))}
+                            )
+                            )}
                         </select>
                         <Stack className='w-25'
                             direction="row"
@@ -171,10 +200,15 @@ function ViewAnswers() {
                             spacing={2}
                         >
                             <p className='mb-0'>Score:</p>
-                            <input type='text' className='form-control' value={score} disabled />
+                            <input type='text' className='form-control' value={score.toFixed(0) + '%'} disabled
+                                style={{
+                                    textAlign: 'center',
+                                    color: getScoreColor(score)
+                                }}
+                            />
                         </Stack>
                     </Stack>
-                    {assessment.items.map((item, index) => (
+                    {items.map((item, index) => (
                         <div key={index}
                             style={{
                                 width: '75%',
@@ -195,21 +229,7 @@ function ViewAnswers() {
                                 }}
                             >
                                 <p className='mb-0'>Answer:</p>
-                                {item.questionType === 'Short answer' && (
-                                    <input type='text' className='form-control' value={answers[index] || ''} disabled />
-                                )}
-                                {item.questionType === 'Paragraph' && (
-                                    <input type='text' className='form-control' value={answers[index] || ''} disabled />
-                                )}
-                                {item.questionType === 'Multiple choice' && (
-                                    <input type='text' className='form-control' value={answers[index] || ''} disabled />
-                                )}
-                                {item.questionType === 'Checkboxes' && (
-                                    <input type='text' className='form-control' value={answers[index] || ''} disabled />
-                                )}
-                                {item.questionType === 'Counter' && (
-                                    <input type='text' className='form-control' value={answers[index] || ''} disabled />
-                                )}
+                                <input type='text' className='form-control' value={selectedAnswers[index]} disabled />
                             </Stack>
                         </div>
                     ))}
