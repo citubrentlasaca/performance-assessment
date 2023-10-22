@@ -116,32 +116,32 @@ function Notifications() {
             }
         };
 
-        axios.get(`https://localhost:7236/api/employees/users/${id}`)
-            .then((response) => {
-                const employeeData = response.data;
-
+        const fetchNotificationsForEmployee = async () => {
+            try {
+                const employeeResponse = await axios.get(`https://localhost:7236/api/employees/users/${id}`);
+                const employeeData = employeeResponse.data;
                 const adminData = [];
                 const assessmentsData = [];
                 const announcementsData = [];
-
-                Promise.all(
-                    employeeData.map(async (employee) => {
+                for (const employee of employeeData) {
+                    if (employee.status === 'Active') {
                         const admin = await fetchAdminNotificationsForEmployee(employee.id);
                         adminData.push(...admin);
                         const assessments = await fetchAssessmentsForEmployee(employee.id);
                         assessmentsData.push(...assessments);
                         const announcements = await fetchAnnouncementsForEmployee(employee.id);
                         announcementsData.push(...announcements);
-                    })
-                ).then(() => {
-                    setAdmin(adminData);
-                    setAssessments(assessmentsData);
-                    setAnnouncements(announcementsData);
-                });
-            })
-            .catch((error) => {
-                console.error('Error fetching employee data:', error);
-            });
+                    }
+                }
+                setAdmin(adminData);
+                setAssessments(assessmentsData);
+                setAnnouncements(announcementsData);
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+            }
+        };
+
+        fetchNotificationsForEmployee();
     }, [id]);
 
     const renderAdminTab = () => (

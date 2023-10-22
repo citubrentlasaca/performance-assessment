@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Stack } from '@mui/material';
 
 function ViewAnswers() {
-    const { teamId, assessmentId } = useParams();
+    const { assessmentId } = useParams();
     const [assessment, setAssessment] = useState(null);
     const [items, setItems] = useState(null);
     const [loading, setLoading] = useState(true);

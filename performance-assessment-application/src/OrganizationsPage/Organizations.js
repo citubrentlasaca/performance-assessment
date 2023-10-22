@@ -12,17 +12,26 @@ function Organizations() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios
-            .get(`https://localhost:7236/api/users/${userId}/teams`)
-            .then((response) => {
-                setUserTeams(response.data);
-            })
-            .catch((error) => {
-                console.error("Error fetching user teams:", error);
-            })
-            .finally(() => {
+        const fetchData = async () => {
+            try {
+                const teamResponse = await axios.get(`https://localhost:7236/api/users/${userId}/teams`);
+                const userTemp = [];
+                for (const team of teamResponse.data) {
+                    const employeeResponse = await axios.get(`https://localhost:7236/api/employees/teams/${team.id}`);
+                    for (const employee of employeeResponse.data) {
+                        if (employee.status === 'Active' && employee.userId === Number(userId)) {
+                            userTemp.push(team);
+                        }
+                    }
+                }
+                setUserTeams(userTemp);
                 setLoading(false);
-            });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, [userId]);
 
     async function fetchEmployeeDetails(teamId, userId) {
