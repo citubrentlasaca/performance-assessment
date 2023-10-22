@@ -226,15 +226,6 @@ namespace PerformanceAssessmentApi.Controllers
         {
             try
             {
-                // Check if an assessment has an item or not
-                var foundItems = await _itemService.GetItemById(id);
-
-                if (foundItems == null)
-                {
-                    return StatusCode(404, "Item/s not found");
-                }
-
-                // Check if assessment exists
                 var foundAssessmentItems = await _assessmentService.GetAssessmentItemsById(id);
 
                 if (foundAssessmentItems == null)

@@ -169,7 +169,7 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<int> DeleteEmployee(int id)
         {
-            var sql = "DELETE FROM [dbo].[Employee] WHERE [Id] = @Id";
+            var sql = "UPDATE [dbo].[Employee] SET [Status] = \'Inactive\' WHERE [Id] = @Id;";
 
             using (var con = _context.CreateConnection())
             {

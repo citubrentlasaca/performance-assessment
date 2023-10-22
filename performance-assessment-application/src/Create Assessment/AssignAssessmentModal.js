@@ -41,16 +41,17 @@ function AssignAssessmentModal({ open, handleClose, assessmentId, assessmentTitl
                 const employeesResponse = await fetch(`https://localhost:7236/api/employees/teams/${employeeStorage.teamId}`);
                 const employeesData = await employeesResponse.json();
 
-                const usersData = await Promise.all(
-                    employeesData.map(async (employee) => {
+                const userTemp = [];
+                for (const employee of employeesData) {
+                    if (employee.status === 'Active' && employee.role !== 'Admin') {
                         const userId = employee.userId;
                         const userResponse = await fetch(`https://localhost:7236/api/users/${userId}`);
                         const userData = await userResponse.json();
-                        return userData;
-                    })
-                );
+                        userTemp.push(userData);
+                    }
+                }
 
-                setUsers(usersData);
+                setUsers(userTemp);
                 setLoading(false);
             } catch (error) {
                 console.error(`Error fetching data:`, error);
