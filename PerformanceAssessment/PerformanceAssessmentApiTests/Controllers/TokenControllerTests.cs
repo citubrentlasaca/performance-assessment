@@ -24,7 +24,6 @@ namespace PerformanceAssessmentApiTests.Controllers
             _fakeLogger = new Mock<ILogger<EmployeeController>>();
             var configuration = new Mock<IConfiguration>();
             configuration.Setup(x => x.GetSection("AppSettings:Token").Value).Returns("The top secret key of the app is performance assessment which is all about implementing evaluations for all employees and admins.");
-
             _controller = new TokenController(_fakeLogger.Object, _fakeTokenService.Object, _fakeEmployeeService.Object);
         }
 

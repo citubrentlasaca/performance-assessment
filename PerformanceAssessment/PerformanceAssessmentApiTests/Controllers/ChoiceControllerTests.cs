@@ -19,7 +19,6 @@ namespace PerformanceAssessmentApiTests.Controllers
         {
             _fakeChoiceService = new Mock<IChoiceService>();
             _logger = new Mock<ILogger<ChoiceController>>();
-
             _controller = new ChoiceController(_fakeChoiceService.Object, _logger.Object);
         }
 

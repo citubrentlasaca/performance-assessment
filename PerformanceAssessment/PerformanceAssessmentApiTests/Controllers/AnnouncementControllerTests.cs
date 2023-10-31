@@ -23,7 +23,6 @@ namespace PerformanceAssessmentApiTests.Controllers
             _fakeEmployeeService = new Mock<IEmployeeService>();
             _fakeEmployeeAnnouncementNotificationService = new Mock<IEmployeeAnnouncementNotificationService>();
             _logger = new Mock<ILogger<AnnouncementController>>();
-
             _controller = new AnnouncementController(
                 _fakeAnnouncementService.Object,
                 _fakeEmployeeService.Object,

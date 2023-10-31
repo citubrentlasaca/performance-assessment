@@ -19,7 +19,6 @@ namespace PerformanceAssessmentApiTests.Controllers
         {
             _fakeItemService = new Mock<IItemService>();
             _fakeLogger = new Mock<ILogger<ItemController>>();
-
             _controller = new ItemController(_fakeItemService.Object, _fakeLogger.Object);
         }
 

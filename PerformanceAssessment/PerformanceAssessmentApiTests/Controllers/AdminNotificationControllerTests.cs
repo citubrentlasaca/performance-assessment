@@ -19,7 +19,6 @@ namespace PerformanceAssessmentApiTests.Controllers
         {
             _fakeAdminNotificationService = new Mock<IAdminNotificationService>();
             _logger = new Mock<ILogger<AdminNotificationController>>();
-
             _controller = new AdminNotificationController(_fakeAdminNotificationService.Object, _logger.Object);
         }
 

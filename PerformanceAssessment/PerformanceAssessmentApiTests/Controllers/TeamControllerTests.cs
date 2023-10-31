@@ -18,7 +18,6 @@ namespace PerformanceAssessmentApiTests.Controllers
         {
             _fakeTeamService = new Mock<ITeamService>();
             _fakeLogger = new Mock<ILogger<TeamController>>();
-
             _controller = new TeamController(_fakeTeamService.Object, _fakeLogger.Object);
         }
 

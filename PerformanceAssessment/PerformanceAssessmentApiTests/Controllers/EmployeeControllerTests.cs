@@ -21,7 +21,6 @@ namespace PerformanceAssessmentApiTests.Controllers
             _fakeEmployeeService = new Mock<IEmployeeService>();
             _fakeTeamService = new Mock<ITeamService>();
             _fakeLogger = new Mock<ILogger<EmployeeController>>();
-
             _controller = new EmployeeController(_fakeEmployeeService.Object, _fakeTeamService.Object, _fakeLogger.Object);
         }
 

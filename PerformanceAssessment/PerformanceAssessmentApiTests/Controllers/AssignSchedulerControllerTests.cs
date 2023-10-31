@@ -30,7 +30,6 @@ namespace PerformanceAssessmentApiTests.Controllers
             _fakeUserService = new Mock<IUserService>();
             _fakeTeamService = new Mock<ITeamService>();
             _logger = new Mock<ILogger<AssignSchedulerController>>();
-
             _controller = new AssignSchedulerController(
                 _fakeAssignSchedulerService.Object,
                 _fakeAssessmentService.Object,
