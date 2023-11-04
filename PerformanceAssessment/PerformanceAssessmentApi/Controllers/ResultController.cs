@@ -129,8 +129,8 @@ namespace PerformanceAssessmentApi.Controllers
         /// <summary>
         /// Gets the result by assessment id
         /// </summary>
-        /// <param name="resultId">Result id</param>
-        /// <returns>Returns the details of the result with assessment id <paramref name="resultId"/></returns>
+        /// <param name="assessmentId">Assessment id</param>
+        /// <returns>Returns the details of the result with assessment id <paramref name="assessmentId"/></returns>
         /// <response code="200">Result found</response>
         /// <response code="404">Result not found</response>
         /// <response code="500">Internal server error</response>

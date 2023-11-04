@@ -10,13 +10,11 @@ namespace PerformanceAssessmentApi.Controllers
     public class AssessmentController : ControllerBase
     {
         private readonly IAssessmentService _assessmentService;
-        private readonly IItemService _itemService;
         private readonly ILogger<AssessmentController> _logger;
 
-        public AssessmentController(IAssessmentService assessmentService, IItemService itemService, ILogger<AssessmentController> logger)
+        public AssessmentController(IAssessmentService assessmentService, ILogger<AssessmentController> logger)
         {
             _assessmentService = assessmentService;
-            _itemService = itemService;
             _logger = logger;
         }
 
