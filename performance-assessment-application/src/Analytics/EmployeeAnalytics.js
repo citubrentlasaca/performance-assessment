@@ -1,32 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './EmployeeAnalytics.css';
-import sample from './sample.png';
 import NavBar from '../Shared/NavBar';
+import SalesChart from './SalesChart';
 import TopBarThree from '../Shared/TopBarThree';
-
-const analyticsData = [
-  { id: 1, imageUrl: sample, title: 'Sales 1' },
-  { id: 2, imageUrl: sample, title: 'Sales 2' },
-  { id: 3, imageUrl: sample, title: 'Sales 3' },
-  { id: 4, imageUrl: sample, title: 'Sales 4' },
-  { id: 5, imageUrl: sample, title: 'Sales 5' },
-  { id: 6, imageUrl: sample, title: 'Sales 6' },
-
-];
-// Sample data for sales
+import axios from 'axios';
 
 const EmployeeAnalytics = () => {
+  const [title, setTitle] = useState('');
+  const [employeeId, setEmployeeId] = useState(null); // State for storing the employee ID
+
+  useEffect(() => {
+    // Retrieve the employee ID from localStorage
+    const employeeData = JSON.parse(localStorage.getItem('employeeData'));
+
+    if (employeeData && employeeData.id) {
+      setEmployeeId(employeeData.id);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Use the dynamically set employeeId in the API request
+    if (employeeId !== null) {
+      axios
+        .get(`https://localhost:7236/api/answers/get-by-employee-and-assessment?employeeId=${employeeId}&assessmentId=1`)
+        .then((response) => {
+          const responseData = response.data;
+          const apiTitle = responseData.title;
+          setTitle(apiTitle);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [employeeId]);
+
   return (
     <NavBar>
       <TopBarThree />
-      <div className="emp-analytics-container">
-        {analyticsData.map((item) => (
-          <div key={item.id} className="emp-analytics-item">
-            <img src={item.imageUrl} alt={item.title} />
-            <h4>{item.title}</h4>
-            <h6>Click to view full details</h6>
-          </div>
-        ))}
+      <div className="employee-analytics-container">
+        <h1>{title}</h1>
+        <SalesChart />
       </div>
     </NavBar>
   );
