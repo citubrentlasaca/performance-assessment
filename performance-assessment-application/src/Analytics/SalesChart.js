@@ -6,28 +6,59 @@ const SalesChart = () => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
   const [chartData, setChartData] = useState(null);
+  const [employeeId, setEmployeeId] = useState(null);
+
+  const fetchLatestAssessmentId = async (employeeId) => {
+    try {
+      const resultResponse = await axios.get(`https://localhost:7236/api/results/employees/${employeeId}`);
+      if (resultResponse.data.length > 0) {
+        // Sort the assessments by dateTimeCreated in descending order
+        const sortedAssessments = resultResponse.data.sort((a, b) => {
+          return new Date(b.dateTimeCreated) - new Date(a.dateTimeCreated);
+        });
+
+        return sortedAssessments[0].assessmentId; // Get the assessment ID from the latest assessment
+      } else {
+        console.error('No assessment found for the employee.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching assessment ID:', error);
+      return null;
+    }
+  };
 
   useEffect(() => {
     const employeeData = JSON.parse(localStorage.getItem('employeeData'));
 
     if (employeeData && employeeData.id) {
-      const employeeId = employeeData.id;
-      const apiUrl = `https://localhost:7236/api/answers/get-by-employee-and-assessment?employeeId=${employeeId}&assessmentId=1`;
-
-      axios.get(apiUrl)
-        .then(response => {
-          const counterValues = response.data.items.map(item => item.answers[0].counterValue);
-
-          setChartData({
-            labels: response.data.items.map(item => item.question),
-            counterValues,
-          });
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
+      setEmployeeId(employeeData.id);
     }
   }, []);
+
+  useEffect(() => {
+    if (employeeId !== null) {
+      fetchLatestAssessmentId(employeeId)
+        .then(assessmentId => {
+          if (assessmentId !== null) {
+            const apiUrl = `https://localhost:7236/api/answers/get-by-employee-and-assessment?employeeId=${employeeId}&assessmentId=${assessmentId}`;
+
+            axios.get(apiUrl)
+              .then(response => {
+                const counterValues = response.data.items.map(item => item.answers[0].counterValue);
+
+                setChartData({
+                  labels: response.data.items.map(item => item.question),
+                  counterValues,
+                });
+              })
+              .catch(error => {
+                console.error('Error fetching data:', error);
+              });
+          }
+        });
+    }
+  }, [employeeId]);
 
   useEffect(() => {
     if (chartRef.current && chartData) {
@@ -35,7 +66,7 @@ const SalesChart = () => {
         labels: chartData.labels,
         datasets: [
           {
-            label: 'Number of Sales',
+            label: 'Result Count',
             data: chartData.counterValues,
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
