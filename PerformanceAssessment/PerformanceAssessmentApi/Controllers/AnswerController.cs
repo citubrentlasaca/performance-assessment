@@ -11,7 +11,7 @@ namespace PerformanceAssessmentApi.Controllers
         private readonly IAnswerService _answerService;
         private readonly ILogger<AnswerController> _logger;
 
-        public AnswerController(IAnswerService answerService, IAssessmentService assessmentService, ILogger<AnswerController> logger)
+        public AnswerController(IAnswerService answerService, ILogger<AnswerController> logger)
         {
             _answerService = answerService;
             _logger = logger;
