@@ -152,7 +152,6 @@ function Notifications() {
             spacing={2}
             sx={{
                 width: '100%',
-                height: '100%',
             }}
         >
             {admin.map((admin, index) => (
@@ -206,7 +205,6 @@ function Notifications() {
             spacing={2}
             sx={{
                 width: '100%',
-                height: '100%',
             }}
         >
             {announcements.map((announcement, index) => (
@@ -260,7 +258,6 @@ function Notifications() {
             spacing={2}
             sx={{
                 width: '100%',
-                height: '100%',
             }}
         >
 
