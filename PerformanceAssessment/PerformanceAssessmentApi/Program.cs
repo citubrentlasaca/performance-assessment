@@ -138,6 +138,8 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IEmployeeAnnouncementNotificationService, EmployeeAnnouncementNotificationService>();
     services.AddScoped<IAdminNotificationRepository, AdminNotificationRepository>();
     services.AddScoped<IAdminNotificationService, AdminNotificationService>();
+    services.AddScoped<IAnalyticsRepository, AnalyticsRepository>();
+    services.AddScoped<IAnalyticsService, AnalyticsService>();
 
     services.AddScoped<ITokenService, TokenService>();
 }
