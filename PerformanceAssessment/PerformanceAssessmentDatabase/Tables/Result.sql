@@ -4,7 +4,7 @@
     [AssessmentId] INT NOT NULL,
     [EmployeeId] INT NOT NULL,
     [Score] FLOAT NOT NULL,
-    [DateTimeDue] NVARCHAR(MAX) NOT NULL,
+    [DateTimeDue] DATETIME NOT NULL,
     [DateTimeCreated] DATETIME NOT NULL,
     [DateTimeUpdated] DATETIME NOT NULL,
     CONSTRAINT [FK_ResultAssessment] FOREIGN KEY ([AssessmentId]) REFERENCES [Assessment]([Id]) ON DELETE CASCADE,
