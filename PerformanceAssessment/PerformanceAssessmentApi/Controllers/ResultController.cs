@@ -31,7 +31,7 @@ namespace PerformanceAssessmentApi.Controllers
         ///         "assessmentId": 1,
         ///         "employeeId": 1,
         ///         "score": 50,
-        ///         "dateTimeDue": "Monday, October 16, 2023"
+        ///         "dateTimeDue": "2023-11-07 11:59:00 PM"
         ///     }
         ///
         /// </remarks>
