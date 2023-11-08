@@ -1,0 +1,46 @@
+.leaderboard-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.leaderboard-header img {
+    width: 100%;
+    height: auto;
+}
+
+.scrollable-content {
+    max-height: 60vh;
+    overflow: auto;
+}
+
+.employee-rank-container {
+    background-color: #27C6D9;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.name-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.employee-rank {
+    font-weight: bolder;
+    font-size: x-large;
+}
+
+.employee-analytics-name {
+    font-size: larger;
+}
+
+.employee-analytics-points {
+    font-weight: bolder;
+}
