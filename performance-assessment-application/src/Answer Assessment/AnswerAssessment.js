@@ -180,7 +180,7 @@ function AnswerAssessment() {
                 assessmentId: id,
                 employeeId: employeeStorage.id,
                 score: score,
-                dateTimeDue: `${schedulerData.dueDate}, ${schedulerData.time}`,
+                dateTimeDue: `${schedulerData.dueDate} ${schedulerData.time}`,
             };
 
             const resultResponse = await fetch('https://localhost:7236/api/results', {
