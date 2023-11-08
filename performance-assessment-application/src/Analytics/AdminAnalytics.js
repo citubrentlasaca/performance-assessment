@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../Shared/NavBar';
-import TopBarThree from '../Shared/TopBarThree';
+import TopBarTwo from '../Shared/TopBarTwo';
 import './AdminAnalytics.css';
 import analyticsheader from './analytics-trophy.png';
 
@@ -40,7 +40,7 @@ const AdminAnalytics = () => {
 
     return (
         <NavBar>
-            <TopBarThree />
+            <TopBarTwo />
             <div className="leaderboard-header">
                 <img src={analyticsheader} alt="Analytics Header" />
             </div>

@@ -90,11 +90,12 @@ function TopBarTwo() {
                             <b>Assessments</b>
                         </a>
                     </li>
-                    <li className="nav-item h-100 col d-flex justify-content-center align-items-center">
+                    <li className={`nav-item h-100 col d-flex justify-content-center align-items-center ${isActive(`/organizations/${employeeStorage.teamId}/admin-analytics`) ? 'active' : ''}`} >
                         <a className="nav-link h-100 w-100 p-0 d-flex justify-content-center align-items-center"
                             href={`/organizations/${organizationId}/admin-analytics`}
                             style={{
-                                color: 'white',
+                                backgroundColor: isActive(`/organizations/${employeeStorage.teamId}/admin-analytics`) ? '#abe9f0' : '#055c9d',
+                                color: isActive(`/organizations/${employeeStorage.teamId}/admin-analytics`) ? '#055c9d' : 'white',
                             }}
                         >
                             <b>Analytics</b>
