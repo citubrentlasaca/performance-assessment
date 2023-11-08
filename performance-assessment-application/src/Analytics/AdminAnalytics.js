@@ -5,22 +5,36 @@ import './AdminAnalytics.css';
 import analyticsheader from './analytics-trophy.png';
 
 const AdminAnalytics = () => {
-    /*const employeeData = Array.from({ length: 10 }, (_, index) => ({
-        rank: index + 1,
-        name: 'Name',
-        points: 100,
-    }));*/
     const [employeeData, setEmployeeData] = useState([]);
+    const employee = JSON.parse(localStorage.getItem("employeeData"));
 
     useEffect(() => {
-        // Make an API request to fetch employee data
-        fetch('https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid?assessmentId=1')
+        fetch(`https://localhost:7236/api/assessments/employee/${employee.id}`)
             .then((response) => response.json())
             .then((data) => {
-                setEmployeeData(data);
+                // Find the first assessment with the title "Daily Performance Report"
+                const dailyPerformanceReportAssessment = data.find(
+                    (assessment) => assessment.title === 'Daily Performance Report'
+                );
+
+                if (dailyPerformanceReportAssessment) {
+                    // Use the found assessment's ID to fetch employee data
+                    fetch(
+                        `https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid?assessmentId=${dailyPerformanceReportAssessment.id}`
+                    )
+                        .then((response) => response.json())
+                        .then((analyticsData) => {
+                            setEmployeeData(analyticsData);
+                        })
+                        .catch((error) => {
+                            console.error('Error fetching employee data:', error);
+                        });
+                } else {
+                    console.error('Daily Performance Report assessment not found.');
+                }
             })
             .catch((error) => {
-                console.error('Error fetching employee data:', error);
+                console.error('Error fetching assessments:', error);
             });
     }, []);
 
@@ -39,7 +53,7 @@ const AdminAnalytics = () => {
                                 {employee.firstName} {employee.lastName}
                             </div>
                             <div className="employee-analytics-points">
-                                {employee.averageResult.toFixed(2)} Points
+                                {employee.averageResult.toFixed(2) * 100} Points
                             </div>
                         </div>
                     </div>
