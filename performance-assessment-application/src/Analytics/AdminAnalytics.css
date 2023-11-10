@@ -12,6 +12,7 @@
 .scrollable-content {
     max-height: 60vh;
     overflow: auto;
+    margin-top: 0;
 }
 
 .employee-rank-container {
@@ -43,4 +44,30 @@
 
 .employee-analytics-points {
     font-weight: bolder;
+}
+
+.select-year-button {
+    border: 2px solid #27c7d9;
+    margin: 10px 5px;
+    padding: 5px 10px;
+    justify-content: end;
+    align-items: flex-end;
+    border-radius: 10px;
+}
+
+.select-month-option {
+    margin: 10px;
+    justify-content: end;
+    align-items: flex-end;
+    display: block;
+    border-radius: 10px;
+    width: max-content;
+}
+
+.centered-text {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 250px;
+    height: 100vh;
 }
