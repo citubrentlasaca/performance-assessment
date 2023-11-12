@@ -29,7 +29,6 @@ const AdminAnalytics = () => {
                         .then((response) => response.json())
                         .then((analyticsData) => {
                             setEmployeeData(analyticsData);
-                            console.log(analyticsData);
                         })
                         .catch((error) => {
                             console.error('Error fetching employee data:', error);
@@ -49,7 +48,6 @@ const AdminAnalytics = () => {
                 .then((response) => response.json())
                 .then((analyticsData) => {
                     setEmployeeData(analyticsData);
-                    console.log(analyticsData);
                 })
                 .catch((error) => {
                     console.error('Error fetching employee data:', error);
@@ -64,7 +62,6 @@ const AdminAnalytics = () => {
                 .then((response) => response.json())
                 .then((analyticsData) => {
                     setEmployeeData(analyticsData);
-                    console.log(analyticsData);
                 })
                 .catch((error) => {
                     console.error('Error fetching employee data:', error);
