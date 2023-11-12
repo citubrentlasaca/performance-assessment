@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../Shared/NavBar';
 import TopBarTwo from '../Shared/TopBarTwo';
-import './AdminAnalytics.css';
 import analyticsheader from './analytics-trophy.png';
 import { Stack } from "@mui/material";
 
@@ -30,6 +29,7 @@ const AdminAnalytics = () => {
                         .then((response) => response.json())
                         .then((analyticsData) => {
                             setEmployeeData(analyticsData);
+                            console.log(analyticsData);
                         })
                         .catch((error) => {
                             console.error('Error fetching employee data:', error);
@@ -49,6 +49,7 @@ const AdminAnalytics = () => {
                 .then((response) => response.json())
                 .then((analyticsData) => {
                     setEmployeeData(analyticsData);
+                    console.log(analyticsData);
                 })
                 .catch((error) => {
                     console.error('Error fetching employee data:', error);
@@ -63,6 +64,7 @@ const AdminAnalytics = () => {
                 .then((response) => response.json())
                 .then((analyticsData) => {
                     setEmployeeData(analyticsData);
+                    console.log(analyticsData);
                 })
                 .catch((error) => {
                     console.error('Error fetching employee data:', error);
@@ -76,7 +78,7 @@ const AdminAnalytics = () => {
 
     const generateYearOptions = () => {
         const currentYear = new Date().getFullYear();
-        const years = Array.from({ length: 25 }, (_, index) => currentYear - index); 
+        const years = Array.from({ length: 25 }, (_, index) => currentYear - index);
         return years.map((year) => (
             <option key={year} value={year}>
                 {year}
@@ -88,58 +90,134 @@ const AdminAnalytics = () => {
         const selectedYear = event.target.value;
         setSelectedYear(selectedYear);
     };
-    
+
     return (
         <NavBar>
             <TopBarTwo />
-            <div className="leaderboard-header">
-                <img src={analyticsheader} alt="Analytics Header" />
-            </div>
-            <Stack direction="row" justifyContent="flex-end" alignItems="left" sx={{ marginTop: "15px" }}>
-                <select
-                    className="form-select select-month-option"
-                    aria-label="Select Month"
-                    onChange={handleMonthChange}
+            <Stack
+                direction="column"
+                justifyContent="flex-start"
+                alignItems="center"
+                spacing={2}
+                sx={{
+                    width: "100%",
+                    height: "calc(100% - 100px)",
+                }}
+            >
+                <img src={analyticsheader}
+                    style={{
+                        width: "100%",
+                        height: "120px"
+                    }}
+                />
+                <Stack
+                    direction="column"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    spacing={4}
+                    sx={{
+                        width: "100%",
+                        height: "calc(100% - 120px)",
+                        padding: "20px",
+                        overflow: 'auto',
+                    }}
                 >
-                    <option value="" selected>Select Month</option>
-                    <option value="1">January</option>
-                    <option value="2">February</option>
-                    <option value="3">March</option>
-                    <option value="4">April</option>
-                    <option value="5">May</option>
-                    <option value="6">June</option>
-                    <option value="7">July</option>
-                    <option value="8">August</option>
-                    <option value="9">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
-                </select>
-                <select className="form-select select-month-option" aria-label="Default select example" onChange={handleYearChange}>
-                    <option value="" disabled selected>Select Year</option>
-                    {generateYearOptions()}
-                </select>
-            </Stack>
+                    <Stack
+                        direction="row"
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        spacing={2}
+                        sx={{
+                            width: "100%"
+                        }}
+                    >
 
-            <div className="scrollable-content">
-                {employeeData.length === 0 ? (
-                    <div className="centered-text">No results found</div>
-                ) : (
-                    employeeData.map((employee, index) => (
-                        <div className="employee-rank-container" key={index}>
-                            <div className="name-container">
-                                <div className="employee-rank">{index + 1}</div>
-                                <div className="employee-analytics-name">
-                                    {employee.firstName} {employee.lastName}
+                        <select
+                            className="form-select select-month-option"
+                            aria-label="Select Month"
+                            onChange={handleMonthChange}
+                            style={{
+                                width: "25%"
+                            }}
+                        >
+                            <option value="" selected>Select Month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        <select className="form-select select-month-option" aria-label="Default select example" onChange={handleYearChange}
+                            style={{
+                                width: "25%"
+                            }}
+                        >
+                            <option value="" disabled selected>Select Year</option>
+                            {generateYearOptions()}
+                        </select>
+                    </Stack>
+                    {employeeData.length === 0 ? (
+                        <Stack
+                            direction="column"
+                            justifyContent="center"
+                            alignItems="center"
+                            spacing={2}
+                            sx={{
+                                width: "100%",
+                                height: "100%"
+                            }}
+                        >
+                            <p className='mb-0'>No results found</p>
+                        </Stack>
+                    ) : (
+
+                        employeeData.map((employee, index) => (
+                            <Stack
+                                direction="column"
+                                justifyContent="flex-start"
+                                alignItems="center"
+                                spacing={2}
+                                sx={{
+                                    width: "75%",
+                                }}
+                                key={index}
+                            >
+                                <div
+                                    style={{
+                                        width: "100%",
+                                        backgroundColor: "#27C6D9",
+                                        padding: "20px",
+                                        borderRadius: "10px"
+                                    }}
+                                >
+                                    <Stack
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        spacing={2}
+                                        sx={{
+                                            width: "100%",
+                                            height: "100%"
+                                        }}
+                                    >
+                                        <b>{index + 1}</b>
+                                        <p className='mb-0'>{employee.firstName} {employee.lastName}</p>
+                                        <b>{(employee.averageResult.toFixed(2)) * 100} Points</b>
+                                    </Stack>
                                 </div>
-                                <div className="employee-analytics-points">
-                                    {employee.averageResult.toFixed(2) * 100} Points
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                )}
-            </div>
+                            </Stack>
+                        ))
+
+                    )}
+                </Stack>
+            </Stack>
         </NavBar>
     );
 };
