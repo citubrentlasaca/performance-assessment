@@ -1,11 +1,12 @@
 import { Box, Stack } from '@mui/material'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function TopBar() {
     const firstName = localStorage.getItem('firstName');
     const lastName = localStorage.getItem('lastName');
     const [showAccount, setShowAccount] = useState(false);
+    const userId = JSON.parse(localStorage.getItem("userId"));
     const navigate = useNavigate();
 
     const handleAccountClick = () => {
@@ -55,7 +56,13 @@ function TopBar() {
                     {showAccount ? (
                         <>
                             <p className='mb-0'>{firstName} {lastName}</p>
-                            <p className='mb-0' style={{ color: '#034cac' }}>Manage your account</p>
+                            <Link to={`/account/${userId}`}
+                                style={{
+                                    textDecoration: "none"
+                                }}
+                            >
+                                <p className='mb-0' style={{ color: '#034cac' }}>Manage your account</p>
+                            </Link>
                         </>
                     ) : null}
 

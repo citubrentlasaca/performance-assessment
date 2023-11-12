@@ -20,6 +20,7 @@ import Employees from './Employees/Employees';
 import CreateReport from './Create Assessment/CreateReport';
 import Notifications from './Notifications/Notifications';
 import ViewAnswers from './View Answers/ViewAnswers';
+import AccountManagement from './Account Management/AccountManagement.js';
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
           <Route path="/organizations/:teamId/employees" element={<Employees />} />
           <Route path="/home" element={<PrivateRoute redirectTo="/login" component={Home} />} />
           <Route path='/notifications/:id' element={<Notifications />} />
+          <Route path='/account/:userId' element={<AccountManagement />} />
         </Routes>
       </Router>
     </div>
