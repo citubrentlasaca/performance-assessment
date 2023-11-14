@@ -19,7 +19,16 @@ function AssignAssessmentModal({ open, handleClose, assessmentId, assessmentTitl
     };
 
     const handleTimeChange = (event) => {
-        setTime(event.target.value);
+        //setTime(event.target.value);
+        const selectedTime = event.target.value;
+    
+        // Parse the input time as a date object
+        const timeDate = new Date(`2000-01-01T${selectedTime}`);
+
+        // Format the time as "HH:mm:ss"
+        const formattedTime = timeDate.toTimeString().slice(0, 8);
+
+        setTime(formattedTime);
     };
 
     const handleDateChange = (event) => {

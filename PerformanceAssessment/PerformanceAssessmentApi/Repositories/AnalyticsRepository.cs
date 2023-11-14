@@ -35,7 +35,7 @@ namespace PerformanceAssessmentApi.Repositories
                         "INNER JOIN [dbo].[Employee] e ON r.EmployeeId = e.Id " +
                         "INNER JOIN [dbo].[User] u ON e.UserId = u.Id " +
                         "WHERE r.AssessmentId = @AssessmentId " +
-                        "AND DATEPART(MONTH, r.DateTimeDue) = @MonthNumber " +
+                        "AND DATEPART(MONTH, r.DateTimeCreated) = @MonthNumber " +
                         "GROUP BY u.FirstName, u.LastName, e.Id " +
                         "ORDER BY AverageResult DESC;";
 
@@ -52,7 +52,7 @@ namespace PerformanceAssessmentApi.Repositories
                         "INNER JOIN [dbo].[Employee] e ON r.EmployeeId = e.Id " +
                         "INNER JOIN [dbo].[User] u ON e.UserId = u.Id " +
                         "WHERE r.AssessmentId = @AssessmentId " +
-                        "AND DATEPART(YEAR, r.DateTimeDue) = @Year " +
+                        "AND DATEPART(YEAR, r.DateTimeCreated) = @Year " +
                         "GROUP BY u.FirstName, u.LastName, e.Id " +
                         "ORDER BY AverageResult DESC;";
 

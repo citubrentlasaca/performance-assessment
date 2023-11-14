@@ -98,7 +98,7 @@ namespace PerformanceAssessmentApi.Controllers
                     TeamName = team.Organization
                 };
 
-                var dueDateTime = DateTime.ParseExact($"{scheduler.DueDate} {scheduler.Time}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                var dueDateTime = DateTime.ParseExact($"{scheduler.DueDate} {scheduler.Time}", "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                 var delay = dueDateTime - DateTime.Now;
                 var notificationDelay = TimeSpan.FromSeconds(5);
                 var notificationScheduledTime = dueDateTime - notificationDelay;

@@ -53,7 +53,14 @@ const EmployeeAnalytics = () => {
     <NavBar>
       <TopBarThree />
       <div className="employee-analytics-container">
-        <h1>{title}</h1>
+        <h4
+          style={{
+            color: "#055C9D",
+            fontWeight: "bold"
+          }}
+        >
+          {title}
+        </h4>
         <SalesChart />
       </div>
     </NavBar>

@@ -5,6 +5,7 @@ import AnswerAssessment from './Answer Assessment/AnswerAssessment';
 import UserRegistration from './User Registration/UserRegistration';
 import Login from './Login/Login.js';
 import EmployeeAnalytics from './Analytics/EmployeeAnalytics';
+import AdminAnalytics from './Analytics/AdminAnalytics';
 import LandingPage from './Landing Page/LandingPage';
 import InvitationPage from './Team Creation/InvitationPage';
 import SuccessPage from './Team Creation/SuccessPage.js';
@@ -19,6 +20,7 @@ import Employees from './Employees/Employees';
 import CreateReport from './Create Assessment/CreateReport';
 import Notifications from './Notifications/Notifications';
 import ViewAnswers from './View Answers/ViewAnswers';
+import AccountManagement from './Account Management/AccountManagement.js';
 
 function App() {
   return (
@@ -44,6 +46,7 @@ function App() {
           <Route path="/teamcreation" element={<TeamCreation />} />
           <Route path="/register" element={<UserRegistration />} />
           <Route path="/organizations/:teamId/employee-analytics" element={<EmployeeAnalytics />} />
+          <Route path="/organizations/:teamId/admin-analytics" element={<AdminAnalytics />} />
           <Route path="/join-team" element={<InvitationPage />} />
           <Route path="/success/:data" element={<SuccessPage />} />
           <Route path="/create-team" element={<TeamCreation />} />
@@ -54,6 +57,7 @@ function App() {
           <Route path="/organizations/:teamId/employees" element={<Employees />} />
           <Route path="/home" element={<PrivateRoute redirectTo="/login" component={Home} />} />
           <Route path='/notifications/:id' element={<Notifications />} />
+          <Route path='/account/:userId' element={<AccountManagement />} />
         </Routes>
       </Router>
     </div>
