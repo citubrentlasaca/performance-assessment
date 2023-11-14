@@ -181,34 +181,38 @@ namespace PerformanceAssessmentApi.Controllers
         /// Updates an existing user
         /// </summary>
         /// <param name="id">The id of the user that will be updated</param>
-        /// <param name="user">New user details</param>
-        /// <returns>Returns the details of the user with id <paramref name="id"/></returns>
+        /// <param name="userDto">New user details to be updated</param>
+        /// <param name="profilePicture">User's profile picture (PNG or JPG)</param>
+        /// <returns>Returns the details of the user with ID <paramref name="id"/></returns>
         /// <remarks>
         /// Sample request:
         ///
         ///     PUT /api/users
+        ///     FormData:
         ///     {
         ///         "firstName": "Jane",
         ///         "lastName": "Dawn",
         ///         "emailAddress": "janedawn@email.com",
-        ///         "password": "WeakPassword123456"
+        ///         "password": "WeakPassword123456",
+        ///         "profilePicture": [attached PNG or JPG file]
         ///     }
-        ///
+        ///     
         /// </remarks>
         /// <response code="200">Successfully updated the user</response>
+        /// <response code="400">Bad request - Invalid file format for profile picture</response>
         /// <response code="404">User not found</response>
         /// <response code="500">Internal server error</response>
         [HttpPut("{id}", Name = "UpdateUser")]
-        [Consumes("application/json")]
+        [Consumes("multipart/form-data")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(UserUpdationDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdationDto user)
+        public async Task<IActionResult> UpdateUser(int id, [FromForm] UserUpdationDto userDto, IFormFile profilePicture)
         {
             try
             {
-                // Check if user exists
                 var foundUser = await _userService.GetUserById(id);
 
                 if (foundUser == null)
@@ -216,8 +220,26 @@ namespace PerformanceAssessmentApi.Controllers
                     return StatusCode(404, "User not found");
                 }
 
+                if (profilePicture != null && profilePicture.Length > 0)
+                {
+                    var allowedExtensions = new[] { ".png", ".jpg", ".jpeg" };
+                    var fileExtension = Path.GetExtension(profilePicture.FileName).ToLower();
+
+                    if (!allowedExtensions.Contains(fileExtension))
+                    {
+                        return BadRequest("Only PNG and JPG files are allowed for the profile picture");
+                    }
+
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        profilePicture.CopyTo(memoryStream);
+                        var fileData = memoryStream.ToArray();
+                        userDto.ProfilePicture = fileData;
+                    }
+                }
+
                 // Update the user
-                await _userService.UpdateUser(id, user);
+                await _userService.UpdateUser(id, userDto);
                 return Ok("User updated successfully");
             }
             catch (Exception e)
