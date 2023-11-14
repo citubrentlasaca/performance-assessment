@@ -209,7 +209,7 @@ namespace PerformanceAssessmentApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateUser(int id, [FromForm] UserUpdationDto userDto, IFormFile profilePicture)
+        public async Task<IActionResult> UpdateUser(int id, [FromForm] UserUpdationDto userDto, IFormFile? profilePicture)
         {
             try
             {
@@ -220,7 +220,13 @@ namespace PerformanceAssessmentApi.Controllers
                     return StatusCode(404, "User not found");
                 }
 
-                if (profilePicture != null && profilePicture.Length > 0)
+                // Retain the original ProfilePicture if it is not provided in the update
+                if (profilePicture == null)
+                {
+                    userDto.ProfilePicture = foundUser.ProfilePicture; // Assuming `ProfilePicture` is a byte array
+                }
+
+                else
                 {
                     var allowedExtensions = new[] { ".png", ".jpg", ".jpeg" };
                     var fileExtension = Path.GetExtension(profilePicture.FileName).ToLower();
