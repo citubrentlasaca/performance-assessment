@@ -258,11 +258,13 @@ namespace PerformanceAssessmentApiTests.Controllers
                 Password = "WeakPassword123456",
             };
 
+            var formFile = new Mock<IFormFile>();
+
             _fakeUserService.Setup(s => s.GetUserById(userId)).ReturnsAsync(userDto);
             _fakeUserService.Setup(s => s.UpdateUser(userId, updatedUser)).ReturnsAsync(1);
 
             // Act
-            var result = await _controller.UpdateUser(userId, updatedUser);
+            var result = await _controller.UpdateUser(userId, updatedUser, formFile.Object);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -282,10 +284,12 @@ namespace PerformanceAssessmentApiTests.Controllers
                 Password = "WeakPassword123456",
             };
 
+            var formFile = new Mock<IFormFile>();
+
             _fakeUserService.Setup(s => s.GetUserById(userId)).ReturnsAsync((UserDto)null!);
 
             // Act
-            var result = await _controller.UpdateUser(userId, updatedUser);
+            var result = await _controller.UpdateUser(userId, updatedUser, formFile.Object);
 
             // Assert
             Assert.IsType<ObjectResult>(result);
@@ -306,11 +310,13 @@ namespace PerformanceAssessmentApiTests.Controllers
                 Password = "WeakPassword123456",
             };
 
+            var formFile = new Mock<IFormFile>();
+
             _fakeUserService.Setup(s => s.GetUserById(userId)).ReturnsAsync(userDto);
             _fakeUserService.Setup(s => s.UpdateUser(userId, updatedUser)).Throws(new Exception());
 
             // Act
-            var result = await _controller.UpdateUser(userId, updatedUser);
+            var result = await _controller.UpdateUser(userId, updatedUser, formFile.Object);
 
             // Assert
             Assert.IsType<ObjectResult>(result);
