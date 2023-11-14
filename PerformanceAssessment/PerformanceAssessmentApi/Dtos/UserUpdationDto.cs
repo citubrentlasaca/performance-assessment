@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PerformanceAssessmentApi.Dtos
 {
@@ -21,5 +22,8 @@ namespace PerformanceAssessmentApi.Dtos
 
         [Required(ErrorMessage = "The password is required.")]
         public string? Password { get; set; }
+
+        [JsonIgnore]
+        public byte[]? ProfilePicture { get; set; }
     }
 }
