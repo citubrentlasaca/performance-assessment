@@ -74,6 +74,7 @@ namespace PerformanceAssessmentApi.Repositories
                       "[EmailAddress] = @EmailAddress, " +
                       "[Password] = @Password, " +
                       "[Salt] = @Salt, " +
+                      "[ProfilePicture] = @ProfilePicture, " +
                       "[DateTimeUpdated] = @DateTimeUpdated " +
                       "WHERE Id = @Id;";
 
@@ -92,6 +93,7 @@ namespace PerformanceAssessmentApi.Repositories
                         EmailAddress = user.EmailAddress,
                         Password = user.Password,
                         Salt = user.Salt,
+                        ProfilePicture = user.ProfilePicture,
                         DateTimeUpdated = user.DateTimeUpdated
                     }
                 );
