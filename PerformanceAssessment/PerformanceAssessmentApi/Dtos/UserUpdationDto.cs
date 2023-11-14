@@ -20,8 +20,7 @@ namespace PerformanceAssessmentApi.Dtos
         )]
         public string? EmailAddress { get; set; }
 
-        [Required(ErrorMessage = "The password is required.")]
-        public string? Password { get; set; }
+        public string Password { get; set; } = "";
 
         [JsonIgnore]
         public byte[]? ProfilePicture { get; set; }
