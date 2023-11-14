@@ -72,14 +72,18 @@ namespace PerformanceAssessmentApi.Repositories
                       "[FirstName] = @FirstName, " +
                       "[LastName] = @LastName, " +
                       "[EmailAddress] = @EmailAddress, " +
-                      "[Password] = @Password, " +
-                      "[Salt] = @Salt, " +
                       "[ProfilePicture] = @ProfilePicture, " +
-                      "[DateTimeUpdated] = @DateTimeUpdated " +
-                      "WHERE Id = @Id;";
+                      "[DateTimeUpdated] = @DateTimeUpdated ";
 
-            // Generate a new salt and hash for the new password
-            (user.Password, user.Salt) = PasswordHasher.HashPassword(user.Password);
+            // Check if the password is being updated
+            if (!string.IsNullOrEmpty(user.Password))
+            {
+                // Generate a new salt and hash for the new password
+                (user.Password, user.Salt) = PasswordHasher.HashPassword(user.Password);
+                sql += ", [Password] = @Password, [Salt] = @Salt ";
+            }
+
+            sql += "WHERE Id = @Id;";
 
             using (var con = _context.CreateConnection())
             {
