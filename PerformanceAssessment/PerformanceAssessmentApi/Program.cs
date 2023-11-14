@@ -2,6 +2,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PerformanceAssessmentApi;
 using PerformanceAssessmentApi.Context;
 using PerformanceAssessmentApi.Repositories;
 using PerformanceAssessmentApi.Services;
@@ -84,6 +85,7 @@ void ConfigureServices(IServiceCollection services)
         });
 
         options.OperationFilter<SecurityRequirementsOperationFilter>();
+        options.OperationFilter<IgnorePropertyFilter>();
 
         // Feed generated xml api docs to swagger
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
