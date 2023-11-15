@@ -69,11 +69,24 @@ namespace PerformanceAssessmentApi.Repositories
         public async Task<int> UpdateUser(User user)
         {
             var sql = "UPDATE [dbo].[User] SET " +
-                      "[FirstName] = @FirstName, " +
-                      "[LastName] = @LastName, " +
-                      "[EmailAddress] = @EmailAddress, " +
-                      "[ProfilePicture] = @ProfilePicture, " +
-                      "[DateTimeUpdated] = @DateTimeUpdated ";
+                      "[ProfilePicture] = @ProfilePicture" +
+                      ", [DateTimeUpdated] = @DateTimeUpdated";
+
+            // Check and conditionally include fields that are being updated
+            if (!string.IsNullOrEmpty(user.FirstName))
+            {
+                sql += ", [FirstName] = @FirstName ";
+            }
+
+            if (!string.IsNullOrEmpty(user.LastName))
+            {
+                sql += ", [LastName] = @LastName ";
+            }
+
+            if (!string.IsNullOrEmpty(user.EmailAddress))
+            {
+                sql += ", [EmailAddress] = @EmailAddress ";
+            }
 
             // Check if the password is being updated
             if (!string.IsNullOrEmpty(user.Password))
@@ -83,7 +96,7 @@ namespace PerformanceAssessmentApi.Repositories
                 sql += ", [Password] = @Password, [Salt] = @Salt ";
             }
 
-            sql += "WHERE Id = @Id;";
+            sql += " WHERE Id = @Id;";
 
             using (var con = _context.CreateConnection())
             {

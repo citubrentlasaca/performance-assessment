@@ -5,13 +5,10 @@ namespace PerformanceAssessmentApi.Dtos
 {
     public class UserUpdationDto
     {
-        [Required(ErrorMessage = "The firstName is required.")]
         public string? FirstName { get; set; }
 
-        [Required(ErrorMessage = "The lastName is required.")]
         public string? LastName { get; set; }
 
-        [Required(ErrorMessage = "The emailAddress is required.")]
         [RegularExpression(
             @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"
             + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)"

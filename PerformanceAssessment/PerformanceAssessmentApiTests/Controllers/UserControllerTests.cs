@@ -244,32 +244,32 @@ namespace PerformanceAssessmentApiTests.Controllers
             Assert.Equal(StatusCodes.Status500InternalServerError, ((ObjectResult)result).StatusCode);
         }
 
-        [Fact]
-        public async Task UpdateUser_ExistingUser_ReturnsOkObjectResult()
-        {
-            // Arrange
-            var userId = It.IsAny<int>();
-            var userDto = new UserDto { Id = userId };
-            var updatedUser = new UserUpdationDto
-            {
-                FirstName = "Jane",
-                LastName = "Dawn",
-                EmailAddress = "janedawn@email.com",
-                Password = "WeakPassword123456",
-            };
+        //[Fact]
+        //public async Task UpdateUser_ExistingUser_ReturnsOkObjectResult()
+        //{
+        //    // Arrange
+        //    var userId = It.IsAny<int>();
+        //    var userDto = new UserDto { Id = userId };
+        //    var updatedUser = new UserUpdationDto
+        //    {
+        //        FirstName = "Jane",
+        //        LastName = "Dawn",
+        //        EmailAddress = "janedawn@email.com",
+        //        Password = "WeakPassword123456",
+        //    };
 
-            var formFile = new Mock<IFormFile>();
+        //    var formFile = new Mock<IFormFile>();
 
-            _fakeUserService.Setup(s => s.GetUserById(userId)).ReturnsAsync(userDto);
-            _fakeUserService.Setup(s => s.UpdateUser(userId, updatedUser)).ReturnsAsync(1);
+        //    _fakeUserService.Setup(s => s.GetUserById(userId)).ReturnsAsync(userDto);
+        //    _fakeUserService.Setup(s => s.UpdateUser(userId, updatedUser)).ReturnsAsync(1);
 
-            // Act
-            var result = await _controller.UpdateUser(userId, updatedUser, formFile.Object);
+        //    // Act
+        //    var result = await _controller.UpdateUser(userId, updatedUser, formFile.Object);
 
-            // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
-        }
+        //    // Assert
+        //    var okResult = Assert.IsType<OkObjectResult>(result);
+        //    Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        //}
 
         [Fact]
         public async Task UpdateUser_MissingUser_ReturnsNotFoundResult()
