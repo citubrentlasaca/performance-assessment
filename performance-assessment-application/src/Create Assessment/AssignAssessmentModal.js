@@ -4,6 +4,7 @@ import axios from 'axios';
 
 function AssignAssessmentModal({ open, handleClose, assessmentId, assessmentTitle }) {
     const [users, setUsers] = useState([]);
+    const [profilePictures, setProfilePictures] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectAllChecked, setSelectAllChecked] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -19,13 +20,10 @@ function AssignAssessmentModal({ open, handleClose, assessmentId, assessmentTitl
     };
 
     const handleTimeChange = (event) => {
-        //setTime(event.target.value);
         const selectedTime = event.target.value;
-    
-        // Parse the input time as a date object
+
         const timeDate = new Date(`2000-01-01T${selectedTime}`);
 
-        // Format the time as "HH:mm:ss"
         const formattedTime = timeDate.toTimeString().slice(0, 8);
 
         setTime(formattedTime);
@@ -51,16 +49,31 @@ function AssignAssessmentModal({ open, handleClose, assessmentId, assessmentTitl
                 const employeesData = await employeesResponse.json();
 
                 const userTemp = [];
+                const profilePictureTemp = [];
+
                 for (const employee of employeesData) {
                     if (employee.status === 'Active' && employee.role !== 'Admin') {
                         const userId = employee.userId;
                         const userResponse = await fetch(`https://localhost:7236/api/users/${userId}`);
                         const userData = await userResponse.json();
                         userTemp.push(userData);
+                        // Store the profile picture data
+                        if (userData.profilePicture !== null) {
+                            profilePictureTemp.push({
+                                id: userId,
+                                profilePicture: `data:image/png;base64,${userData.profilePicture}`
+                            });
+                        } else {
+                            profilePictureTemp.push({
+                                id: userId,
+                                profilePicture: null
+                            });
+                        }
                     }
                 }
 
                 setUsers(userTemp);
+                setProfilePictures(profilePictureTemp);
                 setLoading(false);
             } catch (error) {
                 console.error(`Error fetching data:`, error);
@@ -367,34 +380,52 @@ function AssignAssessmentModal({ open, handleClose, assessmentId, assessmentTitl
                                                     width: '100%',
                                                 }}
                                             >
-                                                {filteredUsers.map((user) => (
-                                                    <Stack
-                                                        key={user.id}
-                                                        direction="row"
-                                                        justifyContent="space-between"
-                                                        alignItems="center"
-                                                        spacing={2}
-                                                        sx={{
-                                                            width: '100%',
-                                                        }}
-                                                    >
+                                                {filteredUsers.map((user) => {
+                                                    const profilePictureData = profilePictures.find((profile) => profile.id === user.id);
+
+                                                    return (
                                                         <Stack
+                                                            key={user.id}
                                                             direction="row"
-                                                            justifyContent="center"
+                                                            justifyContent="space-between"
                                                             alignItems="center"
                                                             spacing={2}
+                                                            sx={{
+                                                                width: '100%',
+                                                            }}
                                                         >
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
-                                                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                                                <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                                                            </svg>
-                                                            <p className='mb-0'>{user.firstName} {user.lastName}</p>
+                                                            <Stack
+                                                                direction="row"
+                                                                justifyContent="center"
+                                                                alignItems="center"
+                                                                spacing={2}
+                                                            >
+                                                                {profilePictureData && profilePictureData.profilePicture !== null ? (
+                                                                    <div
+                                                                        style={{
+                                                                            width: "25px",
+                                                                            height: "25px",
+                                                                            borderRadius: "50%",
+                                                                            backgroundImage: `url(${profilePictureData.profilePicture})`,
+                                                                            backgroundSize: 'cover',
+                                                                            backgroundPosition: 'center',
+                                                                            cursor: 'pointer'
+                                                                        }}
+                                                                    />
+                                                                ) : (
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#85dde7" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                                                                    </svg>
+                                                                )}
+                                                                <p className='mb-0'>{user.firstName} {user.lastName}</p>
+                                                            </Stack>
+                                                            <div className="form-check" style={{ marginRight: '17px' }}>
+                                                                <input className="form-check-input" type="checkbox" value="" id={`flexCheckDefault${user.id}`} onClick={() => handleCheckboxClick(user.id)} />
+                                                            </div>
                                                         </Stack>
-                                                        <div className="form-check" style={{ marginRight: '17px' }}>
-                                                            <input className="form-check-input" type="checkbox" value="" id={`flexCheckDefault${user.id}`} onClick={() => handleCheckboxClick(user.id)} />
-                                                        </div>
-                                                    </Stack>
-                                                ))}
+                                                    );
+                                                })}
                                             </Stack>
                                         </div>
                                     </div>
