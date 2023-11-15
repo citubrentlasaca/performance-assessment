@@ -83,11 +83,38 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<int> DeleteTeam(int id)
         {
-            var sql = "DELETE FROM [dbo].[Team] WHERE [Id] = @Id";
-
-            using (var con = _context.CreateConnection())
+            using (var connection = _context.CreateConnection())
             {
-                return await con.ExecuteScalarAsync<int>(sql, new { Id = id });
+                connection.Open();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Delete Assessments related to Employees in the Team
+                        await connection.ExecuteAsync("DELETE FROM [dbo].[Assessment] WHERE [EmployeeId] IN (SELECT Id FROM [dbo].[Employee] WHERE [TeamId] = @TeamId)", new { TeamId = id }, transaction);
+
+                        // Delete Employees in the Team
+                        await connection.ExecuteAsync("DELETE FROM [dbo].[Employee] WHERE [TeamId] = @TeamId", new { TeamId = id }, transaction);
+
+                        // Delete Announcements related to the Team
+                        await connection.ExecuteAsync("DELETE FROM [dbo].[Announcement] WHERE [TeamId] = @TeamId", new { TeamId = id }, transaction);
+
+                        // Delete the Team
+                        await connection.ExecuteAsync("DELETE FROM [dbo].[Team] WHERE [Id] = @TeamId", new { TeamId = id }, transaction);
+
+                        // Commit the transaction
+                        transaction.Commit();
+
+                        // Return the number of affected rows
+                        return 1; // Assuming success, you can modify this based on your needs
+                    }
+                    catch (Exception)
+                    {
+                        // Optionally log the exception or handle it in another way
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
             }
         }
 
