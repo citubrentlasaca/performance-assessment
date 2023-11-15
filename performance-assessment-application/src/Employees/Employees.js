@@ -3,6 +3,7 @@ import NavBar from '../Shared/NavBar'
 import TopBarTwo from '../Shared/TopBarTwo'
 import { Stack } from '@mui/material'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Employees() {
     const employeeStorage = JSON.parse(localStorage.getItem('employeeData'));
@@ -10,6 +11,7 @@ function Employees() {
     const [filteredEmployees, setFilteredEmployees] = useState(null);
     const [employeeCount, setEmployeeCount] = useState(0);
     const [refresh, setRefresh] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -77,6 +79,32 @@ function Employees() {
 
         setFilteredEmployees(filtered);
     };
+
+    const handleCopy = async () => {
+        try {
+            const getTeam = await axios.get(`https://localhost:7236/api/teams/${employeeStorage.teamId}`);
+            const team = getTeam.data;
+            const textarea = document.createElement('textarea');
+            textarea.value = team.teamCode;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            console.log('Team code copied to clipboard');
+        } catch (error) {
+            console.error('Error fetching or copying team code:', error);
+        }
+    };
+
+    const handleDisband = async () => {
+        try {
+            await axios.delete(`https://localhost:7236/api/teams/${employeeStorage.teamId}`);
+            console.log('Team disbanded');
+            navigate('/organizations');
+        } catch (error) {
+            console.error('Error deleting team:', error);
+        }
+    }
 
     return (
         <NavBar>
@@ -192,13 +220,24 @@ function Employees() {
                                                 </svg>
                                             </button>
                                         )}
-
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     )}
                 </table>
+                <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={2}
+                    sx={{
+                        width: '100%',
+                    }}
+                >
+                    <button type="button" className="btn btn-success" style={{ width: "25%" }} onClick={handleCopy}>Copy Invitation Code</button>
+                    <button type="button" className="btn btn-danger" style={{ width: "25%" }} onClick={handleDisband}>Disband Team</button>
+                </Stack>
             </Stack>
         </NavBar >
     )
