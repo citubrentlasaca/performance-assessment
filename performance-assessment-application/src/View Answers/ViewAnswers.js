@@ -66,6 +66,7 @@ function ViewAnswers() {
                             const timeOptions = {
                                 hour: 'numeric',
                                 minute: '2-digit',
+                                second: '2-digit',
                             };
 
                             const formattedAnswerDate = answerDate.toLocaleDateString('en-US', options) + ' at ' + answerDate.toLocaleTimeString('en-US', timeOptions);
@@ -89,6 +90,7 @@ function ViewAnswers() {
                 setItems(itemsTemp);
                 setAnswers(answersTemp);
                 setLoading(false);
+                console.log(answersTemp)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

@@ -54,55 +54,79 @@ function Organizations() {
 
     return (
         <NavBar>
-            <Stack direction="row" justifyContent="flex-start" alignItems="center">
-                <b
-                    style={{
-                        color: '#065d9d',
-                        padding: '30px'
+            <Stack
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+                sx={{
+                    height: "100%",
+                    width: "100%",
+                    padding: "40px",
+                }}
+            >
+                <Stack
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    spacing={2}
+                    sx={{
+                        width: "100%"
                     }}
                 >
-                    Your teams
-                </b>
+
+                    <b
+                        style={{
+                            color: '#065d9d',
+                        }}
+                    >
+                        Your teams
+                    </b>
+                </Stack>
+                {loading ? (
+                    <Stack
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={2}
+                        sx={{
+                            height: "100%",
+                            width: "100%"
+                        }}
+                    >
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    </Stack>
+                ) : userTeams.length === 0 ? (
+                    <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                        }}
+                    >
+                        <p className="mb-0">No teams created or joined yet.</p>
+                    </Stack>
+                ) : (
+                    <Grid container
+                        spacing={3}
+                        style={{
+                            paddingLeft: "70px",
+                        }}
+                    >
+                        {userTeams.map((team) => (
+                            <Grid item key={team.id} xs={12} sm={6} md={4} lg={3}>
+                                <TeamCard
+                                    organization={team.organization}
+                                    onClick={() => handleCardClick(team)}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
+                )}
             </Stack>
-            {loading ? (
-                <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    style={{
-                        minHeight: "60vh", // Adjust the height as needed
-                    }}
-                >
-                    <Typography>Loading...</Typography>
-                </Stack>
-            ) : userTeams.length === 0 ? (
-                <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    style={{
-                        minHeight: "60vh", // Adjust the height as needed
-                    }}
-                >
-                    <p className="mb-0">No teams created or joined yet.</p>
-                </Stack>
-            ) : (
-                <Grid container
-                    spacing={3}
-                    style={{
-                        paddingLeft: "70px",
-                    }}
-                >
-                    {userTeams.map((team) => (
-                        <Grid item key={team.id} xs={12} sm={6} md={4} lg={3}>
-                            <TeamCard
-                                organization={team.organization}
-                                onClick={() => handleCardClick(team)}
-                            />
-                        </Grid>
-                    ))}
-                </Grid>
-            )}
         </NavBar>
     )
 }
