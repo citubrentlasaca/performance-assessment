@@ -88,7 +88,8 @@ function TopBar() {
                                     backgroundImage: `url(${backgroundImage})`,
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+                                    border: '1px solid black'
                                 }}
                             />
                         ) : (

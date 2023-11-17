@@ -152,39 +152,55 @@ function Notifications() {
             spacing={2}
             sx={{
                 width: '100%',
+                height: '100%',
             }}
         >
-            {admin.map((admin, index) => (
-                <Stack key={index}
-                    direction="column"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
+            {admin.length === 0 ? (
+                <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
                     spacing={2}
                     sx={{
                         width: '100%',
                         height: '100%',
-                        padding: '10px',
                     }}
                 >
-                    <p className='mb-0'>{admin.dateTimeCreated}</p>
-                    <Box className='gap-2'
+                    <p>No notifications found</p>
+                </Stack>
+            ) : (
+                admin.map((admin, index) => (
+                    <Stack key={index}
+                        direction="column"
+                        justifyContent="flex-start"
+                        alignItems="flex-start"
+                        spacing={2}
                         sx={{
                             width: '100%',
-                            height: 'fit-content',
-                            backgroundColor: 'white',
-                            borderRadius: '10px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'flex-start',
-                            padding: '30px',
+                            height: '100%',
+                            padding: '10px',
                         }}
                     >
-                        <b>{admin.employeeName} failed to answer {admin.assessmentTitle} within the due date</b>
-                        <p className='mb-0'>{admin.teamName}</p>
-                    </Box>
-                </Stack>
-            ))}
+                        <p className='mb-0'>{admin.dateTimeCreated}</p>
+                        <Box className='gap-2'
+                            sx={{
+                                width: '100%',
+                                height: 'fit-content',
+                                backgroundColor: 'white',
+                                borderRadius: '10px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'flex-start',
+                                padding: '30px',
+                            }}
+                        >
+                            <b>{admin.employeeName} failed to answer {admin.assessmentTitle} within the due date</b>
+                            <p className='mb-0'>{admin.teamName}</p>
+                        </Box>
+                    </Stack>
+                ))
+            )}
             <div
                 style={{
                     width: '100%',
@@ -205,39 +221,57 @@ function Notifications() {
             spacing={2}
             sx={{
                 width: '100%',
+                height: '100%',
             }}
         >
-            {announcements.map((announcement, index) => (
-                <Stack key={index}
-                    direction="column"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
+            {announcements.length === 0 ? (
+                <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
                     spacing={2}
                     sx={{
                         width: '100%',
                         height: '100%',
-                        padding: '10px',
                     }}
                 >
-                    <p className='mb-0'>{announcement.dateTimeCreated}</p>
-                    <Box className='gap-2'
+                    <p>No notifications found</p>
+                </Stack>
+            ) : (
+                announcements.map((announcement, index) => (
+                    <Stack
+                        key={index}
+                        direction="column"
+                        justifyContent="flex-start"
+                        alignItems="flex-start"
+                        spacing={2}
                         sx={{
                             width: '100%',
-                            height: 'fit-content',
-                            backgroundColor: 'white',
-                            borderRadius: '10px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'flex-start',
-                            padding: '30px',
+                            height: '100%',
+                            padding: '10px',
                         }}
                     >
-                        <p className='mb-0'>{announcement.organization} posted an announcement</p>
-                        <b>{announcement.announcementData.content}</b>
-                    </Box>
-                </Stack>
-            ))}
+                        <p className='mb-0'>{announcement.dateTimeCreated}</p>
+                        <Box
+                            className='gap-2'
+                            sx={{
+                                width: '100%',
+                                height: 'fit-content',
+                                backgroundColor: 'white',
+                                borderRadius: '10px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'flex-start',
+                                padding: '30px',
+                            }}
+                        >
+                            <p className='mb-0'>{announcement.organization} posted an announcement</p>
+                            <b>{announcement.announcementData.content}</b>
+                        </Box>
+                    </Stack>
+                ))
+            )}
             <div
                 style={{
                     width: '100%',
@@ -258,35 +292,67 @@ function Notifications() {
             spacing={2}
             sx={{
                 width: '100%',
+                height: '100%',
             }}
         >
-
-            {assessments.map((assessment, index) => (
-                <Stack key={index}
-                    direction="column"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
+            {assessments.length === 0 ? (
+                <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
                     spacing={2}
                     sx={{
                         width: '100%',
                         height: '100%',
-                        padding: '10px',
                     }}
                 >
-                    <p className='mb-0'>{assessment.dateTimeCreated}</p>
-                    {assessment.hasAssessment ? (
-                        <Link to={`/answerassessment/${assessment.assessmentData.id}`}
-                            style={{
-                                textDecoration: 'none',
-                                color: 'black',
-                                width: '100%',
-                            }}
-                        >
+                    <p>No notifications found</p>
+                </Stack>
+            ) : (
+                assessments.map((assessment, index) => (
+                    <Stack key={index}
+                        direction="column"
+                        justifyContent="flex-start"
+                        alignItems="flex-start"
+                        spacing={2}
+                        sx={{
+                            width: '100%',
+                            height: '100%',
+                            padding: '10px',
+                        }}
+                    >
+                        <p className='mb-0'>{assessment.dateTimeCreated}</p>
+                        {assessment.hasAssessment ? (
+                            <Link to={`/answerassessment/${assessment.assessmentData.id}`}
+                                style={{
+                                    textDecoration: 'none',
+                                    color: 'black',
+                                    width: '100%',
+                                }}
+                            >
+                                <Box className='gap-2'
+                                    sx={{
+                                        width: '100%',
+                                        height: 'fit-content',
+                                        backgroundColor: 'white',
+                                        borderRadius: '10px',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
+                                        alignItems: 'flex-start',
+                                        padding: '30px',
+                                    }}
+                                >
+                                    <b>You have been assigned an assessment</b>
+                                    <p className='mb-0'>{assessment.assessmentData.title}</p>
+                                </Box>
+                            </Link>
+                        ) : (
                             <Box className='gap-2'
                                 sx={{
                                     width: '100%',
                                     height: 'fit-content',
-                                    backgroundColor: 'white',
+                                    backgroundColor: '#a0cce0',
                                     borderRadius: '10px',
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -298,28 +364,11 @@ function Notifications() {
                                 <b>You have been assigned an assessment</b>
                                 <p className='mb-0'>{assessment.assessmentData.title}</p>
                             </Box>
-                        </Link>
-                    ) : (
-                        <Box className='gap-2'
-                            sx={{
-                                width: '100%',
-                                height: 'fit-content',
-                                backgroundColor: '#a0cce0',
-                                borderRadius: '10px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'flex-start',
-                                padding: '30px',
-                            }}
-                        >
-                            <b>You have been assigned an assessment</b>
-                            <p className='mb-0'>{assessment.assessmentData.title}</p>
-                        </Box>
-                    )}
+                        )}
 
-                </Stack>
-            ))}
+                    </Stack>
+                ))
+            )}
             <div
                 style={{
                     width: '100%',
