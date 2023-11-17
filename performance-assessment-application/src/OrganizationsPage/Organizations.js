@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../Shared/NavBar"
-import TeamCard from "./TeamCard";
 import axios from "axios";
-import { Stack, Grid, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useNavigate } from "react-router-dom";
+import groupPhoto from './Images/group.png';
 
 function Organizations() {
     const [userTeams, setUserTeams] = useState([]);
@@ -54,79 +54,70 @@ function Organizations() {
 
     return (
         <NavBar>
-            <Stack
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-                spacing={2}
-                sx={{
-                    height: "100%",
-                    width: "100%",
-                    padding: "40px",
-                }}
-            >
+            {loading ? (
                 <Stack
-                    direction="row"
-                    justifyContent="flex-start"
+                    justifyContent="center"
                     alignItems="center"
                     spacing={2}
                     sx={{
+                        height: "100%",
                         width: "100%"
                     }}
                 >
-
-                    <b
-                        style={{
-                            color: '#065d9d',
-                        }}
-                    >
-                        Your teams
-                    </b>
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
                 </Stack>
-                {loading ? (
-                    <Stack
-                        justifyContent="center"
-                        alignItems="center"
-                        spacing={2}
-                        sx={{
-                            height: "100%",
-                            width: "100%"
-                        }}
-                    >
-                        <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
+            ) : (
+                <Stack
+                    direction="column"
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
+                    spacing={2}
+                    sx={{
+                        height: "100%",
+                        width: "100%",
+                        padding: "40px",
+                        overflow: "auto"
+                    }}
+                >
+                    <b style={{ color: "#055c9d" }}>Your teams</b>
+                    <div className="text-center w-100">
+                        <div className="row row-cols-md-4 row-cols-sm-2 row-cols-1 row-gap-1">
+                            {userTeams.map((team, index) => (
+                                <div className="col" key={index}
+                                    style={{
+                                        height: "250px",
+                                        padding: "10px"
+                                    }}
+                                >
+                                    <div onClick={() => handleCardClick(team)}
+                                        style={{
+                                            height: "100%",
+                                            backgroundColor: "white",
+                                            borderRadius: "10px",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            gap: "10px",
+                                            cursor: "pointer",
+                                            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+                                            transition: "box-shadow 0.3s ease-in-out",
+                                            '&:hover': {
+                                                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.4)"
+                                            }
+                                        }}
+                                    >
+                                        <img src={groupPhoto} alt={team.organization} style={{ maxWidth: "50%", maxHeight: "100%" }} draggable="false" />
+                                        <b>{team.organization}</b>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    </Stack>
-                ) : userTeams.length === 0 ? (
-                    <Stack
-                        direction="column"
-                        justifyContent="center"
-                        alignItems="center"
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                        }}
-                    >
-                        <p className="mb-0">No teams created or joined yet.</p>
-                    </Stack>
-                ) : (
-                    <Grid container
-                        spacing={3}
-                        style={{
-                            paddingLeft: "70px",
-                        }}
-                    >
-                        {userTeams.map((team) => (
-                            <Grid item key={team.id} xs={12} sm={6} md={4} lg={3}>
-                                <TeamCard
-                                    organization={team.organization}
-                                    onClick={() => handleCardClick(team)}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                )}
-            </Stack>
+                    </div>
+                </Stack>
+            )}
         </NavBar>
     )
 }

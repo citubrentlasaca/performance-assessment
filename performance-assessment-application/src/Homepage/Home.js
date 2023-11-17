@@ -2,95 +2,100 @@ import { Box, Stack } from '@mui/material'
 import NavBar from "../Shared/NavBar"
 import teamPhoto from './Images/teampic.png';
 import joinPhoto from './Images/join.png';
+import { Link } from 'react-router-dom';
 
 function Home() {
     return (
         <NavBar>
-            <Stack direction="row" justifyContent="flex-start" alignItems="center">
-                <b
-                    style={{
-                        color: '#065d9d',
-                        padding: '30px'
-                    }}
-                >
-                    Let's get started
-                </b>
-            </Stack>
-            <Stack direction="row" justifyContent="flex-start" alignItems="center" spacing={7}
-                style={{
-                    paddingLeft: "70px"
+            <Stack
+                direction="column"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                spacing={2}
+                sx={{
+                    width: "100%",
+                    height: "100%",
+                    padding: "40px",
+                    overflow: "auto"
                 }}
             >
-                <a href="/create-team" style={{ textDecoration: 'none' }}>
-                    <Box
-                        sx={{
-                            width: "230px",
-                            height: "230px",
-                            backgroundColor: "white",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            borderRadius: "20px",
-                            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
-                            transition: "box-shadow 0.3s ease-in-out",
-                            '&:hover': {
-                                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.4)"
-                            }
-                        }}
-                    >
-                        <Stack direction="column" justifyContent="center" alignItems="center" spacing={1}>
-                            <img src={teamPhoto} alt="Create a Team"
+                <b style={{ color: "#055c9d" }}>Let's get started</b>
+                <div className="text-center w-100">
+                    <div className="row row-cols-md-4 row-cols-sm-2 row-cols-1 row-gap-1">
+                        <div className="col"
+                            style={{
+                                height: "250px",
+                                padding: "10px"
+                            }}
+                        >
+                            <Link to="/create-team"
                                 style={{
-                                    width: '150px',
-                                    height: '150px'
-                                }}
-                            />
-                            <b
-                                style={{
-                                    color: 'black'
+                                    textDecoration: "none",
+                                    color: "black"
                                 }}
                             >
-                                Create a Team
-                            </b>
-                        </Stack>
-                    </Box>
-                </a>
-                <a href="/join-team" style={{ textDecoration: 'none' }}>
-                    <Box
-                        sx={{
-                            width: "230px",
-                            height: "230px",
-                            backgroundColor: "white",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            borderRadius: "20px",
-                            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
-                            transition: "box-shadow 0.3s ease-in-out",
-                            '&:hover': {
-                                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.4)"
-                            }
-                        }}
-                    >
-                        <Stack direction="column" justifyContent="center" alignItems="center" spacing={1}>
-                            <img src={joinPhoto} alt="Join an Existing Team"
+                                <div
+                                    style={{
+                                        height: "100%",
+                                        backgroundColor: "white",
+                                        borderRadius: "10px",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                        cursor: "pointer",
+                                        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+                                        transition: "box-shadow 0.3s ease-in-out",
+                                        '&:hover': {
+                                            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.4)"
+                                        }
+                                    }}
+                                >
+                                    <img src={teamPhoto} alt="Create a Team" style={{ maxWidth: "50%", maxHeight: "100%" }} draggable="false" />
+                                    <b>Create a Team</b>
+                                </div>
+                            </Link>
+                        </div>
+                        <div className="col"
+                            style={{
+                                height: "250px",
+                                padding: "10px"
+                            }}
+                        >
+                            <Link to="/join-team"
                                 style={{
-                                    width: '150px',
-                                    height: '150px'
-                                }}
-                            />
-                            <b
-                                style={{
-                                    color: 'black'
+                                    textDecoration: "none",
+                                    color: "black"
                                 }}
                             >
-                                Join an Existing Team
-                            </b>
-                        </Stack>
-                    </Box>
-                </a>
-            </Stack>
-        </NavBar>
+                                <div
+                                    style={{
+                                        height: "100%",
+                                        backgroundColor: "white",
+                                        borderRadius: "10px",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                        cursor: "pointer",
+                                        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+                                        transition: "box-shadow 0.3s ease-in-out",
+                                        '&:hover': {
+                                            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.4)"
+                                        }
+                                    }}
+                                >
+                                    <img src={joinPhoto} alt="Join an Existing Team" style={{ maxWidth: "50%", maxHeight: "100%" }} draggable="false" />
+                                    <b>Join an Existing Team</b>
+                                </div>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </Stack >
+        </NavBar >
     )
 }
 
