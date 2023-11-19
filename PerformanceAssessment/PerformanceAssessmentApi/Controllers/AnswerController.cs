@@ -27,11 +27,14 @@ namespace PerformanceAssessmentApi.Controllers
         ///
         ///     POST /api/answers
         ///     {
-        ///         "employeeId": 1,
-        ///         "itemId": 1,
-        ///         "answerText": "My performance was great.",
-        ///         "selectedChoices": "Efficiency, Teamwork",
-        ///         "counterValue": 10
+        ///         "resultIds": [1, 2, 3],
+        ///         "answer": {
+        ///             "employeeId": 1,
+        ///             "itemId": 1,
+        ///             "answerText": "My performance was great.",
+        ///             "selectedChoices": "Efficiency, Teamwork",
+        ///             "counterValue": 10
+        ///         }
         ///     }
         ///
         /// </remarks>
@@ -41,17 +44,20 @@ namespace PerformanceAssessmentApi.Controllers
         [HttpPost(Name = "SaveAnswers")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(AnswerCreationDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(AnswerDetailsDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> SaveAnswers([FromBody] AnswerCreationDto answers)
+        public async Task<IActionResult> SaveAnswers([FromBody] AnswerDetailsDto answers)
         {
             try
             {
-                // Create new answers
-                var newAnswers = await _answerService.SaveAnswers(answers);
+                if (answers.ResultIds == null || answers.ResultIds.Count == 0)
+                {
+                    return BadRequest("Result IDs cannot be empty.");
+                }
+                var insertedIds = await _answerService.SaveAnswers(answers.ResultIds, answers.Answer);
 
-                return CreatedAtRoute("GetAnswersById", new { id = newAnswers.Id }, newAnswers);
+                return CreatedAtRoute("GetAnswersById", new { id = insertedIds }, insertedIds);
             }
             catch (Exception e)
             {

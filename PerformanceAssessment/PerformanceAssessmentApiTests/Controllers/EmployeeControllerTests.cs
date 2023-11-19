@@ -1,11 +1,11 @@
-﻿using Moq;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Moq;
 using PerformanceAssessmentApi.Controllers;
 using PerformanceAssessmentApi.Dtos;
 using PerformanceAssessmentApi.Models;
 using PerformanceAssessmentApi.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 
 namespace PerformanceAssessmentApiTests.Controllers
 {
@@ -310,7 +310,7 @@ namespace PerformanceAssessmentApiTests.Controllers
             var userId = It.IsAny<int>();
 
             _fakeEmployeeService.Setup(service => service.GetEmployeeByUserId(userId))
-                .ReturnsAsync(new List <EmployeeDto>());
+                .ReturnsAsync(new List<EmployeeDto>());
 
             // Act
             var result = await _controller.GetEmployeeByUserId(userId);

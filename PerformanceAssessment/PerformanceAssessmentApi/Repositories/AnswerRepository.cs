@@ -14,16 +14,26 @@ namespace PerformanceAssessmentApi.Repositories
             _context = context;
         }
 
-        public async Task<int> SaveAnswers(Answer answer)
+        public async Task<IEnumerable<int>> SaveAnswers(IEnumerable<int> resultIds, Answer answer)
         {
             var sql = "INSERT INTO [dbo].[Answer] " +
-                      "([EmployeeId], [ItemId], [AnswerText], [SelectedChoices], [CounterValue], [IsDeleted], [DateTimeAnswered]) " +
-                      "VALUES (@EmployeeId, @ItemId, @AnswerText, @SelectedChoices, @CounterValue, 0, @DateTimeAnswered); " +
+                      "([ResultId], [EmployeeId], [ItemId], [AnswerText], [SelectedChoices], [CounterValue], [IsDeleted], [DateTimeAnswered]) " +
+                      "VALUES (@ResultId, @EmployeeId, @ItemId, @AnswerText, @SelectedChoices, @CounterValue, 0, @DateTimeAnswered); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
             {
-                return await con.ExecuteScalarAsync<int>(sql, answer);
+                var insertedIds = new List<int>();
+
+                foreach (var resultId in resultIds)
+                {
+                    answer.ResultId = resultId;
+
+                    var insertedId = await con.ExecuteScalarAsync<int>(sql, answer);
+                    insertedIds.Add(insertedId);
+                }
+
+                return insertedIds;
             }
         }
 

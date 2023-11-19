@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using PerformanceAssessmentApi.Controllers;
 using PerformanceAssessmentApi.Dtos;
-using PerformanceAssessmentApi.Models;
 using PerformanceAssessmentApi.Services;
 
 namespace PerformanceAssessmentApiTests.Controllers
@@ -26,51 +25,59 @@ namespace PerformanceAssessmentApiTests.Controllers
         public async Task SaveAnswers_ValidAnswers_ReturnsCreatedAtRouteResult()
         {
             // Arrange
-            var employeeId = It.IsAny<int>();
-            var itemId = It.IsAny<int>();
-
-            var answerCreationDto = new AnswerCreationDto
+            var resultIds = new List<int> { 1, 2, 3 };
+            var answerCreationDto = new AnswerDetailsDto
             {
-                EmployeeId = employeeId,
-                ItemId = itemId,
-                AnswerText = "My performance was great.",
-                SelectedChoices = "Efficiency, Teamwork",
-                CounterValue = 10
+                ResultIds = resultIds,
+                Answer = new AnswerCreationDto
+                {
+                    EmployeeId = 1,
+                    ItemId = 1,
+                    AnswerText = "My performance was great.",
+                    SelectedChoices = "Efficiency, Teamwork",
+                    CounterValue = 10
+                }
             };
-            _fakeAnswerService.Setup(service => service.SaveAnswers(answerCreationDto))
-                .ReturnsAsync(new Answer());
+
+            _fakeAnswerService.Setup(service => service.SaveAnswers(resultIds, answerCreationDto.Answer))
+                              .ReturnsAsync(new List<int> { 1, 2, 3 });
 
             // Act
             var result = await _controller.SaveAnswers(answerCreationDto);
 
             // Assert
-            Assert.IsType<CreatedAtRouteResult>(result);
+            var createdAtRouteResult = Assert.IsType<CreatedAtRouteResult>(result);
+            var insertedIds = Assert.IsAssignableFrom<IEnumerable<int>>(createdAtRouteResult.Value);
+            Assert.Equal(resultIds.Count, insertedIds.Count());
         }
 
         [Fact]
         public async Task SaveAnswers_ExceptionThrown_ReturnsInternalServerError()
         {
             // Arrange
-            var employeeId = It.IsAny<int>();
-            var itemId = It.IsAny<int>();
-
-            var answerCreationDto = new AnswerCreationDto
+            var resultIds = new List<int> { 1, 2, 3 };
+            var answerCreationDto = new AnswerDetailsDto
             {
-                EmployeeId = employeeId,
-                ItemId = itemId,
-                AnswerText = "My performance was great.",
-                SelectedChoices = "Efficiency, Teamwork",
-                CounterValue = 10
+                ResultIds = resultIds,
+                Answer = new AnswerCreationDto
+                {
+                    EmployeeId = 1,
+                    ItemId = 1,
+                    AnswerText = "My performance was great.",
+                    SelectedChoices = "Efficiency, Teamwork",
+                    CounterValue = 10
+                }
             };
-            _fakeAnswerService.Setup(service => service.SaveAnswers(answerCreationDto))
-                .Throws(new Exception());
+
+            _fakeAnswerService.Setup(service => service.SaveAnswers(resultIds, answerCreationDto.Answer))
+                              .Throws(new Exception());
 
             // Act
             var result = await _controller.SaveAnswers(answerCreationDto);
 
             // Assert
-            Assert.IsType<ObjectResult>(result);
-            Assert.Equal(StatusCodes.Status500InternalServerError, ((ObjectResult)result).StatusCode);
+            var objectResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, objectResult.StatusCode);
         }
 
         [Fact]
