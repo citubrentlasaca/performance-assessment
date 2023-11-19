@@ -295,8 +295,8 @@ function QuestionBox({ questions, setQuestions, deletedChoiceIds, setDeletedChoi
 
     useEffect(() => {
         Promise.all([
-            axios.get('https://localhost:7236/api/choices'),
-            axios.get('https://localhost:7236/api/items'),
+            axios.get('https://workpa.azurewebsites.net/api/choices'),
+            axios.get('https://workpa.azurewebsites.net/api/items'),
         ])
             .then((responses) => {
                 const choicesResponse = responses[0];

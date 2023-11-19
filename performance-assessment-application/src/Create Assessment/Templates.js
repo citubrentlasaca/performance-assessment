@@ -25,11 +25,11 @@ function Templates() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/employee/${employeeStorage.id}`);
+                const assessmentResponse = await axios.get(`https://workpa.azurewebsites.net/api/assessments/employee/${employeeStorage.id}`);
                 const assessmentData = await assessmentResponse.data;
                 let disabledTemp = [];
                 for (const assessment of assessmentData) {
-                    const response = await axios.get(`https://localhost:7236/api/results/assessments/${assessment.id}`);
+                    const response = await axios.get(`https://workpa.azurewebsites.net/api/results/assessments/${assessment.id}`);
                     for (const result of response.data) {
                         disabledTemp.push(result.assessmentId);
                     }
@@ -49,7 +49,7 @@ function Templates() {
 
     const handleDeleteAssessment = (assessmentId) => {
         axios
-            .delete(`https://localhost:7236/api/assessments/${assessmentId}`)
+            .delete(`https://workpa.azurewebsites.net/api/assessments/${assessmentId}`)
             .then((response) => {
                 console.log('Assessment deleted successfully');
                 setAssessments((prevAssessments) =>

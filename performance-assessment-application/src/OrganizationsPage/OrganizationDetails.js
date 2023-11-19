@@ -67,7 +67,7 @@ function OrganizationDetails() {
     };
 
     useEffect(() => {
-        axios.get(`https://localhost:7236/api/teams/${employee.teamId}`)
+        axios.get(`https://workpa.azurewebsites.net/api/teams/${employee.teamId}`)
             .then((response) => {
                 const organizationName = response.data.organization;
                 setTeamName(organizationName);
@@ -76,7 +76,7 @@ function OrganizationDetails() {
                 console.error('Error fetching team data:', error);
             });
 
-        axios.get(`https://localhost:7236/api/announcements`)
+        axios.get(`https://workpa.azurewebsites.net/api/announcements`)
             .then((response) => {
                 if (response.data.length !== 0) {
                     const announcements = response.data.reverse();
@@ -117,7 +117,7 @@ function OrganizationDetails() {
             };
 
             axios
-                .post('https://localhost:7236/api/announcements', payload)
+                .post('https://workpa.azurewebsites.net/api/announcements', payload)
                 .then((response) => {
                     console.log('Announcement posted successfully:', response.data);
                     handleClose();

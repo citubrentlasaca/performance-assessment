@@ -137,7 +137,7 @@ function UserRegistration() {
       };
 
       axios
-        .post('https://localhost:7236/api/users', formData)
+        .post('https://workpa.azurewebsites.net/api/users', formData)
         .then((response) => {
           setRegistrationSuccess(true);
           console.log('User registered successfully', response.data);

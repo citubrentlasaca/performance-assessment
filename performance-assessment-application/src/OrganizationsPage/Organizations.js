@@ -14,10 +14,10 @@ function Organizations() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const teamResponse = await axios.get(`https://localhost:7236/api/users/${userId}/teams`);
+                const teamResponse = await axios.get(`https://workpa.azurewebsites.net/api/users/${userId}/teams`);
                 const userTemp = [];
                 for (const team of teamResponse.data) {
-                    const employeeResponse = await axios.get(`https://localhost:7236/api/employees/teams/${team.id}`);
+                    const employeeResponse = await axios.get(`https://workpa.azurewebsites.net/api/employees/teams/${team.id}`);
                     for (const employee of employeeResponse.data) {
                         if (employee.status === 'Active' && employee.userId === Number(userId)) {
                             userTemp.push(team);
@@ -37,7 +37,7 @@ function Organizations() {
     async function fetchEmployeeDetails(teamId, userId) {
         try {
             const response = await axios.get(
-                `https://localhost:7236/api/employees/get-by-team-and-user?teamId=${teamId}&userId=${userId}`
+                `https://workpa.azurewebsites.net/api/employees/get-by-team-and-user?teamId=${teamId}&userId=${userId}`
             );
             return response.data;
         } catch (error) {

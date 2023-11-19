@@ -20,7 +20,7 @@ const EmployeeAnalytics = () => {
   useEffect(() => {
     if (employeeId !== null) {
       axios
-        .get(`https://localhost:7236/api/results/employees/${employeeId}`)
+        .get(`https://workpa.azurewebsites.net/api/results/employees/${employeeId}`)
         .then((resultResponse) => {
           if (resultResponse.data.length > 0) {
             const sortedAssessments = resultResponse.data.sort((a, b) => {
@@ -30,7 +30,7 @@ const EmployeeAnalytics = () => {
             const latestAssessment = sortedAssessments[0];
 
             axios
-              .get(`https://localhost:7236/api/answers/get-by-employee-and-assessment?employeeId=${employeeId}&assessmentId=${latestAssessment.assessmentId}`)
+              .get(`https://workpa.azurewebsites.net/api/answers/get-by-employee-and-assessment?employeeId=${employeeId}&assessmentId=${latestAssessment.assessmentId}`)
               .then((response) => {
                 const responseData = response.data;
                 const apiTitle = responseData.title;

@@ -16,11 +16,11 @@ function Employees() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const employeeResponse = await axios.get(`https://localhost:7236/api/employees/teams/${employeeStorage.teamId}`)
+                const employeeResponse = await axios.get(`https://workpa.azurewebsites.net/api/employees/teams/${employeeStorage.teamId}`)
                 const employeeTemp = [];
                 for (const employee of employeeResponse.data) {
                     if (employee.role !== 'Admin') {
-                        const userResponse = await axios.get(`https://localhost:7236/api/users/${employee.userId}`);
+                        const userResponse = await axios.get(`https://workpa.azurewebsites.net/api/users/${employee.userId}`);
                         employeeTemp.push({
                             id: employee.id,
                             userId: employee.userId,
@@ -48,7 +48,7 @@ function Employees() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://localhost:7236/api/employees/${id}`);
+            await axios.delete(`https://workpa.azurewebsites.net/api/employees/${id}`);
             setRefresh(true);
             console.log('Employee is now inactive');
         } catch (error) {
@@ -58,7 +58,7 @@ function Employees() {
 
     const handleActivate = async (id, userId, teamId, role) => {
         try {
-            await axios.put(`https://localhost:7236/api/employees/${id}`, {
+            await axios.put(`https://workpa.azurewebsites.net/api/employees/${id}`, {
                 userId: userId,
                 teamId: teamId,
                 role: role,
@@ -82,7 +82,7 @@ function Employees() {
 
     const handleCopy = async () => {
         try {
-            const getTeam = await axios.get(`https://localhost:7236/api/teams/${employeeStorage.teamId}`);
+            const getTeam = await axios.get(`https://workpa.azurewebsites.net/api/teams/${employeeStorage.teamId}`);
             const team = getTeam.data;
             const textarea = document.createElement('textarea');
             textarea.value = team.teamCode;
@@ -98,7 +98,7 @@ function Employees() {
 
     const handleDisband = async () => {
         try {
-            await axios.delete(`https://localhost:7236/api/teams/${employeeStorage.teamId}`);
+            await axios.delete(`https://workpa.azurewebsites.net/api/teams/${employeeStorage.teamId}`);
             console.log('Team disbanded');
             navigate('/organizations');
         } catch (error) {

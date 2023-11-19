@@ -71,7 +71,7 @@ function Login() {
 
     if (email !== '' && password !== '') {
       try {
-        const response = await axios.get('https://localhost:7236/api/users/authenticate', {
+        const response = await axios.get('https://workpa.azurewebsites.net/api/users/authenticate', {
           params: {
             email: email,
             password: password,

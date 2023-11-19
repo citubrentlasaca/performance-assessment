@@ -72,10 +72,10 @@ function UpdateAssessment() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${id}`);
+                const assessmentResponse = await axios.get(`https://workpa.azurewebsites.net/api/assessments/${id}`);
                 const assessmentData = assessmentResponse.data;
                 const itemsData = [];
-                const itemsResponse = await axios.get('https://localhost:7236/api/items');
+                const itemsResponse = await axios.get('https://workpa.azurewebsites.net/api/items');
                 for (const item of itemsResponse.data) {
                     if (item.assessmentId === Number(id)) {
                         itemsData.push(item);
@@ -129,7 +129,7 @@ function UpdateAssessment() {
 
     async function doesChoiceExistInDatabase(choiceId) {
         try {
-            await axios.get(`https://localhost:7236/api/choices/${choiceId}`);
+            await axios.get(`https://workpa.azurewebsites.net/api/choices/${choiceId}`);
             return true;
         } catch (error) {
             return false;
@@ -146,14 +146,14 @@ function UpdateAssessment() {
                 return;
             }
 
-            await axios.put(`https://localhost:7236/api/assessments/${id}`, {
+            await axios.put(`https://workpa.azurewebsites.net/api/assessments/${id}`, {
                 title,
                 description,
             });
 
             for (const question of questions) {
                 if (originalQuestions.some((originalQuestion) => originalQuestion.id === question.id)) {
-                    await axios.put(`https://localhost:7236/api/items/${question.id}`, {
+                    await axios.put(`https://workpa.azurewebsites.net/api/items/${question.id}`, {
                         question: question.questionText,
                         questionType: question.questionType,
                         weight: question.questionWeight,
@@ -168,12 +168,12 @@ function UpdateAssessment() {
                             const choiceExists = await doesChoiceExistInDatabase(choice.id);
 
                             if (choiceExists) {
-                                await axios.put(`https://localhost:7236/api/choices/${choice.id}`, {
+                                await axios.put(`https://workpa.azurewebsites.net/api/choices/${choice.id}`, {
                                     choiceValue: choice.valueText,
                                     weight: choice.choiceWeight,
                                 });
                             } else {
-                                const choiceResponse = await axios.post('https://localhost:7236/api/choices', {
+                                const choiceResponse = await axios.post('https://workpa.azurewebsites.net/api/choices', {
                                     choiceValue: choice.valueText,
                                     weight: choice.choiceWeight,
                                     itemId: question.id,
@@ -185,25 +185,25 @@ function UpdateAssessment() {
                 }
             }
 
-            const choicesResponse = await axios.get('https://localhost:7236/api/choices');
+            const choicesResponse = await axios.get('https://workpa.azurewebsites.net/api/choices');
             const choicesData = choicesResponse.data;
 
             for (const choiceId of deletedChoiceIds) {
                 const choiceToDelete = choicesData.find((choice) => choice.id === choiceId);
 
                 if (choiceToDelete) {
-                    await axios.delete(`https://localhost:7236/api/choices/${choiceId}`);
+                    await axios.delete(`https://workpa.azurewebsites.net/api/choices/${choiceId}`);
                 }
             }
 
-            const itemsResponse = await axios.get('https://localhost:7236/api/items');
+            const itemsResponse = await axios.get('https://workpa.azurewebsites.net/api/items');
             const itemsData = itemsResponse.data;
 
             for (const question of questions) {
                 const existingItem = itemsData.find((item) => item.id === question.id);
 
                 if (!existingItem) {
-                    const itemResponse = await axios.post('https://localhost:7236/api/items', {
+                    const itemResponse = await axios.post('https://workpa.azurewebsites.net/api/items', {
                         question: question.questionText,
                         questionType: question.questionType,
                         weight: question.questionWeight,
@@ -216,7 +216,7 @@ function UpdateAssessment() {
                     if (question.questionType === 'Multiple choice' || question.questionType === 'Checkboxes') {
                         const choices = question.questionType === 'Multiple choice' ? question.multipleChoices : question.checkboxesChoices;
                         for (const choice of choices) {
-                            const choiceResponse = await axios.post('https://localhost:7236/api/choices', {
+                            const choiceResponse = await axios.post('https://workpa.azurewebsites.net/api/choices', {
                                 choiceValue: choice.valueText,
                                 weight: choice.choiceWeight,
                                 itemId: question.id,
@@ -230,7 +230,7 @@ function UpdateAssessment() {
             for (const originalQuestion of originalQuestions) {
                 const found = questions.find((question) => question.id === originalQuestion.id);
                 if (!found) {
-                    await axios.delete(`https://localhost:7236/api/items/${originalQuestion.id}`);
+                    await axios.delete(`https://workpa.azurewebsites.net/api/items/${originalQuestion.id}`);
                 }
             }
 

@@ -56,16 +56,16 @@ function AnswerAssessment() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const assessmentResponse = await fetch(`https://localhost:7236/api/assessments/${id}`);
+                const assessmentResponse = await fetch(`https://workpa.azurewebsites.net/api/assessments/${id}`);
                 const assessmentData = await assessmentResponse.json();
                 setAssessmentData(assessmentData);
 
-                const itemResponse = await fetch(`https://localhost:7236/api/items`);
+                const itemResponse = await fetch(`https://workpa.azurewebsites.net/api/items`);
                 const itemData = await itemResponse.json();
                 const filteredItems = itemData.filter(item => item.assessmentId === Number(id));
                 setItemData(filteredItems);
 
-                const choiceResponse = await fetch(`https://localhost:7236/api/choices`);
+                const choiceResponse = await fetch(`https://workpa.azurewebsites.net/api/choices`);
                 const choiceData = await choiceResponse.json();
                 const choicesByItemId = {};
                 filteredItems.forEach(item => {
@@ -128,7 +128,7 @@ function AnswerAssessment() {
                     counterValue: counterValues[item.id] || 0,
                 };
 
-                const response = await fetch('https://localhost:7236/api/answers', {
+                const response = await fetch('https://workpa.azurewebsites.net/api/answers', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ function AnswerAssessment() {
 
             console.log('All answers submitted successfully');
 
-            const schedulerResponse = await fetch(`https://localhost:7236/api/schedulers/get-by-employee-and-assessment?employeeId=${employeeStorage.id}&assessmentId=${id}`);
+            const schedulerResponse = await fetch(`https://workpa.azurewebsites.net/api/schedulers/get-by-employee-and-assessment?employeeId=${employeeStorage.id}&assessmentId=${id}`);
             const schedulerData = await schedulerResponse.json();
 
             const updateData = {
@@ -161,7 +161,7 @@ function AnswerAssessment() {
                 time: schedulerData.time,
             };
 
-            const schedulerUpdateResponse = await fetch(`https://localhost:7236/api/schedulers/${schedulerData.id}`, {
+            const schedulerUpdateResponse = await fetch(`https://workpa.azurewebsites.net/api/schedulers/${schedulerData.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -183,7 +183,7 @@ function AnswerAssessment() {
                 dateTimeDue: `${schedulerData.dueDate} ${schedulerData.time}`,
             };
 
-            const resultResponse = await fetch('https://localhost:7236/api/results', {
+            const resultResponse = await fetch('https://workpa.azurewebsites.net/api/results', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
