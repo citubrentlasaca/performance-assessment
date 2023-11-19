@@ -48,19 +48,22 @@ namespace PerformanceAssessmentApiTests.Services
             };
 
             _fakeMapper.Setup(x => x.Map<Answer>(answerCreationDto)).Returns(expectedAnswer);
-            _fakeAnswerRepository.Setup(x => x.SaveAnswers(expectedAnswer)).ReturnsAsync(answerId);
+            _fakeAnswerRepository
+                .Setup(x => x.SaveAnswers(It.IsAny<IEnumerable<int>>(), It.IsAny<Answer>()))
+                .ReturnsAsync(new List<int> { answerId });
 
             // Act
-            var result = await _answerService.SaveAnswers(answerCreationDto);
+            var result = await _answerService.SaveAnswers(new List<int> { 1, 2, 3 }, answerCreationDto);
+
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(answerId, result.Id);
-            Assert.Equal(answerCreationDto.EmployeeId, result.EmployeeId);
-            Assert.Equal(answerCreationDto.ItemId, result.ItemId);
-            Assert.Equal(answerCreationDto.AnswerText, result.AnswerText);
-            Assert.Equal(answerCreationDto.SelectedChoices, result.SelectedChoices);
-            Assert.Equal(answerCreationDto.CounterValue, result.CounterValue);
+            Assert.Equal(answerId, result.First());
+            Assert.Equal(answerCreationDto.EmployeeId, expectedAnswer.EmployeeId);
+            Assert.Equal(answerCreationDto.ItemId, expectedAnswer.ItemId);
+            Assert.Equal(answerCreationDto.AnswerText, expectedAnswer.AnswerText);
+            Assert.Equal(answerCreationDto.SelectedChoices, expectedAnswer.SelectedChoices);
+            Assert.Equal(answerCreationDto.CounterValue, expectedAnswer.CounterValue);
         }
 
         [Fact]

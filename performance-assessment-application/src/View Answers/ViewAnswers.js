@@ -55,23 +55,7 @@ function ViewAnswers() {
                     const answerResponse = await axios.get(`https://workpa.azurewebsites.net/api/answers/items/${item.id}`);
                     for (const answer of answerResponse.data) {
                         for (const answerTemp of answersTemp) {
-                            const answerDate = new Date(answer.dateTimeAnswered);
-                            const answerTempDate = new Date(answerTemp.date);
-
-                            const options = {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                            };
-                            const timeOptions = {
-                                hour: 'numeric',
-                                minute: '2-digit',
-                                second: '2-digit',
-                            };
-
-                            const formattedAnswerDate = answerDate.toLocaleDateString('en-US', options) + ' at ' + answerDate.toLocaleTimeString('en-US', timeOptions);
-                            const formattedAnswerTempDate = answerTempDate.toLocaleDateString('en-US', options) + ' at ' + answerTempDate.toLocaleTimeString('en-US', timeOptions);
-                            if (formattedAnswerDate === formattedAnswerTempDate) {
+                            if (answer.resultId === answerTemp.id) {
                                 if (item.questionType === 'Short answer' || item.questionType === 'Paragraph') {
                                     answerTemp.answers.push(answer.answerText);
                                 }
@@ -90,7 +74,6 @@ function ViewAnswers() {
                 setItems(itemsTemp);
                 setAnswers(answersTemp);
                 setLoading(false);
-                console.log(answersTemp)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
