@@ -16,12 +16,12 @@ namespace PerformanceAssessmentApi.Services
             _mapper = mapper;
         }
 
-        public async Task<Answer> SaveAnswers(AnswerCreationDto answer)
+        public async Task<IEnumerable<int>> SaveAnswers(IEnumerable<int> resultIds, AnswerCreationDto answerCreation)
         {
-            var model = _mapper.Map<Answer>(answer);
-            model.Id = await _repository.SaveAnswers(model);
+            var answers = _mapper.Map<Answer>(answerCreation);
+            var insertedIds = await _repository.SaveAnswers(resultIds, answers);
 
-            return model;
+            return insertedIds;
         }
 
         public async Task<IEnumerable<AnswerDto>> GetAnswersByItemId(int itemId)
