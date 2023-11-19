@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[Answer]
 (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY,
+    [ResultId] INT NOT NULL,
     [EmployeeId] INT NOT NULL,
     [ItemId] INT NOT NULL,
     [AnswerText] NVARCHAR(MAX) NULL,
