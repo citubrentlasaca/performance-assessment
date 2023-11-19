@@ -81,12 +81,12 @@ const AdminAnalytics = () => {
     const handleAssessmentChange = async (event) => {
         const selectedAssessmentIndex = event.target.value;
         const selectedAssessment = assessments[selectedAssessmentIndex];
-    
+
         if (selectedAssessment) {
             try {
                 setSelectedMonth('');
                 setSelectedYear('');
-    
+
                 const response = await fetch(`https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid?assessmentId=${selectedAssessment.id}`);
                 const analyticsData = await response.json();
                 setEmployeeData(analyticsData);
@@ -130,7 +130,7 @@ const AdminAnalytics = () => {
                 >
                     <Stack
                         direction="row"
-                        justifyContent="flex-end"
+                        justifyContent="space-between"
                         alignItems="center"
                         spacing={2}
                         sx={{
@@ -143,7 +143,6 @@ const AdminAnalytics = () => {
                             onChange={handleAssessmentChange}
                             style={{
                                 width: "25%",
-                                marginRight: "25%"
                             }}
                         >
                             <option value="" disabled selected>Select Assessment</option>
@@ -153,41 +152,51 @@ const AdminAnalytics = () => {
                                 </option>
                             ))}
                         </select>
-                        <select
-                            className="form-select select-month-option"
-                            aria-label="Select Month"
-                            value={selectedMonth}
-                            onChange={handleMonthChange}
-                            style={{
-                                width: "25%"
+                        <Stack
+                            direction="row"
+                            justifyContent="flex-end"
+                            alignItems="center"
+                            spacing={2}
+                            sx={{
+                                width: "100%"
                             }}
                         >
-                            <option value="">Select Month</option>
-                            <option value="1">January</option>
-                            <option value="2">February</option>
-                            <option value="3">March</option>
-                            <option value="4">April</option>
-                            <option value="5">May</option>
-                            <option value="6">June</option>
-                            <option value="7">July</option>
-                            <option value="8">August</option>
-                            <option value="9">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                        <select
-                            className="form-select select-month-option"
-                            aria-label="Default select example"
-                            value={selectedYear}
-                            onChange={handleYearChange}
-                            style={{
-                                width: "25%"
-                            }}
-                        >
-                            <option value="">Select Year</option>
-                            {generateYearOptions()}
-                        </select>
+                            <select
+                                className="form-select select-month-option"
+                                aria-label="Select Month"
+                                value={selectedMonth}
+                                onChange={handleMonthChange}
+                                style={{
+                                    width: "25%"
+                                }}
+                            >
+                                <option value="" disabled selected>Select Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                            <select
+                                className="form-select select-month-option"
+                                aria-label="Default select example"
+                                value={selectedYear}
+                                onChange={handleYearChange}
+                                style={{
+                                    width: "25%"
+                                }}
+                            >
+                                <option value="" disabled selected>Select Year</option>
+                                {generateYearOptions()}
+                            </select>
+                        </Stack>
                     </Stack>
                     {employeeData.length === 0 ? (
                         <Stack

@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/material'
+import { Box, Skeleton, Stack } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import NavBar from '../Shared/NavBar'
 import TopBarTwo from '../Shared/TopBarTwo'
@@ -64,19 +64,123 @@ function Templates() {
     return (
         <NavBar>
             {loading ? (
-                <Stack
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={2}
-                    sx={{
-                        height: "100%",
-                        width: "100%"
-                    }}
-                >
-                    <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </Stack>
+                <>
+                    <TopBarTwo />
+                    <Stack
+                        direction="column"
+                        justifyContent="flex-start"
+                        alignItems="center"
+                        spacing={2}
+                        sx={{
+                            height: "calc(100% - 100px)",
+                            width: "100%",
+                            padding: '40px',
+                            overflow: 'auto',
+                        }}
+                    >
+
+                        <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            spacing={2}
+                            sx={{
+                                width: "100%"
+                            }}
+                        >
+                            <Skeleton>
+                                <b>Create Assessment</b>
+                            </Skeleton>
+                        </Stack>
+                        <Box
+                            sx={{
+                                height: "100px",
+                                width: "100%",
+                                backgroundColor: "white",
+                                borderRadius: "10px",
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                padding: '30px'
+                            }}
+                        >
+                            <Stack
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="center"
+                                spacing={2}
+                                sx={{
+                                    width: "100%"
+                                }}
+                            >
+                                <Skeleton>
+                                    <b>Blank Assessment</b>
+                                </Skeleton>
+                                <Skeleton>
+                                    <button type="button" className="btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                            <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                        </svg>
+                                    </button>
+                                </Skeleton>
+                            </Stack>
+                        </Box>
+                        <Box
+                            sx={{
+                                height: "100px",
+                                width: "100%",
+                                backgroundColor: "white",
+                                borderRadius: "10px",
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                padding: '30px'
+                            }}
+                        >
+                            <Stack
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="center"
+                                spacing={2}
+                                sx={{
+                                    width: "100%"
+                                }}
+                            >
+                                <Skeleton>
+                                    <b>Daily Performance Report</b>
+                                </Skeleton>
+                                <Skeleton>
+                                    <button type="button" className="btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                            <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                        </svg>
+                                    </button>
+                                </Skeleton>
+                            </Stack>
+                        </Box>
+                        <hr
+                            style={{
+                                height: "1px",
+                                width: "100%",
+                            }}
+                        />
+                        <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            spacing={2}
+                            sx={{
+                                width: "100%"
+                            }}
+                        >
+                            <Skeleton>
+                                <b>Assessments</b>
+                            </Skeleton>
+                        </Stack>
+                    </Stack>
+                </>
             ) : (
                 <>
                     <AssignAssessmentModal open={open} handleClose={handleClose} assessmentId={selectedAssessmentId} assessmentTitle={selectedAssessmentTitle} />
