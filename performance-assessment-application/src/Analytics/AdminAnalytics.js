@@ -5,34 +5,25 @@ import analyticsheader from './analytics-trophy.png';
 import { Stack } from "@mui/material";
 
 const AdminAnalytics = () => {
-    const [employeeData, setEmployeeData] = useState([]);
+    const [assessments, setAssessments] = useState([]);
     const [selectedMonth, setSelectedMonth] = useState('');
     const [selectedYear, setSelectedYear] = useState('');
-    const employee = JSON.parse(localStorage.getItem("employeeData"));
-    const [assessmentId, setAssessmentId] = useState(null);
+    const [employeeData, setEmployeeData] = useState([]);
+    const [currentAssessment, setCurrentAssessment] = useState(null);
 
     useEffect(() => {
+        const employee = JSON.parse(localStorage.getItem("employeeData"));
+
         fetch(`https://localhost:7236/api/assessments/employee/${employee.id}`)
             .then((response) => response.json())
             .then((data) => {
-                // Find the first assessment with the title "Daily Performance Report"
+                setAssessments(data);
                 const dailyPerformanceReportAssessment = data.find(
                     (assessment) => assessment.title === 'Daily Performance Report'
                 );
 
                 if (dailyPerformanceReportAssessment) {
-                    setAssessmentId(dailyPerformanceReportAssessment.id);
-                    // Use the found assessment's ID to fetch employee data
-                    fetch(
-                        `https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid?assessmentId=${dailyPerformanceReportAssessment.id}`
-                    )
-                        .then((response) => response.json())
-                        .then((analyticsData) => {
-                            setEmployeeData(analyticsData);
-                        })
-                        .catch((error) => {
-                            console.error('Error fetching employee data:', error);
-                        });
+                    setCurrentAssessment(dailyPerformanceReportAssessment);
                 } else {
                     console.error('Daily Performance Report assessment not found.');
                 }
@@ -43,8 +34,8 @@ const AdminAnalytics = () => {
     }, []);
 
     useEffect(() => {
-        if (selectedMonth && assessmentId) {
-            fetch(`https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid-and-monthnumber?assessmentId=${assessmentId}&monthNumber=${selectedMonth}`)
+        if (selectedMonth && currentAssessment) {
+            fetch(`https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid-and-monthnumber?assessmentId=${currentAssessment.id}&monthNumber=${selectedMonth}`)
                 .then((response) => response.json())
                 .then((analyticsData) => {
                     setEmployeeData(analyticsData);
@@ -53,12 +44,11 @@ const AdminAnalytics = () => {
                     console.error('Error fetching employee data:', error);
                 });
         }
-    }, [selectedMonth, assessmentId]);
+    }, [selectedMonth, currentAssessment]);
 
     useEffect(() => {
-        // Make the API request with the selected year parameter
-        if (selectedYear && assessmentId) {
-            fetch(`https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid-and-year?assessmentId=${assessmentId}&year=${selectedYear}`)
+        if (selectedYear && currentAssessment) {
+            fetch(`https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid-and-year?assessmentId=${currentAssessment.id}&year=${selectedYear}`)
                 .then((response) => response.json())
                 .then((analyticsData) => {
                     setEmployeeData(analyticsData);
@@ -67,7 +57,7 @@ const AdminAnalytics = () => {
                     console.error('Error fetching employee data:', error);
                 });
         }
-    }, [selectedYear, assessmentId]);
+    }, [selectedYear, currentAssessment]);
 
     const handleMonthChange = (event) => {
         setSelectedMonth(event.target.value);
@@ -86,6 +76,25 @@ const AdminAnalytics = () => {
     const handleYearChange = (event) => {
         const selectedYear = event.target.value;
         setSelectedYear(selectedYear);
+    };
+
+    const handleAssessmentChange = async (event) => {
+        const selectedAssessmentIndex = event.target.value;
+        const selectedAssessment = assessments[selectedAssessmentIndex];
+    
+        if (selectedAssessment) {
+            try {
+                setSelectedMonth('');
+                setSelectedYear('');
+    
+                const response = await fetch(`https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid?assessmentId=${selectedAssessment.id}`);
+                const analyticsData = await response.json();
+                setEmployeeData(analyticsData);
+                setCurrentAssessment(selectedAssessment);
+            } catch (error) {
+                console.error('Error fetching employee data:', error);
+            }
+        }
     };
 
     return (
@@ -128,16 +137,32 @@ const AdminAnalytics = () => {
                             width: "100%"
                         }}
                     >
-
+                        <select
+                            className="form-select select-month-option"
+                            aria-label="Select Assessment"
+                            onChange={handleAssessmentChange}
+                            style={{
+                                width: "25%",
+                                marginRight: "25%"
+                            }}
+                        >
+                            <option value="" disabled selected>Select Assessment</option>
+                            {assessments.map((assessment, index) => (
+                                <option key={index} value={index}>
+                                    {`${assessment.title} ${index + 1}`}
+                                </option>
+                            ))}
+                        </select>
                         <select
                             className="form-select select-month-option"
                             aria-label="Select Month"
+                            value={selectedMonth}
                             onChange={handleMonthChange}
                             style={{
                                 width: "25%"
                             }}
                         >
-                            <option value="" selected>Select Month</option>
+                            <option value="">Select Month</option>
                             <option value="1">January</option>
                             <option value="2">February</option>
                             <option value="3">March</option>
@@ -151,12 +176,16 @@ const AdminAnalytics = () => {
                             <option value="11">November</option>
                             <option value="12">December</option>
                         </select>
-                        <select className="form-select select-month-option" aria-label="Default select example" onChange={handleYearChange}
+                        <select
+                            className="form-select select-month-option"
+                            aria-label="Default select example"
+                            value={selectedYear}
+                            onChange={handleYearChange}
                             style={{
                                 width: "25%"
                             }}
                         >
-                            <option value="" disabled selected>Select Year</option>
+                            <option value="">Select Year</option>
                             {generateYearOptions()}
                         </select>
                     </Stack>
@@ -174,24 +203,24 @@ const AdminAnalytics = () => {
                             <p className='mb-0'>No results found</p>
                         </Stack>
                     ) : (
-
-                        employeeData.map((employee, index) => (
-                            <Stack
-                                direction="column"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                spacing={2}
-                                sx={{
-                                    width: "75%",
-                                }}
-                                key={index}
-                            >
+                        <Stack
+                            direction="column"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                            spacing={2}
+                            sx={{
+                                width: "75%",
+                            }}
+                        >
+                            {employeeData.map((employee, index) => (
                                 <div
+                                    key={index}
                                     style={{
                                         width: "100%",
                                         backgroundColor: "#27C6D9",
                                         padding: "20px",
-                                        borderRadius: "10px"
+                                        borderRadius: "10px",
+                                        marginBottom: "10px"
                                     }}
                                 >
                                     <Stack
@@ -209,9 +238,8 @@ const AdminAnalytics = () => {
                                         <b>{(employee.averageResult.toFixed(2)) * 100} Points</b>
                                     </Stack>
                                 </div>
-                            </Stack>
-                        ))
-
+                            ))}
+                        </Stack>
                     )}
                 </Stack>
             </Stack>
