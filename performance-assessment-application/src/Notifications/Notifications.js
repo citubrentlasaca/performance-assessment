@@ -14,12 +14,12 @@ function Notifications() {
     useEffect(() => {
         const fetchAssessmentsForEmployee = async (employeeId) => {
             try {
-                const response = await axios.get(`https://localhost:7236/api/employee-assignscheduler-notifications/employees/${employeeId}`);
+                const response = await axios.get(`https://workpa.azurewebsites.net/api/employee-assignscheduler-notifications/employees/${employeeId}`);
                 const reversedData = response.data.reverse();
 
                 const assessmentPromises = reversedData.map(async (item) => {
-                    const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${item.assessmentId}`);
-                    const schedulerCheck = await axios.get(`https://localhost:7236/api/schedulers/assessments/${item.assessmentId}`);
+                    const assessmentResponse = await axios.get(`https://workpa.azurewebsites.net/api/assessments/${item.assessmentId}`);
+                    const schedulerCheck = await axios.get(`https://workpa.azurewebsites.net/api/schedulers/assessments/${item.assessmentId}`);
                     const dateTimeCreated = new Date(item.dateTimeCreated);
                     const formattedDateTime = dateTimeCreated.toLocaleString('en-US', {
                         month: 'long',
@@ -55,11 +55,11 @@ function Notifications() {
 
         const fetchAnnouncementsForEmployee = async (employeeId) => {
             try {
-                const response = await axios.get(`https://localhost:7236/api/employee-announcement-notifications/employees/${employeeId}`);
+                const response = await axios.get(`https://workpa.azurewebsites.net/api/employee-announcement-notifications/employees/${employeeId}`);
                 const reversedData = response.data.reverse();
 
                 const announcementPromises = reversedData.map(async (item) => {
-                    const announcementResponse = await axios.get(`https://localhost:7236/api/announcements/${item.announcementId}`);
+                    const announcementResponse = await axios.get(`https://workpa.azurewebsites.net/api/announcements/${item.announcementId}`);
                     const dateTimeCreated = new Date(item.dateTimeCreated);
                     const formattedDateTime = dateTimeCreated.toLocaleString('en-US', {
                         month: 'long',
@@ -70,7 +70,7 @@ function Notifications() {
                         hour12: true,
                     });
 
-                    const teamResponse = await axios.get(`https://localhost:7236/api/teams/${announcementResponse.data.teamId}`);
+                    const teamResponse = await axios.get(`https://workpa.azurewebsites.net/api/teams/${announcementResponse.data.teamId}`);
                     const organization = teamResponse.data.organization;
 
                     return {
@@ -90,7 +90,7 @@ function Notifications() {
 
         const fetchAdminNotificationsForEmployee = async (employeeId) => {
             try {
-                const response = await axios.get(`https://localhost:7236/api/admin-notifications/employees/${employeeId}`);
+                const response = await axios.get(`https://workpa.azurewebsites.net/api/admin-notifications/employees/${employeeId}`);
                 const reversedData = response.data.reverse();
 
                 const formattedAdminNotifications = reversedData.map(item => {
@@ -118,7 +118,7 @@ function Notifications() {
 
         const fetchNotificationsForEmployee = async () => {
             try {
-                const employeeResponse = await axios.get(`https://localhost:7236/api/employees/users/${id}`);
+                const employeeResponse = await axios.get(`https://workpa.azurewebsites.net/api/employees/users/${id}`);
                 const employeeData = employeeResponse.data;
                 const adminData = [];
                 const assessmentsData = [];

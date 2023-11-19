@@ -59,7 +59,7 @@ function CreateAssessment() {
                 return;
             }
 
-            const assessmentResponse = await axios.post('https://localhost:7236/api/assessments', {
+            const assessmentResponse = await axios.post('https://workpa.azurewebsites.net/api/assessments', {
                 employeeId: employee.id,
                 title,
                 description,
@@ -67,7 +67,7 @@ function CreateAssessment() {
             const assessmentId = assessmentResponse.data.id;
 
             for (const question of questions) {
-                const itemResponse = await axios.post('https://localhost:7236/api/items', {
+                const itemResponse = await axios.post('https://workpa.azurewebsites.net/api/items', {
                     question: question.questionText,
                     questionType: question.questionType,
                     weight: question.questionWeight,
@@ -83,7 +83,7 @@ function CreateAssessment() {
                         : question.checkboxesChoices;
 
                     for (const choice of choices) {
-                        await axios.post('https://localhost:7236/api/choices', {
+                        await axios.post('https://workpa.azurewebsites.net/api/choices', {
                             choiceValue: choice.valueText,
                             weight: choice.choiceWeight,
                             itemId,

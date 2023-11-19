@@ -16,12 +16,12 @@ function TeamCreation() {
     });
 
     try {
-      const response = await axios.post('https://localhost:7236/api/teams', data);
+      const response = await axios.post('https://workpa.azurewebsites.net/api/teams', data);
       console.log("Team is created successfully");
 
-      const teamDetails = await axios.get(`https://localhost:7236/api/teams/code/${response.data}`);
+      const teamDetails = await axios.get(`https://workpa.azurewebsites.net/api/teams/code/${response.data}`);
 
-      await axios.post('https://localhost:7236/api/employees', {
+      await axios.post('https://workpa.azurewebsites.net/api/employees', {
         userId: localStorage.getItem('userId'),
         teamId: teamDetails.data.id
       });

@@ -30,7 +30,7 @@ function TopBar() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const userResponse = await axios.get(`https://localhost:7236/api/users/${userId}`);
+                const userResponse = await axios.get(`https://workpa.azurewebsites.net/api/users/${userId}`);
                 setUserDetails(userResponse.data);
                 if (userResponse.data.profilePicture !== null) {
                     setBackgroundImage(`data:image/png;base64,${userResponse.data.profilePicture}`);

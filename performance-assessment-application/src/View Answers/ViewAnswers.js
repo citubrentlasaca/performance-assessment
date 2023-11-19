@@ -28,20 +28,20 @@ function ViewAnswers() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${assessmentId}`);
+                const assessmentResponse = await axios.get(`https://workpa.azurewebsites.net/api/assessments/${assessmentId}`);
                 const itemsTemp = [];
-                const itemsResponse = await axios.get(`https://localhost:7236/api/items`);
+                const itemsResponse = await axios.get(`https://workpa.azurewebsites.net/api/items`);
                 for (const item of itemsResponse.data) {
                     if (item.assessmentId === Number(assessmentId)) {
                         itemsTemp.push(item);
                     }
                 }
-                const resultResponse = await axios.get(`https://localhost:7236/api/results/assessments/${assessmentResponse.data.id}`);
+                const resultResponse = await axios.get(`https://workpa.azurewebsites.net/api/results/assessments/${assessmentResponse.data.id}`);
                 const answersTemp = [];
 
                 for (const result of resultResponse.data) {
-                    const employeeResponse = await axios.get(`https://localhost:7236/api/employees/${result.employeeId}`);
-                    const userResponse = await axios.get(`https://localhost:7236/api/users/${employeeResponse.data.userId}`);
+                    const employeeResponse = await axios.get(`https://workpa.azurewebsites.net/api/employees/${result.employeeId}`);
+                    const userResponse = await axios.get(`https://workpa.azurewebsites.net/api/users/${employeeResponse.data.userId}`);
                     answersTemp.push({
                         id: result.id,
                         name: userResponse.data.firstName + ' ' + userResponse.data.lastName,
@@ -52,7 +52,7 @@ function ViewAnswers() {
                 }
 
                 for (const item of itemsTemp) {
-                    const answerResponse = await axios.get(`https://localhost:7236/api/answers/items/${item.id}`);
+                    const answerResponse = await axios.get(`https://workpa.azurewebsites.net/api/answers/items/${item.id}`);
                     for (const answer of answerResponse.data) {
                         for (const answerTemp of answersTemp) {
                             const answerDate = new Date(answer.dateTimeAnswered);

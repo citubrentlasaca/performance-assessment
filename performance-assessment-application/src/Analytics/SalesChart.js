@@ -10,7 +10,7 @@ const SalesChart = () => {
 
   const fetchLatestAssessmentId = async (employeeId) => {
     try {
-      const resultResponse = await axios.get(`https://localhost:7236/api/results/employees/${employeeId}`);
+      const resultResponse = await axios.get(`https://workpa.azurewebsites.net/api/results/employees/${employeeId}`);
       if (resultResponse.data.length > 0) {
         // Sort the assessments by dateTimeCreated in descending order
         const sortedAssessments = resultResponse.data.sort((a, b) => {
@@ -41,7 +41,7 @@ const SalesChart = () => {
       fetchLatestAssessmentId(employeeId)
         .then(assessmentId => {
           if (assessmentId !== null) {
-            const apiUrl = `https://localhost:7236/api/answers/get-by-employee-and-assessment?employeeId=${employeeId}&assessmentId=${assessmentId}`;
+            const apiUrl = `https://workpa.azurewebsites.net/api/answers/get-by-employee-and-assessment?employeeId=${employeeId}&assessmentId=${assessmentId}`;
 
             axios.get(apiUrl)
               .then(response => {

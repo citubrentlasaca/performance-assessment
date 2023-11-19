@@ -15,7 +15,7 @@ function Performance() {
     useEffect(() => {
         const fetchAssessments = async () => {
             try {
-                const schedulersResponse = await axios.get(`https://localhost:7236/api/schedulers/employees/${employeeStorage.id}`);
+                const schedulersResponse = await axios.get(`https://workpa.azurewebsites.net/api/schedulers/employees/${employeeStorage.id}`);
 
                 if (schedulersResponse.data) {
                     const schedulers = schedulersResponse.data;
@@ -24,7 +24,7 @@ function Performance() {
 
                     for (const scheduler of schedulers) {
                         const assessmentId = scheduler.assessmentId;
-                        const assessmentResponse = await axios.get(`https://localhost:7236/api/assessments/${assessmentId}`);
+                        const assessmentResponse = await axios.get(`https://workpa.azurewebsites.net/api/assessments/${assessmentId}`);
                         if (scheduler.isAnswered === false) {
                             if (assessmentResponse.data) {
                                 const assessment = assessmentResponse.data;
@@ -37,7 +37,7 @@ function Performance() {
 
                         if (assessmentResponse.data.title === "Daily Performance Report") {
                             const assessmentData = assessmentResponse.data;
-                            const responseArray = await axios.get(`https://localhost:7236/api/results/assessments/${assessmentData.id}`);
+                            const responseArray = await axios.get(`https://workpa.azurewebsites.net/api/results/assessments/${assessmentData.id}`);
 
                             if (responseArray.data) {
                                 responseArray.data.reverse().forEach((response) => {

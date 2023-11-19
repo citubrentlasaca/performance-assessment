@@ -57,7 +57,7 @@ function AccountManagement() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const userResponse = await axios.get(`https://localhost:7236/api/users/${userId}`);
+                const userResponse = await axios.get(`https://workpa.azurewebsites.net/api/users/${userId}`);
                 setUserDetails(userResponse.data);
                 if (userResponse.data.profilePicture !== null) {
                     setBackgroundImage(`data:image/png;base64,${userResponse.data.profilePicture}`);
@@ -81,14 +81,14 @@ function AccountManagement() {
                     formData.append('profilePicture', backgroundImageFile);
                 }
 
-                const updateAccount = await axios.put(`https://localhost:7236/api/users/${userId}`, formData);
+                const updateAccount = await axios.put(`https://workpa.azurewebsites.net/api/users/${userId}`, formData);
                 if (updateAccount.data) {
                     navigate('/home');
                 }
                 console.log("Account updated successfully")
             }
             else {
-                const authenticate = await axios.get(`https://localhost:7236/api/users/authenticate?email=${userDetails.emailAddress}&password=${currentPassword}`);
+                const authenticate = await axios.get(`https://workpa.azurewebsites.net/api/users/authenticate?email=${userDetails.emailAddress}&password=${currentPassword}`);
                 if (authenticate.data) {
                     if (newPassword !== confirmNewPassword) {
                         setError('New passwords do not match');
@@ -108,7 +108,7 @@ function AccountManagement() {
                             formData.append('profilePicture', backgroundImageFile);
                         }
 
-                        const updateAccount = await axios.put(`https://localhost:7236/api/users/${userId}`, formData);
+                        const updateAccount = await axios.put(`https://workpa.azurewebsites.net/api/users/${userId}`, formData);
                         if (updateAccount.data) {
                             localStorage.removeItem('token');
                             localStorage.removeItem('userId');

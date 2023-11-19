@@ -15,7 +15,7 @@ function InvitationPage() {
     e.preventDefault();
 
     try {
-      const joinResponse = await fetch('https://localhost:7236/api/employees/withteamcode', {
+      const joinResponse = await fetch('https://workpa.azurewebsites.net/api/employees/withteamcode', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -45,7 +45,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId, assessmentTitl
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const employeesResponse = await fetch(`https://localhost:7236/api/employees/teams/${employeeStorage.teamId}`);
+                const employeesResponse = await fetch(`https://workpa.azurewebsites.net/api/employees/teams/${employeeStorage.teamId}`);
                 const employeesData = await employeesResponse.json();
 
                 const userTemp = [];
@@ -54,7 +54,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId, assessmentTitl
                 for (const employee of employeesData) {
                     if (employee.status === 'Active' && employee.role !== 'Admin') {
                         const userId = employee.userId;
-                        const userResponse = await fetch(`https://localhost:7236/api/users/${userId}`);
+                        const userResponse = await fetch(`https://workpa.azurewebsites.net/api/users/${userId}`);
                         const userData = await userResponse.json();
                         userTemp.push(userData);
                         // Store the profile picture data
@@ -121,7 +121,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId, assessmentTitl
     const handlePublishClick = async () => {
         for (const userId of selectedUserIds) {
             try {
-                const employeeResponse = await axios.get(`https://localhost:7236/api/employees/users/${userId}`);
+                const employeeResponse = await axios.get(`https://workpa.azurewebsites.net/api/employees/users/${userId}`);
                 const employeeData = employeeResponse.data;
 
                 if (Array.isArray(employeeData)) {
@@ -139,7 +139,7 @@ function AssignAssessmentModal({ open, handleClose, assessmentId, assessmentTitl
                                 },
                             };
 
-                            await axios.post('https://localhost:7236/api/schedulers', schedulerData);
+                            await axios.post('https://workpa.azurewebsites.net/api/schedulers', schedulerData);
                             console.log(`Scheduler created for employee with ID: ${employeeId}`);
                         }
                     }

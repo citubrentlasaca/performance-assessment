@@ -14,7 +14,7 @@ const AdminAnalytics = () => {
     useEffect(() => {
         const employee = JSON.parse(localStorage.getItem("employeeData"));
 
-        fetch(`https://localhost:7236/api/assessments/employee/${employee.id}`)
+        fetch(`https://workpa.azurewebsites.net/api/assessments/employee/${employee.id}`)
             .then((response) => response.json())
             .then((data) => {
                 setAssessments(data);
@@ -35,7 +35,7 @@ const AdminAnalytics = () => {
 
     useEffect(() => {
         if (selectedMonth && currentAssessment) {
-            fetch(`https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid-and-monthnumber?assessmentId=${currentAssessment.id}&monthNumber=${selectedMonth}`)
+            fetch(`https://workpa.azurewebsites.net/api/analytics/performance/get-analytics-by-assessmentid-and-monthnumber?assessmentId=${currentAssessment.id}&monthNumber=${selectedMonth}`)
                 .then((response) => response.json())
                 .then((analyticsData) => {
                     setEmployeeData(analyticsData);
@@ -48,7 +48,7 @@ const AdminAnalytics = () => {
 
     useEffect(() => {
         if (selectedYear && currentAssessment) {
-            fetch(`https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid-and-year?assessmentId=${currentAssessment.id}&year=${selectedYear}`)
+            fetch(`https://workpa.azurewebsites.net/api/analytics/performance/get-analytics-by-assessmentid-and-year?assessmentId=${currentAssessment.id}&year=${selectedYear}`)
                 .then((response) => response.json())
                 .then((analyticsData) => {
                     setEmployeeData(analyticsData);
@@ -87,7 +87,7 @@ const AdminAnalytics = () => {
                 setSelectedMonth('');
                 setSelectedYear('');
 
-                const response = await fetch(`https://localhost:7236/api/analytics/performance/get-analytics-by-assessmentid?assessmentId=${selectedAssessment.id}`);
+                const response = await fetch(`https://workpa.azurewebsites.net/api/analytics/performance/get-analytics-by-assessmentid?assessmentId=${selectedAssessment.id}`);
                 const analyticsData = await response.json();
                 setEmployeeData(analyticsData);
                 setCurrentAssessment(selectedAssessment);
