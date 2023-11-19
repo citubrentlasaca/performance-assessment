@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../Shared/NavBar"
 import axios from "axios";
-import { Stack } from '@mui/material';
+import { Skeleton, Stack } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import groupPhoto from './Images/group.png';
 
@@ -56,16 +56,53 @@ function Organizations() {
         <NavBar>
             {loading ? (
                 <Stack
-                    justifyContent="center"
-                    alignItems="center"
+                    direction="column"
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
                     spacing={2}
                     sx={{
                         height: "100%",
-                        width: "100%"
+                        width: "100%",
+                        padding: "40px",
+                        overflow: "auto"
                     }}
                 >
-                    <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
+                    <Skeleton>
+                        <b style={{ color: "#055c9d" }}>Your teams</b>
+                    </Skeleton>
+                    <div className="text-center w-100">
+                        <div className="row row-cols-md-4 row-cols-sm-2 row-cols-1 row-gap-1">
+                            <div className="col"
+                                style={{
+                                    height: "250px",
+                                    padding: "10px"
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        height: "100%",
+                                        backgroundColor: "white",
+                                        borderRadius: "10px",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                        cursor: "pointer",
+                                        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+                                        transition: "box-shadow 0.3s ease-in-out",
+                                        '&:hover': {
+                                            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.4)"
+                                        }
+                                    }}
+                                >
+                                    <Skeleton>
+                                        <img src={groupPhoto} style={{ maxWidth: "50%", maxHeight: "100%" }} draggable="false" />
+                                    </Skeleton>
+                                    <Skeleton variant='text' width={100} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </Stack>
             ) : (
