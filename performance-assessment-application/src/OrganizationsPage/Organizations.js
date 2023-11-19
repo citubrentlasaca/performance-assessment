@@ -119,40 +119,54 @@ function Organizations() {
                     }}
                 >
                     <b style={{ color: "#055c9d" }}>Your teams</b>
-                    <div className="text-center w-100">
-                        <div className="row row-cols-md-4 row-cols-sm-2 row-cols-1 row-gap-1">
-                            {userTeams.map((team, index) => (
-                                <div className="col" key={index}
-                                    style={{
-                                        height: "250px",
-                                        padding: "10px"
-                                    }}
-                                >
-                                    <div onClick={() => handleCardClick(team)}
+                    {userTeams.length === 0 ? (
+                        <Stack
+                            justifyContent="center"
+                            alignItems="center"
+                            sx={{
+                                height: "100%",
+                                width: "100%",
+                            }}
+                        >
+                            <p className="mb-0">No teams found</p>
+                        </Stack>
+                    ) : (
+                        <div className="text-center w-100">
+                            <div className="row row-cols-md-4 row-cols-sm-2 row-cols-1 row-gap-1">
+                                {userTeams.map((team, index) => (
+                                    <div className="col" key={index}
                                         style={{
-                                            height: "100%",
-                                            backgroundColor: "white",
-                                            borderRadius: "10px",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                            gap: "10px",
-                                            cursor: "pointer",
-                                            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
-                                            transition: "box-shadow 0.3s ease-in-out",
-                                            '&:hover': {
-                                                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.4)"
-                                            }
+                                            height: "250px",
+                                            padding: "10px"
                                         }}
                                     >
-                                        <img src={groupPhoto} alt={team.organization} style={{ maxWidth: "50%", maxHeight: "100%" }} draggable="false" />
-                                        <b>{team.organization}</b>
+                                        <div onClick={() => handleCardClick(team)}
+                                            style={{
+                                                height: "100%",
+                                                backgroundColor: "white",
+                                                borderRadius: "10px",
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                gap: "10px",
+                                                cursor: "pointer",
+                                                boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+                                                transition: "box-shadow 0.3s ease-in-out",
+                                                '&:hover': {
+                                                    boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.4)"
+                                                }
+                                            }}
+                                        >
+                                            <img src={groupPhoto} alt={team.organization} style={{ maxWidth: "50%", maxHeight: "100%" }} draggable="false" />
+                                            <b>{team.organization}</b>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
+
                 </Stack>
             )}
         </NavBar>

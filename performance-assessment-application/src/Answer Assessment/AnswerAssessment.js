@@ -127,6 +127,50 @@ function AnswerAssessment() {
                     selectedChoices: (answerData[item.id]?.selectedChoices || ['']).join(separator),
                     counterValue: counterValues[item.id] || 0,
                 };
+                setAnswers((prevAnswers) => ({
+                    ...prevAnswers,
+                    [item.id]: postData,
+                }));
+            }
+
+            const schedulerResponse = await fetch(`https://workpa.azurewebsites.net/api/schedulers/get-by-employee-and-assessment?employeeId=${employeeStorage.id}&assessmentId=${id}`);
+            const schedulerData = await schedulerResponse.json();
+
+            const score = computeScore();
+            const resultData = {
+                assessmentId: id,
+                employeeId: employeeStorage.id,
+                score: score,
+                dateTimeDue: `${schedulerData.dueDate} ${schedulerData.time}`,
+            };
+
+            const resultResponse = await fetch('https://workpa.azurewebsites.net/api/results', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(resultData),
+            });
+
+            if (resultResponse.ok) {
+                console.log('Result submitted successfully');
+            } else {
+                console.error('Failed to submit the result');
+            }
+
+            const responseBody = await resultResponse.json();
+
+            for (const item of itemData) {
+                const postData = {
+                    resultIds: [responseBody.id],
+                    answer: {
+                        employeeId: employeeStorage.id,
+                        itemId: item.id,
+                        answerText: answerData[item.id]?.answerText || '',
+                        selectedChoices: (answerData[item.id]?.selectedChoices || ['']).join(separator),
+                        counterValue: counterValues[item.id] || 0,
+                    }
+                };
 
                 const response = await fetch('https://workpa.azurewebsites.net/api/answers', {
                     method: 'POST',
@@ -138,19 +182,12 @@ function AnswerAssessment() {
 
                 if (response.ok) {
                     console.log(`Answer for item ${item.id} submitted successfully`);
-                    setAnswers((prevAnswers) => ({
-                        ...prevAnswers,
-                        [item.id]: postData,
-                    }));
                 } else {
                     console.error(`Failed to submit answer for item ${item.id}`);
                 }
             }
 
             console.log('All answers submitted successfully');
-
-            const schedulerResponse = await fetch(`https://workpa.azurewebsites.net/api/schedulers/get-by-employee-and-assessment?employeeId=${employeeStorage.id}&assessmentId=${id}`);
-            const schedulerData = await schedulerResponse.json();
 
             const updateData = {
                 assessmentId: schedulerData.assessmentId,
@@ -173,28 +210,6 @@ function AnswerAssessment() {
                 console.log(`Assign scheduler has been updated`);
             } else {
                 console.error(`Failed to update the assign scheduler`);
-            }
-
-            const score = computeScore();
-            const resultData = {
-                assessmentId: id,
-                employeeId: employeeStorage.id,
-                score: score,
-                dateTimeDue: `${schedulerData.dueDate} ${schedulerData.time}`,
-            };
-
-            const resultResponse = await fetch('https://workpa.azurewebsites.net/api/results', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(resultData),
-            });
-
-            if (resultResponse.ok) {
-                console.log('Result submitted successfully');
-            } else {
-                console.error('Failed to submit the result');
             }
 
             setSubmissionComplete(true);
