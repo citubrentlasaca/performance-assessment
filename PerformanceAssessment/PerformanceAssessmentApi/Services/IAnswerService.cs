@@ -5,7 +5,7 @@ namespace PerformanceAssessmentApi.Services
 {
     public interface IAnswerService
     {
-        Task<Answer> SaveAnswers(AnswerCreationDto answer);
+        Task<IEnumerable<int>> SaveAnswers(IEnumerable<int> resultIds, AnswerCreationDto answerCreation);
         Task<IEnumerable<AnswerDto>> GetAnswersByItemId(int itemId);
         Task<AnswerDto> GetAnswersById(int id);
         Task<int> UpdateAnswers(int id, AnswerUpdationDto answer);
