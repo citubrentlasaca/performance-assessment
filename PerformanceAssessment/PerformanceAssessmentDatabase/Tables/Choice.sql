@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[Choice]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [ChoiceValue] NVARCHAR(MAX) NOT NULL,
+	[Weight] FLOAT NOT NULL,
+	[ItemId] INT NOT NULL,
+    CONSTRAINT [FK_ChoiceItem] FOREIGN KEY ([ItemId]) REFERENCES [Item]([Id]) ON DELETE CASCADE
+)
