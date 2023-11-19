@@ -16,6 +16,14 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<IEnumerable<int>> SaveAnswers(IEnumerable<int> resultIds, Answer answer)
         {
+            var validResultIds = await ValidateResultIds(resultIds);
+
+            if (validResultIds.Count() != resultIds.Count())
+            {
+                var invalidResultIds = resultIds.Except(validResultIds);
+                throw new Exception($"Result IDs {string.Join(", ", invalidResultIds)} do not exist in the Result table.");
+            }
+
             var sql = "INSERT INTO [dbo].[Answer] " +
                       "([ResultId], [EmployeeId], [ItemId], [AnswerText], [SelectedChoices], [CounterValue], [IsDeleted], [DateTimeAnswered]) " +
                       "VALUES (@ResultId, @EmployeeId, @ItemId, @AnswerText, @SelectedChoices, @CounterValue, 0, @DateTimeAnswered); " +
@@ -25,7 +33,7 @@ namespace PerformanceAssessmentApi.Repositories
             {
                 var insertedIds = new List<int>();
 
-                foreach (var resultId in resultIds)
+                foreach (var resultId in validResultIds)
                 {
                     answer.ResultId = resultId;
 
@@ -34,6 +42,16 @@ namespace PerformanceAssessmentApi.Repositories
                 }
 
                 return insertedIds;
+            }
+        }
+
+        private async Task<IEnumerable<int>> ValidateResultIds(IEnumerable<int> resultIds)
+        {
+            var sql = "SELECT Id FROM [dbo].[Result] WHERE Id IN @ResultIds;";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QueryAsync<int>(sql, new { ResultIds = resultIds });
             }
         }
 
