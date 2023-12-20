@@ -84,7 +84,7 @@ To use the system, users must register and sign in (Admin/Employee).
 
       <img width="960" alt="image" src="https://github.com/citubrentlasaca/performance-assessment/assets/111859196/eed61ba3-5976-4d13-87c9-d675ebd0c612">
 
-2. **Employees Answered Assigned Assessments**
+2. **Employees Answering Assigned Assessments**
 
     - Employees receive their assessments and provide their responses. It's all recorded in one place, making it easy to track progress.
 
