@@ -72,7 +72,19 @@ To use the system, users must register and sign in (Admin/Employee).
 
 ### Employee Side
 
-1. **Employees Answered Assigned Assessments**
+1. **Joining A Team**
+   
+    - Once signed in, navigate to the dashboard or home screen and look for an option such as "Join an Existing Team."
+
+      <img width="960" alt="image" src="https://github.com/citubrentlasaca/performance-assessment/assets/111859196/fb7ebe80-5dc2-435a-8785-c72ca0aa4647">
+     
+    - Enter the unique team invitation code provided by the team admin.
+
+      <img width="960" alt="image" src="https://github.com/citubrentlasaca/performance-assessment/assets/111859196/364ef86b-0e2e-4028-a18a-12a1fe24b74a">
+
+      <img width="960" alt="image" src="https://github.com/citubrentlasaca/performance-assessment/assets/111859196/eed61ba3-5976-4d13-87c9-d675ebd0c612">
+
+2. **Employees Answered Assigned Assessments**
 
     - Employees receive their assessments and provide their responses. It's all recorded in one place, making it easy to track progress.
 
