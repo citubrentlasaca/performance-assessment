@@ -15,6 +15,13 @@ function Notifications() {
         const fetchAssessmentsForEmployee = async (employeeId) => {
             try {
                 const response = await axios.get(`https://workpa.azurewebsites.net/api/employee-assignscheduler-notifications/employees/${employeeId}`);
+                for (const notification of response.data) {
+                    if (notification.isRead === false) {
+                        await axios.patch(`https://workpa.azurewebsites.net/api/employee-assignscheduler-notifications/${notification.id}/mark-as-read`, {
+                            isRead: true,
+                        });
+                    }
+                }
                 const reversedData = response.data.reverse();
 
                 const assessmentPromises = reversedData.map(async (item) => {
@@ -56,6 +63,13 @@ function Notifications() {
         const fetchAnnouncementsForEmployee = async (employeeId) => {
             try {
                 const response = await axios.get(`https://workpa.azurewebsites.net/api/employee-announcement-notifications/employees/${employeeId}`);
+                for (const notification of response.data) {
+                    if (notification.isRead === false) {
+                        await axios.patch(`https://workpa.azurewebsites.net/api/employee-announcement-notifications/${notification.id}/mark-as-read`, {
+                            isRead: true,
+                        });
+                    }
+                }
                 const reversedData = response.data.reverse();
 
                 const announcementPromises = reversedData.map(async (item) => {
@@ -91,6 +105,13 @@ function Notifications() {
         const fetchAdminNotificationsForEmployee = async (employeeId) => {
             try {
                 const response = await axios.get(`https://workpa.azurewebsites.net/api/admin-notifications/employees/${employeeId}`);
+                for (const notification of response.data) {
+                    if (notification.isRead === false) {
+                        await axios.patch(`https://workpa.azurewebsites.net/api/admin-notifications/${notification.id}/mark-as-read`, {
+                            isRead: true,
+                        });
+                    }
+                }
                 const reversedData = response.data.reverse();
 
                 const formattedAdminNotifications = reversedData.map(item => {

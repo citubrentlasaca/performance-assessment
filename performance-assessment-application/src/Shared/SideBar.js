@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack } from '@mui/material'
 import { useLocation } from 'react-router-dom';
 import logo from '../Images/WorkPA-logo.png'
 import miniLogo from '../Images/Mini Logo.png'
+import axios from 'axios';
 
 function SideBar() {
     const [collapsed, setCollapsed] = useState(false);
     const userId = localStorage.getItem('userId');
     const location = useLocation();
+    const [hasNewNotifications, setHasNewNotifications] = useState(false);
 
     const toggleCollapse = () => {
         setCollapsed(!collapsed);
@@ -16,6 +18,76 @@ function SideBar() {
     const isActive = (path) => {
         return location.pathname.startsWith(path);
     };
+
+    useEffect(() => {
+        const fetchAssessmentsForEmployee = async (employeeId) => {
+            try {
+                const response = await axios.get(`https://workpa.azurewebsites.net/api/employee-assignscheduler-notifications/employees/${employeeId}`);
+                let count = 0;
+                for (const notification of response.data) {
+                    if (notification.isRead === false) {
+                        count++;
+                    }
+                }
+                return count;
+            } catch (error) {
+                console.error('Error fetching assessments:', error);
+                return [];
+            }
+        };
+
+        const fetchAnnouncementsForEmployee = async (employeeId) => {
+            try {
+                const response = await axios.get(`https://workpa.azurewebsites.net/api/employee-announcement-notifications/employees/${employeeId}`);
+                let count = 0;
+                for (const notification of response.data) {
+                    if (notification.isRead === false) {
+                        count++;
+                    }
+                }
+                return count;
+            } catch (error) {
+                console.error('Error fetching announcements:', error);
+                return [];
+            }
+        };
+
+        const fetchAdminNotificationsForEmployee = async (employeeId) => {
+            try {
+                const response = await axios.get(`https://workpa.azurewebsites.net/api/admin-notifications/employees/${employeeId}`);
+                let count = 0;
+                for (const notification of response.data) {
+                    if (notification.isRead === false) {
+                        count++;
+                    }
+                }
+                return count;
+            } catch (error) {
+                console.error('Error fetching admin notifications:', error);
+            }
+        };
+
+        const fetchNotificationsForEmployee = async () => {
+            try {
+                const employeeResponse = await axios.get(`https://workpa.azurewebsites.net/api/employees/users/${userId}`);
+                const employeeData = employeeResponse.data;
+                for (const employee of employeeData) {
+                    if (employee.status === 'Active') {
+                        const admin = await fetchAdminNotificationsForEmployee(employee.id);
+                        const assessments = await fetchAssessmentsForEmployee(employee.id);
+                        const announcements = await fetchAnnouncementsForEmployee(employee.id);
+                        if (admin > 0 || assessments > 0 || announcements > 0) {
+                            setHasNewNotifications(true);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+            }
+        };
+
+        fetchNotificationsForEmployee();
+    }, []);
 
     return (
         <div
@@ -141,7 +213,7 @@ function SideBar() {
                                         color: 'black'
                                     }}
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-bell" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill={hasNewNotifications ? '#dc3545' : 'currentColor'} className="bi bi-bell" viewBox="0 0 16 16">
                                         <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
                                     </svg>
                                 </a>
@@ -241,10 +313,14 @@ function SideBar() {
                                             padding: '20px'
                                         }}
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-bell" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill={hasNewNotifications ? '#dc3545' : 'currentColor'} className="bi bi-bell" viewBox="0 0 16 16">
                                             <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
                                         </svg>
-                                        <b>Notifications</b>
+                                        <b style={{
+                                            color: hasNewNotifications ? '#dc3545' : 'black'
+                                        }}>
+                                            Notifications
+                                        </b>
                                     </Stack>
                                 </a>
                             </li>
