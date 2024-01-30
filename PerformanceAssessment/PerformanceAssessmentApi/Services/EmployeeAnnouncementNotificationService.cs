@@ -37,5 +37,10 @@ namespace PerformanceAssessmentApi.Services
         {
             return _repository.GetEmployeeAnnouncementNotificationById(id);
         }
+
+        public async Task<int> MarkEmployeeAnnouncementNotificationAsRead(int id)
+        {
+            return await _repository.MarkEmployeeAnnouncementNotificationAsRead(id);
+        }
     }
 }

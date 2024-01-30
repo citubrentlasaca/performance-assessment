@@ -50,5 +50,10 @@ namespace PerformanceAssessmentApi.Services
                 await _repository.CreateAdminNotification(model);
             }
         }
+
+        public async Task<int> MarkAdminNotificationAsRead(int id)
+        {
+            return await _repository.MarkAdminNotificationAsRead(id);
+        }
     }
 }
