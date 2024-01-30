@@ -14,5 +14,7 @@ namespace PerformanceAssessmentApi.Services
         Task<IEnumerable<AdminNotificationDto>> GetAdminNotificationByEmployeeId(int employeeId);
 
         Task ExecuteAdminNotificationAsync(int schedulerId, AdminNotificationCreationDto adminNotification);
+
+        Task<int> MarkAdminNotificationAsRead(int id);
     }
 }

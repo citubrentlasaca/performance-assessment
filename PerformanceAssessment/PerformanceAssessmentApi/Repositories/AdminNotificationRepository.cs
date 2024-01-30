@@ -16,8 +16,8 @@ namespace PerformanceAssessmentApi.Repositories
 
         public async Task<int> CreateAdminNotification(AdminNotification adminNotification)
         {
-            var sql = "INSERT INTO [dbo].[AdminNotification] ([EmployeeId], [EmployeeName], [AssessmentTitle], [TeamName], [DateTimeCreated]) " +
-                      "VALUES (@EmployeeId, @EmployeeName, @AssessmentTitle, @TeamName, @DateTimeCreated); " +
+            var sql = "INSERT INTO [dbo].[AdminNotification] ([EmployeeId], [EmployeeName], [AssessmentTitle], [TeamName], [IsRead], [DateTimeCreated]) " +
+                      "VALUES (@EmployeeId, @EmployeeName, @AssessmentTitle, @TeamName, 0, @DateTimeCreated); " +
                       "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
@@ -53,6 +53,16 @@ namespace PerformanceAssessmentApi.Repositories
             using (var con = _context.CreateConnection())
             {
                 return await con.QueryAsync<AdminNotificationDto>(sql, new { EmployeeId = employeeId });
+            }
+        }
+
+        public async Task<int> MarkAdminNotificationAsRead(int id)
+        {
+            var sql = "UPDATE [dbo].[AdminNotification] SET [IsRead] = 1 WHERE [Id] = @Id;";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.ExecuteAsync(sql, new { Id = id });
             }
         }
     }

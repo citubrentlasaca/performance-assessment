@@ -157,5 +157,39 @@ namespace PerformanceAssessmentApi.Controllers
                 return StatusCode(500, "Something went wrong");
             }
         }
+
+        /// <summary>
+        /// Marks the associated employee assign scheduler notification as read
+        /// </summary>
+        /// <param name="id">The id of the employee assign scheduler notification</param>
+        /// <response code="200">Successfully marked the notification as read</response>
+        /// <response code="404">Employee assign scheduler notification not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpPatch("{id}/mark-as-read", Name = "MarkEmployeeAssignSchedulerNotificationAsRead")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> MarkEmployeeAssignSchedulerNotificationAsRead(int id)
+        {
+            try
+            {
+                // Check if the notification exists
+                var foundNotification = await _employeeNotificationService.GetEmployeeAssignSchedulerNotificationById(id);
+
+                if (foundNotification == null)
+                {
+                    return StatusCode(404, "Notification not found");
+                }
+
+                await _employeeNotificationService.MarkEmployeeAssignSchedulerNotificationAsRead(id);
+                return Ok("Notification has been marked as read successfully");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
     }
 }

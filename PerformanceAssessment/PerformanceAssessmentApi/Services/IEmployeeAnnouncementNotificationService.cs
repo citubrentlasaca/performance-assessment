@@ -12,5 +12,7 @@ namespace PerformanceAssessmentApi.Services
         Task<EmployeeAnnouncementNotificationDto> GetEmployeeAnnouncementNotificationById(int id);
 
         Task<IEnumerable<EmployeeAnnouncementNotificationDto>> GetEmployeeAnnouncementNotificationByEmployeeId(int id);
+
+        Task<int> MarkEmployeeAnnouncementNotificationAsRead(int id);
     }
 }
