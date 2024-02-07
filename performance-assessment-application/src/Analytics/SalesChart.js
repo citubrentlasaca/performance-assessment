@@ -1,32 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import axios from 'axios';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import 'chartjs-adapter-moment';
 
-const SalesChart = () => {
-  const chartRef = useRef(null);
-  const chartInstance = useRef(null);
-  const [chartData, setChartData] = useState(null);
+const SalesChart = ({ assessmentId }) => {
+  const chartRefs = useRef([]);
+  const chartInstances = useRef([]);
+  const [chartData, setChartData] = useState([]);
   const [employeeId, setEmployeeId] = useState(null);
-
-  const fetchLatestAssessmentId = async (employeeId) => {
-    try {
-      const resultResponse = await axios.get(`https://workpa.azurewebsites.net/api/results/employees/${employeeId}`);
-      if (resultResponse.data.length > 0) {
-        // Sort the assessments by dateTimeCreated in descending order
-        const sortedAssessments = resultResponse.data.sort((a, b) => {
-          return new Date(b.dateTimeCreated) - new Date(a.dateTimeCreated);
-        });
-
-        return sortedAssessments[0].assessmentId; // Get the assessment ID from the latest assessment
-      } else {
-        console.error('No assessment found for the employee.');
-        return null;
-      }
-    } catch (error) {
-      console.error('Error fetching assessment ID:', error);
-      return null;
-    }
-  };
 
   useEffect(() => {
     const employeeData = JSON.parse(localStorage.getItem('employeeData'));
@@ -37,84 +19,96 @@ const SalesChart = () => {
   }, []);
 
   useEffect(() => {
-    if (employeeId !== null) {
-      fetchLatestAssessmentId(employeeId)
-        .then(assessmentId => {
-          if (assessmentId !== null) {
-            const apiUrl = `https://workpa.azurewebsites.net/api/answers/get-by-employee-and-assessment?employeeId=${employeeId}&assessmentId=${assessmentId}`;
-
-            axios.get(apiUrl)
-              .then(response => {
-                const counterValues = response.data.items.map(item => item.answers[0].counterValue);
-
-                setChartData({
-                  labels: response.data.items.map(item => item.question),
-                  counterValues,
-                });
-              })
-              .catch(error => {
-                console.error('Error fetching data:', error);
-              });
-          }
-        });
+    const fetchChartData = async () => {
+      try {
+        if (!employeeId) return;
+  
+        const response = await axios.get(`https://workpa.azurewebsites.net/api/answers/get-by-employee-and-assessment?employeeId=${employeeId}&assessmentId=${assessmentId}`);
+        const items = response.data.items;
+        const data = items.map(item => ({
+          question: item.question,
+          labels: item.answers.map(answer => {
+            const dateTimeAnswered = new Date(answer.dateTimeAnswered + 'Z');
+            return dateTimeAnswered.toISOString().split('T')[0];
+          }),
+          data: item.answers.map(answer => answer.counterValue),
+        }));
+        console.log(data);
+        setChartData(data);
+      } catch (error) {
+        console.error('Error fetching chart data:', error);
+      }
+    };
+  
+    if (assessmentId && employeeId) {
+      fetchChartData();
     }
-  }, [employeeId]);
+  }, [assessmentId, employeeId]);
+  
 
   useEffect(() => {
-    if (chartRef.current && chartData) {
-      const data = {
-        labels: chartData.labels,
-        datasets: [
-          {
-            label: 'Result Count',
-            data: chartData.counterValues,
+    if (chartRefs.current.length > 0 && chartData.length > 0) {
+      chartData.forEach((data, index) => {
+        const chartRef = chartRefs.current[index];
+        const chartInstance = chartInstances.current[index];
+
+        const chartData = {
+          labels: data.labels,
+          datasets: [{
+            label: data.question,
+            data: data.data,
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1,
-          },
-        ],
-      };
+            barPercentage: 0.8 / data.data.length,
+          }],
+        };
 
-      const options = {
-        scales: {
-          x: {
-            type: 'category',
-            position: 'bottom',
+        const options = {
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                unit: 'day',
+              },
+              position: 'bottom',
+            },
+            y: {
+              beginAtZero: true,
+              suggestedMax: Math.max(...data.data) + 10,
+            },
           },
-          y: {
-            beginAtZero: true,
-            suggestedMax: Math.max(...data.datasets[0].data) + 10,
+          plugins: {
+            datalabels: {
+              display: true,
+              color: 'black',
+            },
           },
-        },
-      };
+        };
 
-      if (chartInstance.current) {
-        chartInstance.current.data = data;
-        chartInstance.current.options = options;
-        chartInstance.current.update();
-      } else {
-        chartInstance.current = new Chart(chartRef.current, {
-          type: 'bar',
-          data: data,
-          options: options,
-        });
-      }
+        if (chartInstance) {
+          chartInstance.data = chartData;
+          chartInstance.options = options;
+          chartInstance.update();
+        } else {
+          chartInstances.current[index] = new Chart(chartRef, {
+            type: 'bar',
+            data: chartData,
+            options: options,
+            plugins: [ChartDataLabels],
+          });
+        }
+      });
     }
   }, [chartData]);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '85%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        display: 'flex',
-        padding: 0,
-        margin: 0,
-      }}
-    >
-      <canvas ref={chartRef} />
+    <div style={{paddingBottom: "20px", marginTop: 0, marginBottom: "20px"}}>
+      {chartData.map((data, index) => (
+        <div key={index} style={{paddingBottom: "20px"}}>
+          <canvas ref={el => chartRefs.current[index] = el} />
+        </div>
+      ))}
     </div>
   );
 };

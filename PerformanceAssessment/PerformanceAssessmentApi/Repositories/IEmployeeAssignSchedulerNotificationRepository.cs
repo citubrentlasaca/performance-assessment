@@ -12,5 +12,7 @@ namespace PerformanceAssessmentApi.Repositories
         Task<EmployeeAssignSchedulerNotificationDto> GetEmployeeAssignSchedulerNotificationById(int id);
 
         Task<IEnumerable<EmployeeAssignSchedulerNotificationDto>> GetAllEmployeeAssignSchedulerNotificationsByEmployeeId(int employeeId);
+
+        Task<int> MarkEmployeeAssignSchedulerNotificationAsRead(int id);
     }
 }

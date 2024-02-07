@@ -1,10 +1,9 @@
 {
   "dependencies": {
     "mssql1": {
-      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/workpa/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsSqlServer_12B1865996",
+      "serviceConnectorResourceId": "",
       "secretStore": "AzureAppSettings",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/workpa/databases/workpa-database",
-      "type": "mssql.azure",
+      "type": "mssql.onprem",
       "connectionId": "ConnectionStrings:SqlServer",
       "dynamicId": null
     }

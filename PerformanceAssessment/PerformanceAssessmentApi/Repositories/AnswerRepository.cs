@@ -100,7 +100,7 @@ namespace PerformanceAssessmentApi.Repositories
             }
         }
 
-        public async Task<AssessmentAnswersDto> GetAssessmentAnswersByEmployeeIdAndAssessmentId(int employeeId, int assessmentId)
+        /*public async Task<AssessmentAnswersDto> GetAssessmentAnswersByEmployeeIdAndAssessmentId(int employeeId, int assessmentId)
         {
             var sql = @"SELECT a.*, i.*, an.* FROM [dbo].[Assessment] AS a JOIN [dbo].[Item] AS i ON a.Id = i.AssessmentId
                         LEFT JOIN [dbo].[Answer] AS an ON i.Id = an.ItemId AND (an.EmployeeId = @EmployeeId OR an.EmployeeId IS NULL)
@@ -132,6 +132,55 @@ namespace PerformanceAssessmentApi.Repositories
                             if (answer != null)
                             {
                                 item.Answers.Add(answer);
+                            }
+                        }
+
+                        return currentAssessment;
+                    },
+                    splitOn: "Id, Id, Id",
+                    param: new { EmployeeId = employeeId, AssessmentId = assessmentId }
+                );
+
+                return assessments.FirstOrDefault();
+            }
+        }*/
+        public async Task<AssessmentAnswersDto> GetAssessmentAnswersByEmployeeIdAndAssessmentId(int employeeId, int assessmentId)
+        {
+            var sql = @"SELECT a.*, i.*, an.* FROM [dbo].[Assessment] AS a JOIN [dbo].[Item] AS i ON a.Id = i.AssessmentId
+                LEFT JOIN [dbo].[Answer] AS an ON i.Id = an.ItemId AND (an.EmployeeId = @EmployeeId OR an.EmployeeId IS NULL)
+                WHERE a.Id = @AssessmentId;";
+
+            using (var con = _context.CreateConnection())
+            {
+                var assessmentDictionary = new Dictionary<int, AssessmentAnswersDto>();
+
+                var assessments = await con.QueryAsync<AssessmentAnswersDto, ItemAnswersDto, AnswerDto, AssessmentAnswersDto>(
+                    sql,
+                    (assessment, item, answer) =>
+                    {
+                        if (!assessmentDictionary.TryGetValue(assessment.Id, out var currentAssessment))
+                        {
+                            currentAssessment = assessment;
+                            currentAssessment.Items = new List<ItemAnswersDto>();
+                            assessmentDictionary.Add(currentAssessment.Id, currentAssessment);
+                        }
+
+                        if (item != null)
+                        {
+                            // Check if the item already exists in the assessment
+                            var existingItem = currentAssessment.Items.FirstOrDefault(i => i.Id == item.Id);
+                            if (existingItem == null)
+                            {
+                                // If the item does not exist, add it to the assessment
+                                existingItem = item;
+                                existingItem.Answers = new List<AnswerDto>();
+                                currentAssessment.Items.Add(existingItem);
+                            }
+
+                            // Append the answer to the item
+                            if (answer != null)
+                            {
+                                existingItem.Answers.Add(answer);
                             }
                         }
 
