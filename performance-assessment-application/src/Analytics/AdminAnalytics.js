@@ -319,7 +319,7 @@ const AdminAnalytics = () => {
                             ))}
                         </div>
                     )}
-                    {employeeData.length === 0 && overall !== "Overall" ? (
+                    {employeeData.length === 0 && overall !== "Overall" && (
                         <Stack
                             direction="column"
                             justifyContent="center"
@@ -332,7 +332,8 @@ const AdminAnalytics = () => {
                         >
                             <p className='mb-0'>No results found</p>
                         </Stack>
-                    ) : (
+                    )}
+                    {employeeData.length > 0 && overall !== "Overall" && (
                         <Stack
                             direction="column"
                             justifyContent="flex-start"
