@@ -164,6 +164,9 @@ const AdminAnalytics = () => {
         if (selectedAssessmentIndex === 'Overall') {
             setOverall(selectedAssessmentIndex)
         }
+        else {
+            setOverall('');
+        }
         const selectedAssessment = assessments[selectedAssessmentIndex];
 
         if (selectedAssessment) {
@@ -175,7 +178,6 @@ const AdminAnalytics = () => {
                 const analyticsData = await response.json();
                 setEmployeeData(analyticsData);
                 setCurrentAssessment(selectedAssessment);
-                console.log(selectedAssessment)
             } catch (error) {
                 console.error('Error fetching employee data:', error);
             }
