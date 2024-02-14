@@ -22,7 +22,7 @@ const SalesChart = ({ assessmentId }) => {
     const fetchChartData = async () => {
       try {
         if (!employeeId) return;
-  
+
         const response = await axios.get(`https://workpa.azurewebsites.net/api/answers/get-by-employee-and-assessment?employeeId=${employeeId}&assessmentId=${assessmentId}`);
         const items = response.data.items;
         const data = items.map(item => ({
@@ -39,12 +39,12 @@ const SalesChart = ({ assessmentId }) => {
         console.error('Error fetching chart data:', error);
       }
     };
-  
+
     if (assessmentId && employeeId) {
       fetchChartData();
     }
   }, [assessmentId, employeeId]);
-  
+
 
   useEffect(() => {
     if (chartRefs.current.length > 0 && chartData.length > 0) {
@@ -103,9 +103,9 @@ const SalesChart = ({ assessmentId }) => {
   }, [chartData]);
 
   return (
-    <div style={{paddingBottom: "20px", marginTop: 0, marginBottom: "20px"}}>
+    <div style={{ paddingBottom: "20px", marginTop: 0, marginBottom: "20px" }}>
       {chartData.map((data, index) => (
-        <div key={index} style={{paddingBottom: "20px"}}>
+        <div key={index} style={{ paddingBottom: "20px" }}>
           <canvas ref={el => chartRefs.current[index] = el} />
         </div>
       ))}
