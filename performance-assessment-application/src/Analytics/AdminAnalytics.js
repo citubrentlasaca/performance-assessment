@@ -3,6 +3,8 @@ import NavBar from '../Shared/NavBar';
 import TopBarTwo from '../Shared/TopBarTwo';
 import analyticsheader from './analytics-trophy.png';
 import { Stack } from "@mui/material";
+import axios from 'axios';
+import { Bar } from 'react-chartjs-2';
 
 const AdminAnalytics = () => {
     const [assessments, setAssessments] = useState([]);
@@ -10,6 +12,11 @@ const AdminAnalytics = () => {
     const [selectedYear, setSelectedYear] = useState('');
     const [employeeData, setEmployeeData] = useState([]);
     const [currentAssessment, setCurrentAssessment] = useState(null);
+    const [overall, setOverall] = useState('');
+    const employeeStorage = JSON.parse(localStorage.getItem('employeeData'));
+    const [employees, setEmployees] = useState([]);
+    const [chartData, setChartData] = useState(null);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
 
     useEffect(() => {
         const employee = JSON.parse(localStorage.getItem("employeeData"));
@@ -59,6 +66,80 @@ const AdminAnalytics = () => {
         }
     }, [selectedYear, currentAssessment]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const employeeResponse = await axios.get(`https://workpa.azurewebsites.net/api/employees/teams/${employeeStorage.teamId}`);
+                const usersResponse = await axios.get(`https://workpa.azurewebsites.net/api/users`);
+                const users = usersResponse.data;
+                const updatedEmployees = [];
+
+                for (const employee of employeeResponse.data) {
+                    const resultsResponse = await axios.get(`https://workpa.azurewebsites.net/api/results/employees/${employee.id}`);
+                    const assessmentResults = [];
+
+                    for (const result of resultsResponse.data) {
+                        const assessmentResponse = await axios.get(`https://workpa.azurewebsites.net/api/assessments/${result.assessmentId}`);
+                        const assessment = assessmentResponse.data;
+                        assessmentResults.push({ assessmentTitle: assessment.title, score: result.score });
+                    }
+
+                    const calculateAverageScores = (results) => {
+                        const scoreMap = {};
+                        results.forEach((result) => {
+                            if (!scoreMap[result.assessmentTitle]) {
+                                scoreMap[result.assessmentTitle] = [result.score];
+                            } else {
+                                scoreMap[result.assessmentTitle].push(result.score);
+                            }
+                        });
+                        const averages = Object.keys(scoreMap).map((title) => {
+                            const scores = scoreMap[title];
+                            const averageScore = scores.reduce((acc, curr) => acc + curr, 0) / scores.length;
+                            return { assessmentTitle: title, average: averageScore.toFixed(2) };
+                        });
+                        return averages;
+                    };
+
+                    const averageScores = calculateAverageScores(assessmentResults);
+
+                    for (const user of users) {
+                        if (employee.userId === user.id && employee.role === 'User') {
+                            updatedEmployees.push({
+                                id: user.id,
+                                employeeId: employee.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                assessmentResults: averageScores
+                            });
+                        }
+                    }
+                }
+
+                setEmployees(updatedEmployees);
+                setChartData({
+                    labels: selectedEmployee.assessmentResults.map(assessment => assessment.assessmentTitle),
+                    datasets: [
+                        {
+                            label: 'Average Score Percentage',
+                            data: selectedEmployee.assessmentResults.map(assessment => (assessment.average * 100).toFixed(0)),
+                        }
+                    ]
+                });
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [selectedEmployee]);
+
+    const handleEmployeeChange = (employee) => {
+        setSelectedEmployee(employee);
+        console.log(employee);
+    };
+
     const handleMonthChange = (event) => {
         setSelectedMonth(event.target.value);
     };
@@ -80,6 +161,9 @@ const AdminAnalytics = () => {
 
     const handleAssessmentChange = async (event) => {
         const selectedAssessmentIndex = event.target.value;
+        if (selectedAssessmentIndex === 'Overall') {
+            setOverall(selectedAssessmentIndex)
+        }
         const selectedAssessment = assessments[selectedAssessmentIndex];
 
         if (selectedAssessment) {
@@ -91,6 +175,7 @@ const AdminAnalytics = () => {
                 const analyticsData = await response.json();
                 setEmployeeData(analyticsData);
                 setCurrentAssessment(selectedAssessment);
+                console.log(selectedAssessment)
             } catch (error) {
                 console.error('Error fetching employee data:', error);
             }
@@ -151,6 +236,7 @@ const AdminAnalytics = () => {
                                     {`${assessment.title} ${index + 1}`}
                                 </option>
                             ))}
+                            <option value="Overall">Overall Performance</option>
                         </select>
                         <Stack
                             direction="row"
@@ -198,7 +284,40 @@ const AdminAnalytics = () => {
                             </select>
                         </Stack>
                     </Stack>
-                    {employeeData.length === 0 ? (
+                    {overall === 'Overall' && (
+                        <div className="accordion w-100" id="accordionExample">
+                            {employees && employees.map((employee, index) => (
+                                <div className="accordion-item" key={index}>
+                                    <h2 className="accordion-header">
+                                        <button onClick={() => handleEmployeeChange(employee)} className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${index}`} aria-expanded="false" aria-controls={`collapse${index}`}>
+                                            {employee.firstName} {employee.lastName}
+                                        </button>
+                                    </h2>
+                                    <div id={`collapse${index}`} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div className="accordion-body">
+                                            {chartData && (
+                                                <Bar
+                                                    data={chartData}
+                                                    options={{
+                                                        plugins: {
+                                                            title: {
+                                                                display: true,
+                                                                text: 'Overall Performance',
+                                                                font: {
+                                                                    size: 18
+                                                                }
+                                                            }
+                                                        }
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    {employeeData.length === 0 && overall !== "Overall" ? (
                         <Stack
                             direction="column"
                             justifyContent="center"
